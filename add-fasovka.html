@@ -18,8 +18,8 @@
   .layout{width:500px;max-width:calc(100vw - 32px)}
   /* шапка: заголовок слева, крестик справа (лейаут) */
   .dlgh{display:flex;align-items:center;justify-content:space-between;width:100%;padding:20px 24px 12px;box-sizing:border-box}
-  /* раскладка формы внутри ds-dialog-content__scroll (лейаут) */
-  .ds-dialog-content__scroll{padding:16px 24px;gap:16px;box-sizing:border-box}
+  /* раскладка формы внутри ds-dialog-content__scroll (лейаут): растянуться на ширину контента + колонка */
+  .ds-dialog-content__scroll{flex:1 1 auto;width:100%;padding:16px 24px;gap:16px;box-sizing:border-box}
   /* подвал: кнопки действий — выравнивание и зазор (лейаут) */
   .dlg-actions{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:16px 24px}
 </style>
