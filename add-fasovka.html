@@ -16,6 +16,8 @@
   html,body{margin:0;min-height:100%;background:#f4f5f7;font-family:'Roboto','Helvetica Neue',Arial,sans-serif}
   body{display:flex;align-items:center;justify-content:center;min-height:100vh}
   .layout{width:500px;max-width:calc(100vw - 32px)}
+  /* шапка: заголовок слева, крестик справа (лейаут) */
+  .dlgh{display:flex;align-items:center;justify-content:space-between;width:100%;padding:20px 24px 12px;box-sizing:border-box}
   /* раскладка формы внутри ds-dialog-content__scroll (лейаут) */
   .ds-dialog-content__scroll{padding:16px 24px;gap:16px;box-sizing:border-box}
   /* подвал: кнопки действий — выравнивание и зазор (лейаут) */
@@ -28,12 +30,12 @@
   <!-- Попап: ds-dialog-view (основа окна) -->
   <div class="ds-dialog-view">
 
-    <!-- Шапка -->
+    <!-- Шапка: title-container (flex-row) — заголовок слева, крестик справа -->
     <div class="ds-dialog-header ds-dialog-header--text">
-      <div class="ds-dialog-header__title-container">
+      <div class="ds-dialog-header__title-container dlgh">
         <span class="ds-dialog-header__label">Добавление типа фасовки</span>
+        <span class="ds-dialog-header__icon"><span class="material-icons">close</span></span>
       </div>
-      <span class="ds-dialog-header__icon"><span class="material-icons">close</span></span>
     </div>
 
     <!-- Содержимое -->
