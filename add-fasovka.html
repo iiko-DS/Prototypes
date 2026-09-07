@@ -16,8 +16,10 @@
   html,body{margin:0;min-height:100%;background:#f4f5f7;font-family:'Roboto','Helvetica Neue',Arial,sans-serif}
   body{display:flex;align-items:center;justify-content:center;min-height:100vh}
   .layout{width:var(--ds-dialog-width, 500px);max-width:calc(100vw - 32px)}
-  /* попап: подрезать детей под скругление (иначе квадратные углы) */
+  /* попап: подрезать детей под скругление */
   .ds-dialog-view{overflow:hidden}
+  /* контент растягивается, чтобы футер прижался к низу (убрать пустоту под кнопками) */
+  .ds-dialog-content{flex:1 1 auto;display:flex;flex-direction:column}
   /* шапка: заголовок слева, крестик справа; отступы — из токенов */
   .dlgh{display:flex;align-items:center;justify-content:space-between;width:100%;padding:var(--ds-space-5x) var(--ds-space-6x) var(--ds-space-3x);box-sizing:border-box}
   /* раскладка формы внутри __scroll: растянуться + колонка; отступы — из токенов */
