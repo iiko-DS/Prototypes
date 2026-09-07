@@ -18,6 +18,8 @@
   .layout{width:500px;max-width:calc(100vw - 32px)}
   /* раскладка формы внутри ds-dialog-content__scroll (лейаут) */
   .ds-dialog-content__scroll{padding:16px 24px;gap:16px;box-sizing:border-box}
+  /* подвал: кнопки действий — выравнивание и зазор (лейаут) */
+  .dlg-actions{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:16px 24px}
 </style>
 </head>
 <body>
@@ -26,7 +28,7 @@
   <!-- Попап: ds-dialog-view (основа окна) -->
   <div class="ds-dialog-view">
 
-    <!-- Шапка: ds-dialog-header--text; текст — из референса -->
+    <!-- Шапка -->
     <div class="ds-dialog-header ds-dialog-header--text">
       <div class="ds-dialog-header__title-container">
         <span class="ds-dialog-header__label">Добавление типа фасовки</span>
@@ -34,11 +36,11 @@
       <span class="ds-dialog-header__icon"><span class="material-icons">close</span></span>
     </div>
 
-    <!-- Содержимое: ds-dialog-content > __scroll (flex-column); текст — из референса -->
+    <!-- Содержимое -->
     <div class="ds-dialog-content">
       <div class="ds-dialog-content__scroll">
 
-        <!-- Инфо-сообщение: ds-banner --accent --horizontal -->
+        <!-- Инфо-сообщение -->
         <div class="ds-banner ds-banner--accent ds-banner--horizontal">
           <span class="ds-banner__row">
             <span class="ds-banner__icon"><span class="material-icons">info</span></span>
@@ -46,7 +48,7 @@
           </span>
         </div>
 
-        <!-- Поле «Название фасовки *» (ds-input--m, Populated: label + value) -->
+        <!-- Поле «Название фасовки *» -->
         <div class="ds-input ds-input--m">
           <div class="ds-input__frame">
             <div class="ds-input__content">
@@ -56,7 +58,7 @@
           </div>
         </div>
 
-        <!-- Поле «Количество базовых единиц в фасовке *» (ds-input--m, пустое) -->
+        <!-- Поле «Количество базовых единиц в фасовке *» -->
         <div class="ds-input ds-input--m">
           <div class="ds-input__frame">
             <div class="ds-input__content">
@@ -69,9 +71,9 @@
       </div>
     </div>
 
-    <!-- Подвал: ds-dialog-footer > __button (flex-row); кнопки ДС; текст — из референса -->
+    <!-- Подвал: кнопки действий (главное — справа, отмена — слева от него) -->
     <div class="ds-dialog-footer">
-      <div class="ds-dialog-footer__button">
+      <div class="dlg-actions">
         <button class="ds-btn ds-btn--m ds-btn--neutral ds-btn--outlined" type="button">
           <span class="ds-btn__label">Отменить</span>
         </button>
