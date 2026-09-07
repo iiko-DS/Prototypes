@@ -4,39 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Добавление типа фасовки — прототип ДС</title>
-
-<!-- ДС: токены и стили компонентов (iiko-ds-web) -->
+<!-- ДС: токены + стили компонентов -->
 <link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/tokens.css">
 <link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/components/index.css">
-
-<!-- Шрифт Roboto из Google Fonts -->
+<!-- Roboto из Google Fonts -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
-<!-- Иконки Material -->
+<!-- Иконки Material Icons -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
 <style>
-  /* каркас страницы под попап (свой лейаут, не из ДС) */
-  body{
-    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-    font-family:'Roboto','Helvetica Neue',Arial,sans-serif; background:#f4f5f7;
-  }
-  .ds-dialog-view{ /* попап уже несёт свои стили; центрируем + габариты */
-    width:500px; max-width:calc(100vw - 32px);
-  }
-  .ds-dialog-content{
-    display:flex; flex-direction:column; gap:16px; padding:16px 24px;
-  }
-  .ds-dialog-footer{
-    display:flex; justify-content:space-between; gap:12px; padding:16px 24px;
-  }
+  /* каркас страницы (свой лейаут — у него нет ДС-компонента) */
+  html,body{margin:0;min-height:100%;background:#f4f5f7;font-family:'Roboto','Helvetica Neue',Arial,sans-serif}
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .layout{width:500px;max-width:calc(100vw - 32px)}
 </style>
 </head>
 <body>
+<div class="layout">
 
   <!-- ═══ Попап «Добавление типа фасовки» ═══ -->
   <div class="ds-dialog-view">
 
-    <!-- Шапка -->
+    <!-- Шапка: заголовок + крестик -->
     <div class="ds-dialog-header ds-dialog-header--text">
       <span class="ds-dialog-header__title-container">
         <span class="ds-dialog-header__label">Добавление типа фасовки</span>
@@ -44,13 +32,15 @@
       <span class="ds-dialog-header__icon"><span class="material-icons">close</span></span>
     </div>
 
-    <!-- Содержимое -->
+    <!-- Содержимое: инфо + форма -->
     <div class="ds-dialog-content">
 
       <!-- Инфо-сообщение (Banner, стиль Accent) -->
       <div class="ds-banner ds-banner--accent ds-banner--horizontal">
-        <span class="ds-banner__icon"><span class="material-icons">info</span></span>
-        <span class="ds-banner__text">Базовая единица товара «Картофель фри»: кг.</span>
+        <span class="ds-banner__row">
+          <span class="ds-banner__icon"><span class="material-icons">info</span></span>
+          <span class="ds-banner__text">Базовая единица товара «Картофель фри»: кг.</span>
+        </span>
       </div>
 
       <!-- Поле «Название фасовки» (обязательное, заполнено) -->
@@ -68,7 +58,7 @@
         <div class="ds-input__frame">
           <div class="ds-input__content">
             <label class="ds-input__label">Количество базовых единиц в фасовке *</label>
-            <input class="ds-input__field" type="text" placeholder="">
+            <input class="ds-input__field" type="text">
           </div>
         </div>
       </div>
@@ -77,15 +67,19 @@
 
     <!-- Подвал: кнопки -->
     <div class="ds-dialog-footer">
-      <button class="ds-btn ds-btn--m ds-btn--neutral ds-btn--outlined" type="button">
-        <span class="ds-btn__label">ОТМЕНИТЬ</span>
-      </button>
-      <button class="ds-btn ds-btn--m ds-btn--accent ds-btn--filled" type="button">
-        <span class="ds-btn__label">ДОБАВИТЬ И ВЫБРАТЬ</span>
-      </button>
+      <div class="ds-dialog-footer__button">
+        <button class="ds-btn ds-btn--m ds-btn--neutral ds-btn--outlined" type="button">
+          <span class="ds-btn__label">ОТМЕНИТЬ</span>
+        </button>
+      </div>
+      <div class="ds-dialog-footer__button">
+        <button class="ds-btn ds-btn--m ds-btn--accent ds-btn--filled" type="button">
+          <span class="ds-btn__label">ДОБАВИТЬ И ВЫБРАТЬ</span>
+        </button>
+      </div>
     </div>
 
   </div>
-
+</div>
 </body>
 </html>
