@@ -110,14 +110,21 @@
   /* ряды блюд — плоские, просто зазор между ними */
   .kds2f-food{
     display:flex;align-items:center;
-    box-sizing:border-box;                         /* рамка внутри — не сдвигает и не срезается */
+    position:relative;                             /* для синей полоски */
     min-height:56px;                               /* не меньше 48 (Material), ~56 */
     background:#2a2a33;                            /* как в варианте 2 (компакт) */
     border-radius:0;                               /* плоские */
-    border-right:2px solid #448aff;                /* синяя полоска справа */
     margin-bottom:2px;                             /* зазор между блюдами */
   }
   .kds2f-food:last-child{margin-bottom:0}
+  /* синяя полоска справа — только у блюд с классом accent */
+  .kds2f-food--accent::after{
+    content:"";
+    position:absolute;
+    top:0;bottom:0;right:0;
+    width:2px;
+    background:#448aff;
+  }
   .kds2f-food__name{
     flex:1;display:flex;align-items:center;gap:4px;
     padding:6px 10px;min-width:0;
@@ -197,7 +204,7 @@
       <div class="kds2f-comment">Принести сразу морс</div>
 
       <!-- Блюдо 1 -->
-      <div class="kds2f-food">
+      <div class="kds2f-food kds2f-food--accent">
         <div class="kds2f-food__name"><span>1</span><span>Морс ягодный 1 л.</span></div>
         <button class="kds2f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
       </div>
@@ -209,7 +216,7 @@
       </div>
 
       <!-- Блюдо 3: группа (пицца + добавки) -->
-      <div class="kds2f-food kds2f-food--group">
+      <div class="kds2f-food kds2f-food--group kds2f-food--accent">
         <div class="kds2f-food__main">
           <div class="kds2f-food__name kds2f-food__name--error"><span>1</span><span>Пицца от шефа маленькая</span></div>
           <div class="kds2f-food__nested">
