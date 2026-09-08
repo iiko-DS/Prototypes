@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заказ: готовится — прототип ДС (KDS-карточка)</title>
+<!-- ДС: токены + стили компонентов (по URL сайта ДС) -->
+<link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/tokens.css">
+<link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/components/index.css">
+<!-- Roboto из Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+<!-- Иконки Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+  /* каркас страницы */
+  html,body{margin:0;min-height:100%;background:#f4f5f7;font-family:'Roboto','Helvetica Neue',Arial,sans-serif}
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box}
+  .layout{width:360px;max-width:calc(100vw - 32px)}
+
+  /* ── KDS-карточка «Заказ: готовится» (тёмная) ───────────────
+     Источник: Figma, узел 10012:49049. Цвета/радиусы/отступы — токены ДС. */
+  .kds-card{
+    display:flex;flex-direction:column;
+    width:360px;max-width:100%;
+    background:var(--ds-palette-neutral-990);      /* #121212 */
+    color:#fff;
+    border-radius:var(--ds-radius-3x);             /* 12px */
+    overflow:hidden;
+    font-family:'Roboto','Helvetica Neue',Arial,sans-serif;
+  }
+
+  /* ── Шапка ── */
+  .kds-card__header{display:flex;flex-direction:column;gap:var(--ds-space-2x);padding:var(--ds-space-2x)}
+  .kds-card__top{display:flex;flex-direction:column;gap:var(--ds-space-2x)}
+
+  /* строка «номер заказа + время» */
+  .kds-slot{display:flex;align-items:center;justify-content:space-between}
+  .kds-order__num{
+    font-size:var(--ds-typography-font-size-6x);   /* 24px */
+    font-weight:var(--ds-typography-font-weight-medium); /* 500 */
+    line-height:32px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+  .kds-order__time{display:inline-flex;align-items:center;gap:var(--ds-space-1x)}
+  .kds-order__time .material-icons{font-size:24px}
+
+  /* канал заказа */
+  .kds-channel{
+    font-size:var(--ds-typography-body-font-size-m); /* 16px */
+    font-weight:var(--ds-typography-font-weight-regular); /* 400 */
+    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+
+  /* кнопка статуса (полная ширина) */
+  .kds-status-btn{
+    width:100%;display:inline-flex;align-items:center;justify-content:center;
+    gap:var(--ds-space-2x);height:56px;
+    background:var(--ds-palette-neutral-700);      /* #616161 */
+    color:#fff;border:none;border-radius:var(--ds-radius-3x);
+    font-size:var(--ds-typography-body-font-size-s); /* 14px */
+    font-weight:var(--ds-typography-font-weight-medium);
+    letter-spacing:var(--ds-typography-letter-spacing-s);
+    text-transform:uppercase;cursor:pointer;
+  }
+  .kds-status-btn .material-icons{font-size:20px}
+
+  /* футер шапки */
+  .kds-card__footer{display:flex;flex-direction:column;gap:var(--ds-space-2x)}
+  .kds-customer{display:flex;align-items:center;gap:var(--ds-space-1x)}
+  .kds-customer .material-icons{font-size:20px}
+  .kds-customer span{
+    font-size:var(--ds-typography-body-font-size-m);
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+
+  /* мета-строка: тип, стол, гости + оплата */
+  .kds-meta{display:flex;align-items:center;justify-content:space-between}
+  .kds-meta__items{display:flex;align-items:center;gap:16px}
+  .kds-meta__item{display:flex;align-items:center;gap:var(--ds-space-1x)}
+  .kds-meta__item .material-icons{font-size:20px;color:#fff}
+  .kds-meta__item span{
+    font-size:var(--ds-typography-body-font-size-m);
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+  .kds-meta__pay .material-icons{font-size:20px;color:var(--ds-palette-positive-500)} /* #14b456 */
+
+  /* комментарий (пунктирная рамка) */
+  .kds-comment{padding:var(--ds-space-1x) var(--ds-space-2x)}
+  .kds-comment__box{
+    display:flex;align-items:center;gap:var(--ds-space-2x);
+    border:1px dashed var(--ds-palette-neutral-200);
+    border-radius:var(--ds-radius-2x);             /* 8px */
+    padding:var(--ds-space-1x) var(--ds-space-3x); /* 4px 12px */
+    color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
+    font-size:var(--ds-typography-body-font-size-m);
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+  .kds-comment__box .material-icons{font-size:20px;color:var(--ds-palette-neutral-300)}
+
+  /* ── Контент: список блюд ── */
+  .kds-card__content{display:flex;flex-direction:column;gap:var(--ds-space-1x);padding:var(--ds-space-2x)}
+  .kds-food{display:flex;align-items:center;background:var(--ds-palette-neutral-950);border-radius:var(--ds-radius-3x);overflow:hidden}
+  .kds-food__main{flex:1;display:flex;align-items:center;min-width:0}
+  .kds-food__text{
+    flex:1;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:var(--ds-space-2x) var(--ds-space-3x); /* 8px 12px */
+  }
+  .kds-food__guest{
+    font-size:var(--ds-typography-font-size-3x);   /* 12px */
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:16px;letter-spacing:0.4px;
+    color:var(--ds-palette-neutral-500);           /* #9e9e9e */
+  }
+  .kds-food__name{
+    font-size:var(--ds-typography-font-size-4-5x); /* 18px */
+    font-weight:var(--ds-typography-font-weight-medium);
+    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:#fff;
+  }
+  .kds-food__name--error{color:var(--ds-palette-negative-500)} /* #ff5252 */
+  .kds-food__action{
+    width:56px;height:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    background:var(--ds-palette-neutral-800);      /* #424242 */
+    border:none;border-radius:var(--ds-radius-3x);
+  }
+  .kds-food__action .material-icons{font-size:28px;color:#fff}
+
+  /* группа блюд (пицца с добавками) — кнопка на всю высоту */
+  .kds-food--group{align-items:stretch}
+  .kds-food--group .kds-food__main{flex-direction:column;align-items:stretch;justify-content:flex-start}
+  .kds-food--group .kds-food__text{padding:var(--ds-space-2x) var(--ds-space-3x)}
+  .kds-food__nested{padding:var(--ds-space-1x) var(--ds-space-3x) var(--ds-space-1x) 34px;display:flex;flex-direction:column}
+  .kds-food__nested-item{
+    display:flex;align-items:center;gap:var(--ds-space-2x);
+    font-size:var(--ds-typography-font-size-4-5x); /* 18px */
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:var(--ds-palette-negative-500);          /* #ff5252 */
+    padding:var(--ds-space-1x) 0;                  /* 4px 0 */
+  }
+  .kds-food--group .kds-food__action{height:auto;align-self:stretch}
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- KDS-карточка «Заказ: готовится» -->
+  <div class="kds-card">
+
+    <!-- Шапка -->
+    <div class="kds-card__header">
+
+      <!-- верх шапки: номер/время, канал, статус -->
+      <div class="kds-card__top">
+
+        <div class="kds-slot">
+          <span class="kds-order__num">1028</span>
+          <span class="kds-order__time">12:35 <span class="material-icons">schedule</span></span>
+        </div>
+
+        <div class="kds-channel">#9753 Яндекс доставка</div>
+
+        <button class="kds-status-btn" type="button">
+          <span>Ожидает</span>
+          <span class="material-icons">arrow_forward</span>
+        </button>
+
+      </div>
+
+      <!-- низ шапки: гость, мета, комментарий -->
+      <div class="kds-card__footer">
+
+        <div class="kds-customer">
+          <span class="material-icons">person</span>
+          <span>Константинопольский</span>
+        </div>
+
+        <div class="kds-meta">
+          <div class="kds-meta__items">
+            <div class="kds-meta__item"><span class="material-icons">restaurant</span><span>Обычный заказ</span></div>
+            <div class="kds-meta__item"><span class="material-icons">inventory_2</span><span>Б12</span></div>
+            <div class="kds-meta__item"><span class="material-icons">person</span><span>3</span></div>
+          </div>
+          <div class="kds-meta__pay"><span class="material-icons">credit_card</span></div>
+        </div>
+
+        <div class="kds-comment">
+          <div class="kds-comment__box">
+            <span class="material-icons">check_box_outline_blank</span>
+            <span>Принести сразу морс</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Контент: список блюд -->
+    <div class="kds-card__content">
+
+      <!-- Блюдо 1 -->
+      <div class="kds-food">
+        <div class="kds-food__main">
+          <div class="kds-food__text">
+            <span class="kds-food__guest">Гость 1</span>
+            <span class="kds-food__name">1х Морс ягодный 1 л.</span>
+          </div>
+        </div>
+        <button class="kds-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+
+      <!-- Блюдо 2 -->
+      <div class="kds-food">
+        <div class="kds-food__main">
+          <div class="kds-food__text">
+            <span class="kds-food__guest">Гость 1</span>
+            <span class="kds-food__name">1х Паста карбонара</span>
+          </div>
+        </div>
+        <button class="kds-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+
+      <!-- Блюдо 3: группа (пицца + добавки) -->
+      <div class="kds-food kds-food--group">
+        <div class="kds-food__main">
+          <div class="kds-food__text">
+            <span class="kds-food__guest">Гость 2</span>
+            <span class="kds-food__name kds-food__name--error">1х Пицца от шефа маленькая</span>
+          </div>
+          <div class="kds-food__nested">
+            <div class="kds-food__nested-item"><span>1х</span><span>Двойной сыр</span></div>
+            <div class="kds-food__nested-item"><span>1х</span><span>Толстое</span></div>
+            <div class="kds-food__nested-item"><span>1х</span><span>Бекон</span></div>
+            <div class="kds-food__nested-item"><span>1х</span><span>Курица</span></div>
+            <div class="kds-food__nested-item"><span>1х</span><span>Пепперони</span></div>
+            <div class="kds-food__nested-item"><span>1х</span><span>Салями</span></div>
+          </div>
+        </div>
+        <button class="kds-food__action" type="button"><span class="material-icons">delete</span></button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
