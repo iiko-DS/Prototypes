@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заказ (вар. 3) — плоская v3 (прототип ДС, KDS)</title>
+<!-- ДС: токены + стили компонентов (по URL сайта ДС) -->
+<link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/tokens.css">
+<link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/components/index.css">
+<!-- Roboto из Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+<!-- Иконки Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+  /* каркас страницы */
+  html,body{margin:0;min-height:100%;background:#f4f5f7;font-family:'Roboto','Helvetica Neue',Arial,sans-serif}
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box}
+  .layout{width:361px;max-width:calc(100vw - 32px)}
+
+  /* ── KDS-карточка «Заказ» — вариант 3, плоская v3 ───
+     Источник: Figma, узел 10056:4696. Стиль — как в плоской v3. */
+  .kds3f-card{
+    display:flex;flex-direction:column;
+    width:361px;max-width:100%;
+    background:#1a1a24;
+    color:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    font-family:'Roboto','Helvetica Neue',Arial,sans-serif;
+  }
+
+  /* ── Шапка (кликабельная, статус = цвет фона) ── */
+  .kds3f-card__header{
+    padding:8px 10px;display:flex;flex-direction:column;gap:4px;
+    background:var(--ds-palette-accent-500);       /* #448aff — «Готовится» */
+    cursor:pointer;
+    transition:background-color .15s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .kds3f-card__header:active{background:#3574d6}
+  .kds3f-card--cooking .kds3f-card__header{background:var(--ds-palette-positive-500)} /* #14b456 */
+  .kds3f-slot{display:flex;align-items:center;justify-content:space-between}
+  .kds3f-order__num{
+    font-size:var(--ds-typography-font-size-6x);   /* 24px */
+    font-weight:var(--ds-typography-font-weight-medium);
+    line-height:32px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+  .kds3f-order__time{
+    font-size:var(--ds-typography-font-size-6x);
+    font-weight:var(--ds-typography-font-weight-medium);
+    line-height:32px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:var(--ds-palette-negative-500);          /* #ff5252 — просрочено */
+  }
+  .kds3f-channel{
+    font-size:var(--ds-typography-body-font-size-s);
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
+  }
+
+
+  /* мета-строка: самовывоз + время + оплата */
+  .kds3f-meta{display:flex;align-items:center;justify-content:space-between;padding:0 10px 8px}
+  .kds3f-meta__items{display:flex;align-items:center;gap:12px}
+  .kds3f-meta__item{display:flex;align-items:center;gap:4px}
+  .kds3f-meta__item .material-icons{font-size:18px;color:#fff}
+  .kds3f-meta__item span{
+    font-size:var(--ds-typography-body-font-size-s);
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+  .kds3f-meta__pay .material-icons{font-size:18px;color:#fff}
+
+  /* ── Контент: плоский список блюд ── */
+  .kds3f-card__content{padding:0 0 8px;display:flex;flex-direction:column}
+
+  .kds3f-food{
+    display:flex;align-items:center;
+    position:relative;
+    min-height:56px;
+    background:#2a2a33;
+    border-radius:0;
+    padding-right:4px;
+    margin-bottom:2px;
+  }
+  .kds3f-food:last-child{margin-bottom:0}
+  /* синяя полоска справа (у блюд с классом accent) */
+  .kds3f-food--accent::after{
+    content:"";
+    position:absolute;top:0;bottom:0;right:0;
+    width:4px;background:var(--ds-palette-accent-500);
+  }
+  .kds3f-food__main{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+  .kds3f-food__name{
+    flex:1;display:flex;align-items:center;gap:4px;
+    padding:6px 10px;min-width:0;
+    font-size:var(--ds-typography-font-size-5x);   /* 20px */
+    font-weight:var(--ds-typography-font-weight-medium);
+    line-height:26px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:#fff;
+  }
+  .kds3f-badge{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:2px 10px 0;
+    font-size:var(--ds-typography-font-size-3x);   /* 12px */
+    font-weight:var(--ds-typography-font-weight-medium);
+    letter-spacing:0.4px;
+    color:var(--ds-palette-positive-500);          /* #14b456 — «Новый» */
+  }
+  .kds3f-food__action{
+    width:56px;flex-shrink:0;align-self:stretch;display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.06);
+    border:none;
+    cursor:pointer;transition:background-color .1s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .kds3f-food__action:active{background:rgba(255,255,255,.12)}
+  .kds3f-food__action .material-icons{font-size:24px;color:#fff}
+
+  /* группа блюд */
+  .kds3f-food--group{align-items:stretch}
+  .kds3f-food__nested{padding:2px 10px 4px 26px;display:flex;flex-direction:column}
+  .kds3f-food__nested-item{
+    display:flex;align-items:center;gap:4px;
+    font-size:var(--ds-typography-font-size-4x);   /* 16px */
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:22px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:var(--ds-palette-warning-500);           /* #ffab40 — добавки */
+    padding:2px 0;
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- KDS-карточка «Заказ» — вариант 3, плоская v3 -->
+  <div class="kds3f-card" id="kds3fCard">
+
+    <!-- Шапка: клик меняет статус -->
+    <div class="kds3f-card__header" id="kds3fHeader">
+      <div class="kds3f-slot">
+        <span class="kds3f-order__num">1028</span>
+        <span class="kds3f-order__time">- 00:27</span>
+      </div>
+      <div class="kds3f-channel">#975328</div>
+    </div>
+
+    <!-- Мета: самовывоз + время + оплата -->
+    <div class="kds3f-meta">
+      <div class="kds3f-meta__items">
+        <div class="kds3f-meta__item"><span class="material-icons">storefront</span><span>Самовывоз</span></div>
+        <div class="kds3f-meta__item"><span class="material-icons">schedule</span><span>17:00</span></div>
+      </div>
+      <div class="kds3f-meta__pay"><span class="material-icons">credit_card</span></div>
+    </div>
+
+    <!-- Контент: плоский список блюд -->
+    <div class="kds3f-card__content">
+
+      <!-- Группа: Комбо с пастой -->
+      <div class="kds3f-food kds3f-food--group kds3f-food--accent">
+        <div class="kds3f-food__main">
+          <div class="kds3f-badge"><span>Новый</span></div>
+          <div class="kds3f-food__name"><span>1</span><span>Комбо с пастой</span></div>
+          <div class="kds3f-food__nested">
+            <div class="kds3f-food__nested-item"><span>Капучино на растительном молоке</span></div>
+            <div class="kds3f-food__nested-item"><span>1</span><span>Паста карбонара</span></div>
+            <div class="kds3f-food__nested-item"><span>1</span><span>Капучино</span></div>
+          </div>
+        </div>
+        <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+
+      <!-- Морс -->
+      <div class="kds3f-food kds3f-food--accent">
+        <div class="kds3f-food__name"><span>1</span><span>Морс ягодный 1 л.</span></div>
+        <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+
+      <!-- Паста 1 -->
+      <div class="kds3f-food">
+        <div class="kds3f-food__name"><span>1</span><span>Паста карбонара</span></div>
+        <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+
+      <!-- Паста 2 -->
+      <div class="kds3f-food kds3f-food--accent">
+        <div class="kds3f-food__name"><span>1</span><span>Паста карбонара</span></div>
+        <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Клик по шапке — смена статуса (прототип) -->
+<script>
+  const header = document.getElementById('kds3fHeader');
+  header.addEventListener('click', () => {
+    document.getElementById('kds3fCard').classList.toggle('kds3f-card--cooking');
+  });
+</script>
+</body>
+</html>
