@@ -94,8 +94,7 @@
   /* комментарий заказа — короткий оранжевый пунктир слева */
   .kds2f-comment{
     display:flex;align-items:center;gap:10px;
-    padding:6px 0 6px 10px;                        /* разделитель на всю ширину, линия с отступом */
-    border-bottom:1px solid rgba(255,255,255,.16);
+    padding:6px 0 6px 10px;
     color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
     font-size:var(--ds-typography-body-font-size-s);
     font-weight:var(--ds-typography-font-weight-regular);
@@ -108,15 +107,15 @@
     background:repeating-linear-gradient(to bottom, var(--ds-palette-warning-500) 0 3px, transparent 3px 6px);
   }
 
-  /* ряды блюд — плоские, встык, с разделителем */
+  /* ряды блюд — плоские, просто зазор между ними */
   .kds2f-food{
     display:flex;align-items:center;
     min-height:56px;                               /* не меньше 48 (Material), ~56 */
     background:#2a2a33;                            /* как в варианте 2 (компакт) */
     border-radius:0;                               /* плоские */
-    border-bottom:1px solid rgba(255,255,255,.16); /* чёткий разделитель */
+    margin-bottom:2px;                             /* зазор между блюдами */
   }
-  .kds2f-food:last-child{border-bottom:0}
+  .kds2f-food:last-child{margin-bottom:0}
   .kds2f-food__name{
     flex:1;display:flex;align-items:center;gap:4px;
     padding:6px 10px;min-width:0;
@@ -130,7 +129,7 @@
   .kds2f-food__action{
     width:56px;flex-shrink:0;align-self:stretch;display:flex;align-items:center;justify-content:center;
     background:rgba(255,255,255,.06);              /* фон — видно, что это кнопка */
-    border:none;border-left:1px solid rgba(255,255,255,.16); /* разделитель от контента */
+    border:none;
     cursor:pointer;transition:background-color .1s ease;
     -webkit-tap-highlight-color:transparent;
   }
