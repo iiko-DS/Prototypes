@@ -40,9 +40,9 @@
     background:var(--ds-palette-neutral-700);      /* #616161 — как кнопка, во всю ширину */
     cursor:pointer;
     transition:background-color .15s ease;
+    -webkit-tap-highlight-color:transparent;       /* без серой вспышки на таче */
   }
-  .kds-card__header:hover{background:var(--ds-palette-neutral-600)} /* #757575 */
-  .kds-card__header:active{background:var(--ds-palette-neutral-800)} /* #424242 */
+  .kds-card__header:active{background:var(--ds-palette-neutral-800)} /* #424242 — нажатие */
   .kds-card--cooking .kds-card__header{background:var(--ds-palette-positive-500)} /* #14b456 */
 
   .kds-card__top{display:flex;flex-direction:column;gap:4px}
@@ -130,7 +130,10 @@
   .kds-food__action{
     width:48px;flex-shrink:0;align-self:stretch;display:flex;align-items:center;justify-content:center;
     background:transparent;border:none;border-left:1px solid rgba(255,255,255,.08);
+    cursor:pointer;transition:background-color .1s ease;
+    -webkit-tap-highlight-color:transparent;
   }
+  .kds-food__action:active{background:rgba(255,255,255,.12)} /* нажатие на таче */
   .kds-food__action .material-icons{font-size:24px;color:#fff}
 
   /* группа блюд (пицца с добавками) */
