@@ -94,8 +94,7 @@
   /* комментарий заказа — короткий оранжевый пунктир слева */
   .kds2f-comment{
     display:flex;align-items:center;gap:10px;
-    margin-left:10px;
-    padding:6px 0;
+    padding:6px 0 6px 10px;                        /* разделитель на всю ширину, линия с отступом */
     border-bottom:1px solid rgba(255,255,255,.16);
     color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
     font-size:var(--ds-typography-body-font-size-s);
@@ -130,8 +129,8 @@
   /* кнопка у блюда — плоская иконка на всю высоту, крупная зона касания */
   .kds2f-food__action{
     width:56px;flex-shrink:0;align-self:stretch;display:flex;align-items:center;justify-content:center;
-    background:transparent;
-    border:1px solid rgba(255,255,255,.18);        /* чёткая граница кнопки */
+    background:rgba(255,255,255,.06);              /* фон — видно, что это кнопка */
+    border:none;border-left:1px solid rgba(255,255,255,.16); /* разделитель от контента */
     cursor:pointer;transition:background-color .1s ease;
     -webkit-tap-highlight-color:transparent;
   }
