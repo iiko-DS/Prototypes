@@ -139,8 +139,18 @@
     font-size:var(--ds-typography-font-size-4x);   /* 16px */
     font-weight:var(--ds-typography-font-weight-regular);
     line-height:22px;letter-spacing:var(--ds-typography-letter-spacing-s);
-    color:var(--ds-palette-warning-500);           /* #ffab40 — добавки */
+    color:#fff;
     padding:2px 0;
+  }
+  /* комментарий-добавка с оранжевым пунктиром слева */
+  .kds3f-food__nested-item--comment{
+    color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
+  }
+  .kds3f-food__nested-item--comment::before{
+    content:"";
+    flex-shrink:0;
+    width:1px;height:16px;
+    background:repeating-linear-gradient(to bottom, var(--ds-palette-warning-500) 0 3px, transparent 3px 6px);
   }
 
   /* футер «Перенос чека» */
@@ -186,7 +196,7 @@
           <div class="kds3f-badge"><span>Новый</span></div>
           <div class="kds3f-food__name"><span>1</span><span>Комбо с пастой</span></div>
           <div class="kds3f-food__nested">
-            <div class="kds3f-food__nested-item"><span>Капучино на растительном молоке</span></div>
+            <div class="kds3f-food__nested-item kds3f-food__nested-item--comment"><span>Капучино на растительном молоке</span></div>
             <div class="kds3f-food__nested-item"><span>1</span><span>Паста карбонара</span></div>
             <div class="kds3f-food__nested-item"><span>1</span><span>Капучино</span></div>
           </div>
