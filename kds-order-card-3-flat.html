@@ -39,28 +39,32 @@
   }
   .kds3f-card__header:active{background:#3574d6}
   .kds3f-card--cooking .kds3f-card__header{background:var(--ds-palette-positive-500)} /* #14b456 */
-  .kds3f-slot{display:flex;align-items:center;justify-content:space-between}
+  .kds3f-slot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .kds3f-slot__left{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
   .kds3f-order__num{
     font-size:var(--ds-typography-font-size-6x);   /* 24px */
     font-weight:var(--ds-typography-font-weight-medium);
     line-height:32px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    flex-shrink:0;white-space:nowrap;
   }
   .kds3f-order__time{
     font-size:var(--ds-typography-font-size-6x);
     font-weight:var(--ds-typography-font-weight-medium);
     line-height:32px;letter-spacing:var(--ds-typography-letter-spacing-s);
     color:var(--ds-palette-negative-500);          /* #ff5252 — просрочено */
+    flex-shrink:0;white-space:nowrap;
   }
   .kds3f-channel{
     font-size:var(--ds-typography-body-font-size-s);
     font-weight:var(--ds-typography-font-weight-regular);
     line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
     color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
 
 
   /* мета-строка: самовывоз + время + оплата */
-  .kds3f-meta{display:flex;align-items:center;justify-content:space-between;padding:0 10px 8px}
+  .kds3f-meta{display:flex;align-items:center;justify-content:space-between;padding:4px 0 0}
   .kds3f-meta__items{display:flex;align-items:center;gap:12px}
   .kds3f-meta__item{display:flex;align-items:center;gap:4px}
   .kds3f-meta__item .material-icons{font-size:18px;color:#fff}
@@ -84,12 +88,19 @@
     margin-bottom:2px;
   }
   .kds3f-food:last-child{margin-bottom:0}
-  /* синяя полоска справа (у блюд с классом accent) */
-  .kds3f-food--accent::after{
+  /* полоска справа — цвет по модификатору */
+  .kds3f-food--accent::after,
+  .kds3f-food--stripe-orange::after,
+  .kds3f-food--stripe-green::after,
+  .kds3f-food--stripe-red::after{
     content:"";
     position:absolute;top:0;bottom:0;right:0;
-    width:4px;background:var(--ds-palette-accent-500);
+    width:4px;
   }
+  .kds3f-food--accent::after{background:#448aff}
+  .kds3f-food--stripe-orange::after{background:#ffab40}
+  .kds3f-food--stripe-green::after{background:var(--ds-palette-positive-500)} /* #14b456 */
+  .kds3f-food--stripe-red::after{background:var(--ds-palette-negative-500)} /* #ff5252 */
   .kds3f-food__main{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
   .kds3f-food__name{
     flex:1;display:flex;align-items:center;gap:4px;
@@ -116,6 +127,9 @@
   }
   .kds3f-food__action:active{background:rgba(255,255,255,.12)}
   .kds3f-food__action .material-icons{font-size:24px;color:#fff}
+  /* разные цвета стрелок в кнопках */
+  .kds3f-food--arrow-orange .kds3f-food__action .material-icons{color:#ffab40}
+  .kds3f-food--arrow-blue   .kds3f-food__action .material-icons{color:#448aff}
 
   /* группа блюд */
   .kds3f-food--group{align-items:stretch}
@@ -128,6 +142,15 @@
     color:var(--ds-palette-warning-500);           /* #ffab40 — добавки */
     padding:2px 0;
   }
+
+  /* футер «Перенос чека» */
+  .kds3f-footer{padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .kds3f-footer__dash{width:100%;height:1px;background:rgba(255,255,255,.12)}
+  .kds3f-footer__row{color:#fff;font-size:var(--ds-typography-font-size-3x);letter-spacing:0.4px}
+  .kds3f-footer__row b{font-weight:500}
+  .kds3f-footer__dots{display:flex;gap:6px}
+  .kds3f-footer__dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25)}
+  .kds3f-footer__dots span.on{background:var(--ds-palette-accent-500)}
 </style>
 </head>
 <body>
@@ -139,26 +162,26 @@
     <!-- Шапка: клик меняет статус -->
     <div class="kds3f-card__header" id="kds3fHeader">
       <div class="kds3f-slot">
-        <span class="kds3f-order__num">1028</span>
+        <div class="kds3f-slot__left">
+          <span class="kds3f-order__num">1028</span>
+          <span class="kds3f-channel">#975328</span>
+        </div>
         <span class="kds3f-order__time">- 00:27</span>
       </div>
-      <div class="kds3f-channel">#975328</div>
-    </div>
-
-    <!-- Мета: самовывоз + время + оплата -->
-    <div class="kds3f-meta">
-      <div class="kds3f-meta__items">
-        <div class="kds3f-meta__item"><span class="material-icons">storefront</span><span>Самовывоз</span></div>
-        <div class="kds3f-meta__item"><span class="material-icons">schedule</span><span>17:00</span></div>
+      <div class="kds3f-meta">
+        <div class="kds3f-meta__items">
+          <div class="kds3f-meta__item"><span class="material-icons">storefront</span><span>Самовывоз</span></div>
+          <div class="kds3f-meta__item"><span class="material-icons">schedule</span><span>17:00</span></div>
+        </div>
+        <div class="kds3f-meta__pay"><span class="material-icons">credit_card</span></div>
       </div>
-      <div class="kds3f-meta__pay"><span class="material-icons">credit_card</span></div>
     </div>
 
     <!-- Контент: плоский список блюд -->
     <div class="kds3f-card__content">
 
       <!-- Группа: Комбо с пастой -->
-      <div class="kds3f-food kds3f-food--group kds3f-food--accent">
+      <div class="kds3f-food kds3f-food--group kds3f-food--accent kds3f-food--arrow-orange">
         <div class="kds3f-food__main">
           <div class="kds3f-badge"><span>Новый</span></div>
           <div class="kds3f-food__name"><span>1</span><span>Комбо с пастой</span></div>
@@ -172,23 +195,30 @@
       </div>
 
       <!-- Морс -->
-      <div class="kds3f-food kds3f-food--accent">
+      <div class="kds3f-food kds3f-food--accent kds3f-food--arrow-orange kds3f-food--stripe-orange">
         <div class="kds3f-food__name"><span>1</span><span>Морс ягодный 1 л.</span></div>
         <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
       </div>
 
       <!-- Паста 1 -->
-      <div class="kds3f-food">
+      <div class="kds3f-food kds3f-food--stripe-green">
         <div class="kds3f-food__name"><span>1</span><span>Паста карбонара</span></div>
         <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
       </div>
 
       <!-- Паста 2 -->
-      <div class="kds3f-food kds3f-food--accent">
+      <div class="kds3f-food kds3f-food--accent kds3f-food--arrow-blue kds3f-food--stripe-red">
         <div class="kds3f-food__name"><span>1</span><span>Паста карбонара</span></div>
         <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
       </div>
 
+    </div>
+
+    <!-- Футер «Перенос чека» -->
+    <div class="kds3f-footer">
+      <div class="kds3f-footer__dash"></div>
+      <div class="kds3f-footer__row">Перенос чека <b>1/3</b></div>
+      <div class="kds3f-footer__dots"><span class="on"></span><span></span><span></span></div>
     </div>
   </div>
 
