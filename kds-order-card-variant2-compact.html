@@ -28,14 +28,19 @@
     font-family:'Roboto','Helvetica Neue',Arial,sans-serif;
   }
 
-  /* ── Шапка ── */
+  /* ── Шапка (кликабельная, фон «как у кнопки») ── */
   .kds2-card__header{
     display:flex;flex-direction:column;gap:6px;
-    background:var(--ds-palette-neutral-950);      /* #212121 */
-    border:1px solid #333;
+    background:var(--ds-palette-neutral-700);      /* #616161 — как кнопка */
+    border:none;
     border-radius:16px;
-    padding:6px;
+    padding:8px;
+    cursor:pointer;
+    transition:background-color .15s ease;
+    -webkit-tap-highlight-color:transparent;
   }
+  .kds2-card__header:active{background:var(--ds-palette-neutral-800)} /* #424242 */
+  .kds2-card--cooking .kds2-card__header{background:var(--ds-palette-positive-500)} /* #14b456 */
   .kds2-slot{display:flex;align-items:center;justify-content:space-between}
   .kds2-order__num{
     font-size:var(--ds-typography-font-size-5x);   /* 20px — компактнее */
@@ -54,20 +59,6 @@
     font-weight:var(--ds-typography-font-weight-regular);
     line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
   }
-
-  /* кнопка статуса (компактная) */
-  .kds2-status{
-    width:100%;display:inline-flex;align-items:center;justify-content:center;gap:4px;
-    background:#3b3b43;border:1px solid #333;border-radius:12px;
-    padding:9px 16px;
-    color:#fff;cursor:pointer;
-    font-size:var(--ds-typography-body-font-size-s);
-    font-weight:var(--ds-typography-font-weight-medium);
-    letter-spacing:var(--ds-typography-letter-spacing-s);
-    text-transform:uppercase;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .kds2-status .material-icons{font-size:20px}
 
   /* футер шапки */
   .kds2-card__footer{display:flex;flex-direction:column;gap:6px}
@@ -90,16 +81,17 @@
   .kds2-meta__pay .material-icons{font-size:18px;color:var(--ds-palette-positive-500)}
   .kds2-divider{height:1px;background:#333}
 
-  /* комментарий — оранжевая пунктирная рамка слева */
+  /* комментарий заказа — примечание над списком блюд */
   .kds2-comment{
-    display:flex;align-items:center;
-    border-left:1px dashed var(--ds-palette-warning-500); /* #ffab40 */
-    padding:2px 12px;
+    display:flex;align-items:center;gap:8px;
+    padding:4px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
     color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
     font-size:var(--ds-typography-body-font-size-s);
     font-weight:var(--ds-typography-font-weight-regular);
     line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
   }
+  .kds2-comment .material-icons{font-size:18px;color:var(--ds-palette-neutral-300)}
 
   /* ── Контент: список блюд ── */
   .kds2-content{display:flex;flex-direction:column;gap:4px;padding:2px}
@@ -114,9 +106,9 @@
   .kds2-food__name{
     flex:1;display:flex;align-items:center;gap:8px;
     padding:0 10px;min-width:0;
-    font-size:var(--ds-typography-font-size-4-5x); /* 18px */
+    font-size:var(--ds-typography-font-size-5x);   /* 20px — крупнее */
     font-weight:var(--ds-typography-font-weight-medium);
-    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    line-height:26px;letter-spacing:var(--ds-typography-letter-spacing-s);
     color:#fff;
   }
   .kds2-food__name--error{color:var(--ds-palette-negative-500)} /* #ff5252 */
@@ -135,9 +127,9 @@
   .kds2-food__nested{padding:0 10px 4px 26px;display:flex;flex-direction:column}
   .kds2-food__nested-item{
     display:flex;align-items:center;gap:8px;
-    font-size:var(--ds-typography-font-size-4-5x); /* 18px */
+    font-size:var(--ds-typography-font-size-5x);   /* 20px */
     font-weight:var(--ds-typography-font-weight-regular);
-    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    line-height:26px;letter-spacing:var(--ds-typography-letter-spacing-s);
     color:var(--ds-palette-negative-500);          /* #ff5252 */
     padding:2px 0;
   }
@@ -147,10 +139,10 @@
 <div class="layout">
 
   <!-- KDS-карточка «Заказ: готовится» — вариант 2, компактная -->
-  <div class="kds2-card">
+  <div class="kds2-card" id="kds2Card">
 
-    <!-- Шапка -->
-    <div class="kds2-card__header">
+    <!-- Шапка: клик меняет статус -->
+    <div class="kds2-card__header" id="kds2Header" title="Клик — смена статуса">
 
       <div class="kds2-slot">
         <span class="kds2-order__num">1028</span>
@@ -158,12 +150,6 @@
       </div>
 
       <div class="kds2-channel">#9753 Яндекс доставка</div>
-
-      <button class="kds2-status" type="button">
-        <span>Ожидает</span>
-        <span class="material-icons">chevron_right</span>
-        <span class="material-icons">chevron_right</span>
-      </button>
 
       <div class="kds2-card__footer">
 
@@ -181,15 +167,17 @@
           <div class="kds2-meta__pay"><span class="material-icons">credit_card</span></div>
         </div>
 
-        <div class="kds2-divider"></div>
-
-        <div class="kds2-comment">Принести сразу морс</div>
-
       </div>
     </div>
 
-    <!-- Контент: список блюд -->
+    <!-- Контент: комментарий заказа + список блюд -->
     <div class="kds2-content">
+
+      <!-- Комментарий заказа -->
+      <div class="kds2-comment">
+        <span class="material-icons">check_box_outline_blank</span>
+        <span>Принести сразу морс</span>
+      </div>
 
       <!-- Блюдо 1 -->
       <div class="kds2-food">
@@ -223,5 +211,13 @@
   </div>
 
 </div>
+
+<!-- Клик по шапке — смена статуса (прототип) -->
+<script>
+  const header = document.getElementById('kds2Header');
+  header.addEventListener('click', () => {
+    document.getElementById('kds2Card').classList.toggle('kds2-card--cooking');
+  });
+</script>
 </body>
 </html>
