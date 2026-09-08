@@ -36,8 +36,8 @@
   /* ── Шапка (кликабельная, фон «как у кнопки») ── */
   .kds-card__header{
     display:flex;flex-direction:column;gap:4px;
-    padding:4px;
-    background:var(--ds-palette-neutral-700);      /* #616161 — как кнопка */
+    padding:8px;                                   /* внутренний воздух для текста шапки */
+    background:var(--ds-palette-neutral-700);      /* #616161 — как кнопка, во всю ширину */
     cursor:pointer;
     transition:background-color .15s ease;
   }
@@ -98,8 +98,8 @@
   }
   .kds-comment .material-icons{font-size:18px;color:var(--ds-palette-neutral-300)}
 
-  /* ── Контент: список блюд (плоский, с воздухом по краям) ── */
-  .kds-card__content{padding:8px;display:flex;flex-direction:column}
+  /* ── Контент: список блюд (плоский; внешний отступ даёт карточка) ── */
+  .kds-card__content{padding:0;display:flex;flex-direction:column}
   .kds-food{
     display:flex;align-items:center;
     background:var(--ds-palette-neutral-950);      /* #212121 */
