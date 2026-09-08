@@ -22,10 +22,12 @@
   .kds3f-card{
     display:flex;flex-direction:column;
     width:361px;max-width:100%;
+    box-sizing:border-box;
     background:#1a1a24;
     color:#fff;
     border-radius:12px;
     overflow:hidden;
+    border-bottom:1px dashed rgba(255,255,255,.55); /* пунктир только внизу — перенос чека */
     font-family:'Roboto','Helvetica Neue',Arial,sans-serif;
   }
 
@@ -101,6 +103,13 @@
   .kds3f-food--stripe-orange::after{background:#ffab40}
   .kds3f-food--stripe-green::after{background:var(--ds-palette-positive-500)} /* #14b456 */
   .kds3f-food--stripe-red::after{background:var(--ds-palette-negative-500)} /* #ff5252 */
+  /* линия слева (у нижней «Пасты») */
+  .kds3f-food--edge-left::before{
+    content:"";
+    position:absolute;top:0;bottom:0;left:0;
+    width:4px;
+    background:var(--ds-palette-negative-500);     /* #ff5252 */
+  }
   .kds3f-food__main{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
   .kds3f-food__name{
     flex:1;display:flex;align-items:center;gap:4px;
@@ -217,7 +226,7 @@
       </div>
 
       <!-- Паста 2 -->
-      <div class="kds3f-food kds3f-food--accent kds3f-food--arrow-blue kds3f-food--stripe-red">
+      <div class="kds3f-food kds3f-food--accent kds3f-food--arrow-blue kds3f-food--edge-left">
         <div class="kds3f-food__name"><span>1</span><span>Паста карбонара</span></div>
         <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
       </div>
