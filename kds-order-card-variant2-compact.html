@@ -81,11 +81,12 @@
   .kds2-meta__pay .material-icons{font-size:18px;color:var(--ds-palette-positive-500)}
   .kds2-divider{height:1px;background:#333}
 
-  /* комментарий заказа — примечание над списком блюд */
+  /* комментарий заказа — примечание с оранжевой пунктирной рамкой слева */
   .kds2-comment{
     display:flex;align-items:center;gap:8px;
-    padding:4px 0;
-    border-bottom:1px solid rgba(255,255,255,.08);
+    padding:4px 0 4px 12px;                        /* слева отступ под рамку */
+    border-left:1px dashed var(--ds-palette-warning-500); /* #ffab40 */
+    border-bottom:1px solid rgba(255,255,255,.08); /* отделяет от списка */
     color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
     font-size:var(--ds-typography-body-font-size-s);
     font-weight:var(--ds-typography-font-weight-regular);
