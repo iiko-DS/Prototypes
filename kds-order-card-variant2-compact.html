@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заказ: готовится (вар. 2) — компактный прототип ДС (KDS)</title>
+<!-- ДС: токены + стили компонентов (по URL сайта ДС) -->
+<link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/tokens.css">
+<link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/components/index.css">
+<!-- Roboto из Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+<!-- Иконки Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+  /* каркас страницы */
+  html,body{margin:0;min-height:100%;background:#f4f5f7;font-family:'Roboto','Helvetica Neue',Arial,sans-serif}
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box}
+  .layout{width:360px;max-width:calc(100vw - 32px)}
+
+  /* ── KDS-карточка «Заказ: готовится» — вариант 2, компактный ───
+     Источник: Figma, узел 10047:4536. Уменьшены паддинги/высоты/кнопки. */
+  .kds2-card{
+    display:flex;flex-direction:column;gap:4px;
+    width:360px;max-width:100%;
+    background:#1a1a24;
+    border-radius:16px;
+    padding:4px;
+    font-family:'Roboto','Helvetica Neue',Arial,sans-serif;
+  }
+
+  /* ── Шапка ── */
+  .kds2-card__header{
+    display:flex;flex-direction:column;gap:6px;
+    background:var(--ds-palette-neutral-950);      /* #212121 */
+    border:1px solid #333;
+    border-radius:16px;
+    padding:6px;
+  }
+  .kds2-slot{display:flex;align-items:center;justify-content:space-between}
+  .kds2-order__num{
+    font-size:var(--ds-typography-font-size-5x);   /* 20px — компактнее */
+    font-weight:var(--ds-typography-font-weight-medium);
+    line-height:26px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+  .kds2-order__time{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:var(--ds-typography-font-size-5x);
+    font-weight:var(--ds-typography-font-weight-medium);
+    line-height:26px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+  .kds2-order__time .material-icons{font-size:20px}
+  .kds2-channel{
+    font-size:var(--ds-typography-body-font-size-s); /* 14px */
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+
+  /* кнопка статуса (компактная) */
+  .kds2-status{
+    width:100%;display:inline-flex;align-items:center;justify-content:center;gap:4px;
+    background:#3b3b43;border:1px solid #333;border-radius:12px;
+    padding:9px 16px;
+    color:#fff;cursor:pointer;
+    font-size:var(--ds-typography-body-font-size-s);
+    font-weight:var(--ds-typography-font-weight-medium);
+    letter-spacing:var(--ds-typography-letter-spacing-s);
+    text-transform:uppercase;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .kds2-status .material-icons{font-size:20px}
+
+  /* футер шапки */
+  .kds2-card__footer{display:flex;flex-direction:column;gap:6px}
+  .kds2-customer{display:flex;align-items:center;gap:4px}
+  .kds2-customer .material-icons{font-size:18px}
+  .kds2-customer span{
+    font-size:var(--ds-typography-body-font-size-s);
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+  .kds2-meta{display:flex;align-items:center;justify-content:space-between}
+  .kds2-meta__items{display:flex;align-items:center;gap:12px}
+  .kds2-meta__item{display:flex;align-items:center;gap:4px}
+  .kds2-meta__item .material-icons{font-size:18px;color:#fff}
+  .kds2-meta__item span{
+    font-size:var(--ds-typography-body-font-size-s);
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+  .kds2-meta__pay .material-icons{font-size:18px;color:var(--ds-palette-positive-500)}
+  .kds2-divider{height:1px;background:#333}
+
+  /* комментарий — оранжевая пунктирная рамка слева */
+  .kds2-comment{
+    display:flex;align-items:center;
+    border-left:1px dashed var(--ds-palette-warning-500); /* #ffab40 */
+    padding:2px 12px;
+    color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
+    font-size:var(--ds-typography-body-font-size-s);
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+
+  /* ── Контент: список блюд ── */
+  .kds2-content{display:flex;flex-direction:column;gap:4px;padding:2px}
+  .kds2-food{
+    display:flex;align-items:center;
+    background:#2a2a33;
+    border-right:1px solid var(--ds-palette-accent-500); /* #448aff */
+    border-radius:12px;
+    height:48px;
+    overflow:hidden;
+  }
+  .kds2-food__name{
+    flex:1;display:flex;align-items:center;gap:8px;
+    padding:0 10px;min-width:0;
+    font-size:var(--ds-typography-font-size-4-5x); /* 18px */
+    font-weight:var(--ds-typography-font-weight-medium);
+    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:#fff;
+  }
+  .kds2-food__name--error{color:var(--ds-palette-negative-500)} /* #ff5252 */
+  .kds2-food__action{
+    width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    background:#3b3b43;border:1px solid #333;border-radius:12px;margin-right:2px;
+    cursor:pointer;transition:background-color .1s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .kds2-food__action:active{background:#4a4a54}
+  .kds2-food__action .material-icons{font-size:24px;color:#fff}
+
+  /* группа блюд (пицца с добавками) — корзина в строке сверху */
+  .kds2-food--group{height:auto;align-items:stretch;flex-direction:column}
+  .kds2-food__header{display:flex;align-items:center;height:48px}
+  .kds2-food__nested{padding:0 10px 4px 26px;display:flex;flex-direction:column}
+  .kds2-food__nested-item{
+    display:flex;align-items:center;gap:8px;
+    font-size:var(--ds-typography-font-size-4-5x); /* 18px */
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:24px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:var(--ds-palette-negative-500);          /* #ff5252 */
+    padding:2px 0;
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- KDS-карточка «Заказ: готовится» — вариант 2, компактная -->
+  <div class="kds2-card">
+
+    <!-- Шапка -->
+    <div class="kds2-card__header">
+
+      <div class="kds2-slot">
+        <span class="kds2-order__num">1028</span>
+        <span class="kds2-order__time">12:35 <span class="material-icons">schedule</span></span>
+      </div>
+
+      <div class="kds2-channel">#9753 Яндекс доставка</div>
+
+      <button class="kds2-status" type="button">
+        <span>Ожидает</span>
+        <span class="material-icons">chevron_right</span>
+        <span class="material-icons">chevron_right</span>
+      </button>
+
+      <div class="kds2-card__footer">
+
+        <div class="kds2-customer">
+          <span class="material-icons">person</span>
+          <span>Константинопольский</span>
+        </div>
+
+        <div class="kds2-meta">
+          <div class="kds2-meta__items">
+            <div class="kds2-meta__item"><span class="material-icons">restaurant</span><span>Обычный заказ</span></div>
+            <div class="kds2-meta__item"><span class="material-icons">inventory_2</span><span>Б12</span></div>
+            <div class="kds2-meta__item"><span class="material-icons">person</span><span>3</span></div>
+          </div>
+          <div class="kds2-meta__pay"><span class="material-icons">credit_card</span></div>
+        </div>
+
+        <div class="kds2-divider"></div>
+
+        <div class="kds2-comment">Принести сразу морс</div>
+
+      </div>
+    </div>
+
+    <!-- Контент: список блюд -->
+    <div class="kds2-content">
+
+      <!-- Блюдо 1 -->
+      <div class="kds2-food">
+        <div class="kds2-food__name"><span>1х</span><span>Морс ягодный 1 л.</span></div>
+        <button class="kds2-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+
+      <!-- Блюдо 2 -->
+      <div class="kds2-food">
+        <div class="kds2-food__name"><span>1х</span><span>Паста карбонара</span></div>
+        <button class="kds2-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+
+      <!-- Блюдо 3: группа (пицца + добавки) -->
+      <div class="kds2-food kds2-food--group">
+        <div class="kds2-food__header">
+          <div class="kds2-food__name kds2-food__name--error"><span>1х</span><span>Пицца от шефа маленькая</span></div>
+          <button class="kds2-food__action" type="button"><span class="material-icons">delete</span></button>
+        </div>
+        <div class="kds2-food__nested">
+          <div class="kds2-food__nested-item"><span>1х</span><span>Двойной сыр</span></div>
+          <div class="kds2-food__nested-item"><span>1х</span><span>Толстое</span></div>
+          <div class="kds2-food__nested-item"><span>1х</span><span>Бекон</span></div>
+          <div class="kds2-food__nested-item"><span>1х</span><span>Курица</span></div>
+          <div class="kds2-food__nested-item"><span>1х</span><span>Пепперони</span></div>
+          <div class="kds2-food__nested-item"><span>1х</span><span>Салями</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
