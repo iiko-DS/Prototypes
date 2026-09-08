@@ -86,15 +86,17 @@
   }
   .kds-meta__pay .material-icons{font-size:18px;color:var(--ds-palette-positive-500)} /* #14b456 */
 
-  /* комментарий — без рамки, просто строка */
-  .kds-comment{display:flex;align-items:center;gap:var(--ds-space-2x);padding:2px 4px}
-  .kds-comment .material-icons{font-size:18px;color:var(--ds-palette-neutral-300)}
-  .kds-comment span{
+  /* комментарий заказа — примечание над списком блюд */
+  .kds-comment{
+    display:flex;align-items:center;gap:var(--ds-space-2x);
+    padding:4px 8px;
+    border-bottom:1px solid rgba(255,255,255,.08);   /* тонкий разделитель от списка */
     color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
     font-size:var(--ds-typography-body-font-size-s);
     font-weight:var(--ds-typography-font-weight-regular);
     line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
   }
+  .kds-comment .material-icons{font-size:18px;color:var(--ds-palette-neutral-300)}
 
   /* ── Контент: список блюд (плоский, без отступов) ── */
   .kds-card__content{padding:0;display:flex;flex-direction:column}
@@ -185,16 +187,17 @@
           <div class="kds-meta__pay"><span class="material-icons">credit_card</span></div>
         </div>
 
-        <div class="kds-comment">
-          <span class="material-icons">check_box_outline_blank</span>
-          <span>Принести сразу морс</span>
-        </div>
-
       </div>
     </div>
 
-    <!-- Контент: список блюд (плоский) -->
+    <!-- Контент: комментарий заказа + список блюд (плоский) -->
     <div class="kds-card__content">
+
+      <!-- Комментарий заказа -->
+      <div class="kds-comment">
+        <span class="material-icons">check_box_outline_blank</span>
+        <span>Принести сразу морс</span>
+      </div>
 
       <!-- Блюдо 1 -->
       <div class="kds-food">
