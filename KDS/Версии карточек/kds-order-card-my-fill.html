@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заказ: готовится — моя версия: цветная шапка (KDS-карточка)</title>
+<!-- ДС: токены + стили компонентов (по URL сайта ДС) -->
+<link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/tokens.css">
+<link rel="stylesheet" href="https://anders7rusk.github.io/iiko-ds-web/components/index.css">
+<!-- Roboto из Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+<!-- Иконки Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+<style>
+  .material-icons{font-family:'Material Icons Outlined'}
+  *,*::before,*::after{box-sizing:border-box}
+
+  /* каркас страницы (как у остальных файлов вариантов) */
+  html,body{margin:0;min-height:100%;background:#f4f5f7;font-family:'Roboto','Helvetica Neue',Arial,sans-serif}
+  body{display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box}
+  .layout{width:360px;max-width:calc(100vw - 32px)}
+
+  /* ═══ КАРТОЧКА — МОЯ ВЕРСИЯ: шапка целиком цветом статуса ═══════════
+     Вариант «цветная шапка»: заливка шапки = статус (цвет, без слова).
+     Номер и время — первыми; в шапке весь «паспорт» заказа и комментарий. */
+  .kcard{display:flex;flex-direction:column;width:360px;max-width:100%;background:#121212;color:#fff;border-radius:12px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.45)}
+  .kcard[data-state="waiting"]       {--st:#616161;--stt:#fff}
+  .kcard[data-state="ready-to-cook"] {--st:#ea7806;--stt:#1c1c1f}
+  .kcard[data-state="cooking"]       {--st:#2651b5;--stt:#fff}
+  .kcard[data-state="ready"]         {--st:#0f852c;--stt:#fff}
+  .kcard[data-state="cancelled"]     {--st:#de1a12;--stt:#fff}
+
+  /* ШАПКА = КНОПКА СТАТУСА */
+  .kcard__head{
+    display:flex;flex-direction:column;gap:5px;width:100%;margin:0;padding:8px 14px 10px;
+    border:0;border-radius:12px;
+    background:var(--st);color:var(--stt);text-align:left;font-family:inherit;
+    cursor:pointer;transition:filter .12s ease;
+  }
+  .kcard__head:hover{filter:brightness(1.08)}
+  .kcard__head:active{filter:brightness(.94)}
+  .kcard__head:focus-visible{outline:3px solid #448aff;outline-offset:-3px}
+
+  /* строка 1: номер слева, время у правого края (с иконкой перед значением) */
+  .kcard__r1{display:flex;align-items:center;gap:8px;min-width:0}
+  .kcard__num{font-size:24px;font-weight:500;line-height:32px;letter-spacing:.4px}
+  .kcard__time{display:inline-flex;align-items:center;gap:6px;font-size:24px;font-weight:500;line-height:32px;letter-spacing:.4px}
+  .kcard__r1 .kcard__time{margin-left:auto;flex:0 0 auto}
+  .kcard__time .material-icons{font-size:22px;line-height:1}
+  .kcard__time--late,.kcard__time--sos{height:30px;padding:0 6px;border-radius:10px}
+  .kcard__time--late{background:#ea7806;color:#1c1c1f}                    /* белый тут 2.9:1 — тёмный 5.8:1 */
+  .kcard__time--sos{background:#de1a12;color:#fff}                        /* 4.9:1 */
+  .kcard[data-state="ready-to-cook"] .kcard__time--late{background:#994000;color:#fff}   /* на оранжевой шапке — затемняем, иначе сольётся */
+  .kcard[data-state="cancelled"] .kcard__time--sos{background:#fff;color:#de1a12}        /* на красной — инверсия */
+
+  /* вторичные строки — 14/20; комментарий — 16/22 с линией-отбивкой */
+  .kcard__r{display:flex;align-items:center;gap:6px;min-width:0;font-size:14px;line-height:20px}
+  .kcard__r .material-icons{font-size:18px;flex:0 0 auto}
+  .kcard__r .key{flex:0 0 auto;white-space:nowrap}
+  .kcard__r .sep{opacity:.6}
+  .kcard__r .pay{margin-left:auto}
+  .kcard__r4{margin-top:2px;padding-top:5px;border-top:1px solid color-mix(in srgb,currentColor 30%,transparent);font-size:16px;line-height:22px}
+  .kcard__r4 .material-icons{font-size:16px}
+
+  /* блюда: строка 48, кнопка 56 во всю высоту строки */
+  .kcard__body{display:flex;flex-direction:column;gap:3px;padding:4px 4px 6px 8px}
+  .kdish{display:flex;align-items:stretch;background:#212121;border-radius:10px;overflow:hidden}
+  .kdish__body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;min-height:48px;padding:4px 10px}
+  .kdish__name{font-size:20px;font-weight:500;line-height:26px;letter-spacing:.4px}
+  .kdish__name--error{color:#ff5252}
+  .kdish__act{flex:0 0 56px;width:56px;border:0;border-radius:10px;background:#424242;color:#9e9e9e;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .kdish__act .material-icons{font-size:24px}
+  .kdish__act--negative{color:#ff5252}
+  .kdish--group .kdish__body{padding:0;justify-content:flex-start}
+  .kgroup__head{padding:4px 10px;min-height:44px;display:flex;flex-direction:column;justify-content:center}
+  .kgroup__note{display:flex;align-items:flex-start;gap:8px;margin:1px 8px 3px 10px;font-size:16px;line-height:22px;color:#d6d6d6}
+  .kgroup__note .material-icons{font-size:16px;color:#9e9e9e;flex:0 0 auto}
+  .kgroup__sub{padding:1px 10px 1px 20px;font-size:16px;line-height:22px;color:#fff}
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- KDS-карточка (заказ 1028, наполнение блюд — единое с остальными версиями) -->
+  <article class="kcard" data-state="cooking" id="demoCard">
+    <button class="kcard__head" type="button" id="demoHead" aria-label="Готовится — перевести в следующий статус">
+      <span class="kcard__r1">
+        <span class="kcard__num">1028</span>
+        <span class="kcard__time" id="demoTime"><span class="material-icons">schedule</span><span id="demoTimeValue">12:35</span></span>
+      </span>
+      <span class="kcard__r kcard__r2">
+        <span class="key">#9753 Яндекс доставка</span>
+        <span class="key sep">·</span>
+        <span class="material-icons">table_bar</span><span class="key">Б12</span>
+        <span class="key sep">·</span>
+        <span class="material-icons">person_outline</span><span class="key">3</span>
+        <span class="material-icons pay">credit_card</span>
+      </span>
+      <span class="kcard__r kcard__r3">
+        <span class="material-icons">person</span><span class="key">Константинопольский</span>
+        <span class="key sep">·</span>
+        <span class="material-icons">restaurant</span><span class="key">Обычный заказ</span>
+      </span>
+      <span class="kcard__r kcard__r4">
+        <span class="material-icons">mode_comment</span><span class="key">Принести сразу морс</span>
+      </span>
+    </button>
+    <div class="kcard__body">
+      <div class="kdish kdish--group">
+        <div class="kdish__body">
+          <div class="kgroup__head"><span class="kdish__name">1 Комбо с пастой</span></div>
+          <div class="kgroup__note"><span class="material-icons">mode_comment</span>Капучино на растительном молоке</div>
+          <div class="kgroup__sub">1 Паста карбонара</div>
+          <div class="kgroup__sub">1 Капучино</div>
+        </div>
+        <button class="kdish__act" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+      <div class="kdish">
+        <div class="kdish__body"><span class="kdish__name">1 Морс ягодный 1 л.</span></div>
+        <button class="kdish__act" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+      <div class="kdish">
+        <div class="kdish__body"><span class="kdish__name">1 Паста карбонара</span></div>
+        <button class="kdish__act" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+      <div class="kdish kdish--group">
+        <div class="kdish__body">
+          <div class="kgroup__head"><span class="kdish__name kdish__name--error">1 Пицца от шефа маленькая</span></div>
+          <div class="kgroup__sub">1 Двойной сыр</div>
+          <div class="kgroup__sub">1 Толстое</div>
+          <div class="kgroup__sub">1 Бекон</div>
+          <div class="kgroup__sub">1 Курица</div>
+          <div class="kgroup__sub">1 Пепперони</div>
+          <div class="kgroup__sub">1 Салями</div>
+        </div>
+        <button class="kdish__act kdish__act--negative" type="button"><span class="material-icons">delete</span></button>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+<!-- Клик по шапке — перевод заказа в следующий статус (цикл для демонстрации состояний) -->
+<script>
+  (function(){
+    var card = document.getElementById('demoCard');
+    var head = document.getElementById('demoHead');
+    var time = document.getElementById('demoTime');
+    var timeVal = document.getElementById('demoTimeValue');
+    if (!card || !head) return;
+
+    var META = {
+      'waiting':       {label:'Ожидает',       time:'12:35',  cls:'',                 next:'ready-to-cook'},
+      'ready-to-cook': {label:'Пора готовить', time:'-04:27', cls:'kcard__time--late', next:'cooking'},
+      'cooking':       {label:'Готовится',     time:'-05:27', cls:'kcard__time--sos',  next:'ready'},
+      'ready':         {label:'Приготовлен',   time:'12:35',  cls:'',                 next:'waiting'}
+    };
+
+    head.addEventListener('click', function(){
+      var m = META[card.getAttribute('data-state')];
+      if (!m) return;
+      card.setAttribute('data-state', m.next);
+      var nx = META[m.next];
+      timeVal.textContent = nx.time;
+      time.className = 'kcard__time' + (nx.cls ? ' ' + nx.cls : '');
+      head.setAttribute('aria-label', nx.label + ' — перевести в следующий статус');
+    });
+  })();
+</script>
+</body>
+</html>

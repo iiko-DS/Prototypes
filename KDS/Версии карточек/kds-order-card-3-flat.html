@@ -10,11 +10,12 @@
 <!-- Roboto из Google Fonts -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
 <!-- Иконки Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <style>
   /* каркас страницы */
   html,body{margin:0;min-height:100%;background:#f4f5f7;font-family:'Roboto','Helvetica Neue',Arial,sans-serif}
-  body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box}
+  body{display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box}
   .layout{width:361px;max-width:calc(100vw - 32px)}
 
   /* ── KDS-карточка «Заказ» — вариант 3, плоская v3 ───
@@ -65,6 +66,15 @@
   }
 
 
+  /* официант в шапке (как в остальных карточках) */
+  .kds3f-customer{display:flex;align-items:center;gap:4px}
+  .kds3f-customer .material-icons{font-size:18px;color:#fff}
+  .kds3f-customer span{
+    font-size:var(--ds-typography-body-font-size-s);
+    font-weight:var(--ds-typography-font-weight-regular);
+    line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
+  }
+
   /* мета-строка: самовывоз + время + оплата */
   .kds3f-meta{display:flex;align-items:center;justify-content:space-between;padding:4px 0 0}
   .kds3f-meta__items{display:flex;align-items:center;gap:12px}
@@ -112,13 +122,25 @@
   }
   .kds3f-food__main{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
   .kds3f-food__name{
-    flex:1;display:flex;align-items:center;gap:4px;
-    padding:6px 10px;min-width:0;
+    flex:1;min-width:0;
+    padding:6px 10px 6px 4px;                        /* 4px — прежний зазор до названия */
     font-size:var(--ds-typography-font-size-5x);   /* 20px */
     font-weight:var(--ds-typography-font-weight-medium);
     line-height:26px;letter-spacing:var(--ds-typography-letter-spacing-s);
     color:#fff;
   }
+  /* количество — отдельный элемент перед названием (правка 16.09) */
+  .kds3f-food__qty{
+    flex:0 0 auto;
+    padding:6px 0 6px 10px;
+    font-size:var(--ds-typography-font-size-5x);   /* 20px */
+    font-weight:var(--ds-typography-font-weight-medium);
+    line-height:26px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:#fff;
+  }
+  /* строка «количество + название»: количество — по верхней строке названия (правка 16.09) */
+  .kds3f-food__line{display:flex;align-items:flex-start;min-width:0}
+  .kds3f-food > .kds3f-food__line{flex:1}
   .kds3f-badge{
     display:inline-flex;align-items:center;gap:4px;
     padding:2px 10px 0;
@@ -139,27 +161,33 @@
   /* разные цвета стрелок в кнопках */
   .kds3f-food--arrow-orange .kds3f-food__action .material-icons{color:#ffab40}
   .kds3f-food--arrow-blue   .kds3f-food__action .material-icons{color:#448aff}
+  /* удалённая позиция — красные текст и иконка удаления */
+  .kds3f-food__name--neg{color:var(--ds-palette-negative-500)}          /* #ff5252 */
+  .kds3f-food--group:has(.kds3f-food__name--neg) .kds3f-food__qty{color:var(--ds-palette-negative-500)}
+  .kds3f-food--arrow-neg .kds3f-food__action .material-icons{color:var(--ds-palette-negative-500)}
 
   /* группа блюд */
   .kds3f-food--group{align-items:stretch}
   .kds3f-food__nested{padding:2px 10px 4px 26px;display:flex;flex-direction:column}
   .kds3f-food__nested-item{
-    display:flex;align-items:center;gap:4px;
+    display:flex;align-items:flex-start;gap:4px;
     font-size:var(--ds-typography-font-size-4x);   /* 16px */
     font-weight:var(--ds-typography-font-weight-regular);
     line-height:22px;letter-spacing:var(--ds-typography-letter-spacing-s);
     color:#fff;
     padding:2px 0;
   }
-  /* комментарий-добавка с оранжевым пунктиром слева */
+  /* отменённая позиция: весь текст красный (правило — после базового, иначе перекрывается) */
+  .kds3f-food__nested-item--neg,
+  .kds3f-food__nested-item--neg span{color:var(--ds-palette-negative-500)}    /* #ff5252 */
+  /* комментарий-добавка с иконкой комментария 16 px */
   .kds3f-food__nested-item--comment{
     color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
+    gap:8px;                                       /* зазор до текста 8 */
   }
   .kds3f-food__nested-item--comment::before{
-    content:"";
-    flex-shrink:0;
-    width:1px;height:16px;
-    background:repeating-linear-gradient(to bottom, var(--ds-palette-warning-500) 0 3px, transparent 3px 6px);
+    content:"mode_comment";font-family:'Material Icons Outlined';font-size:16px;line-height:1;
+    color:var(--ds-palette-neutral-500);flex-shrink:0;   /* иконка комментария 16 px — как у коммента в шапке */
   }
 
   /* футер «Перенос чека» */
@@ -187,6 +215,10 @@
         </div>
         <span class="kds3f-order__time">- 00:27</span>
       </div>
+      <div class="kds3f-customer">
+        <span class="material-icons">person</span>
+        <span>Константинопольский</span>
+      </div>
       <div class="kds3f-meta">
         <div class="kds3f-meta__items">
           <div class="kds3f-meta__item"><span class="material-icons">storefront</span><span>Самовывоз</span></div>
@@ -203,7 +235,7 @@
       <div class="kds3f-food kds3f-food--group kds3f-food--accent kds3f-food--arrow-orange">
         <div class="kds3f-food__main">
           <div class="kds3f-badge"><span>Новый</span></div>
-          <div class="kds3f-food__name"><span>1</span><span>Комбо с пастой</span></div>
+          <div class="kds3f-food__line"><span class="kds3f-food__qty">1</span><span class="kds3f-food__name">Комбо с пастой</span></div>
           <div class="kds3f-food__nested">
             <div class="kds3f-food__nested-item kds3f-food__nested-item--comment"><span>Капучино на растительном молоке</span></div>
             <div class="kds3f-food__nested-item"><span>1</span><span>Паста карбонара</span></div>
@@ -215,20 +247,30 @@
 
       <!-- Морс -->
       <div class="kds3f-food kds3f-food--accent kds3f-food--arrow-orange kds3f-food--stripe-orange">
-        <div class="kds3f-food__name"><span>1</span><span>Морс ягодный 1 л.</span></div>
+        <span class="kds3f-food__line"><span class="kds3f-food__qty">1</span><span class="kds3f-food__name">Морс ягодный 1 л.</span></span>
         <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
       </div>
 
       <!-- Паста 1 -->
       <div class="kds3f-food kds3f-food--stripe-green">
-        <div class="kds3f-food__name"><span>1</span><span>Паста карбонара</span></div>
+        <span class="kds3f-food__line"><span class="kds3f-food__qty">1</span><span class="kds3f-food__name">Паста карбонара</span></span>
         <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
       </div>
 
-      <!-- Паста 2 -->
-      <div class="kds3f-food kds3f-food--accent kds3f-food--arrow-blue kds3f-food--edge-left">
-        <div class="kds3f-food__name"><span>1</span><span>Паста карбонара</span></div>
-        <button class="kds3f-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      <!-- Пицца (позиция удалена) -->
+      <div class="kds3f-food kds3f-food--group kds3f-food--stripe-red kds3f-food--arrow-neg">
+        <div class="kds3f-food__main">
+          <div class="kds3f-food__line"><span class="kds3f-food__qty">1</span><span class="kds3f-food__name kds3f-food__name--neg">Пицца от шефа маленькая</span></div>
+          <div class="kds3f-food__nested">
+            <div class="kds3f-food__nested-item kds3f-food__nested-item--neg"><span>1</span><span>Двойной сыр</span></div>
+            <div class="kds3f-food__nested-item kds3f-food__nested-item--neg"><span>1</span><span>Толстое</span></div>
+            <div class="kds3f-food__nested-item kds3f-food__nested-item--neg"><span>1</span><span>Бекон</span></div>
+            <div class="kds3f-food__nested-item kds3f-food__nested-item--neg"><span>1</span><span>Курица</span></div>
+            <div class="kds3f-food__nested-item kds3f-food__nested-item--neg"><span>1</span><span>Пепперони</span></div>
+            <div class="kds3f-food__nested-item kds3f-food__nested-item--neg"><span>1</span><span>Салями</span></div>
+          </div>
+        </div>
+        <button class="kds3f-food__action" type="button"><span class="material-icons">delete</span></button>
       </div>
 
     </div>

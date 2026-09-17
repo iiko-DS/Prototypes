@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frame 1276 «Метро» — отрисовка на компонентах ДС (адаптив 1184 → 375)</title>
+<!--
+  Источник: Figma, файл «Новый список товаров, заказа - поставщики», node 7408:44703 (Frame 1276, 1184×633).
+  Значения — из переменных этого фрейма (get_variable_defs):
+    Input M: pad 12/12, gap 8, height 48 (12+24+12), border-radius 12, border 1, fill #F8F9FC, border #E0E0E0
+    Text/Primary #333333 · Placeholder #BDBDBD · Accent #448AFF · Surface #F8F9FC · Gray/300 #E0E0E0
+    H5 24/500 · H6 20/500 · Body M 16/400 (lh 24) · Body S 14/400 (lh 20) · Button Caps 14/500 (letter-spacing 1.25)
+    Stepper: gap 8, divider width 8, selected #448AFF, default #333333
+  Геометрия из дерева фрейма (get_metadata):
+    title row 1120×36 at 32/24 · stepper line 1114×24 at 32/80 · контент-колонка 720 wide at 32/124
+    карточка 720×373, внутренний блок 672×333 с паддингом 24/16 · отступ между группами 24, между текстом и полем 16
+    Input 672×48 · textarea 672×109 · Stepper button 153×36, прижат вправо (x=567 внутри 720)
+  Компоненты и стили — только ДС (iiko-ds-web/components). Своё — каркас страницы и отступы,
+  помеченные ниже как «из макета».
+
+  ОТКУДА ЧТО ВЗЯТО:
+    • разметка и стили — из файлов iiko-ds-web: components/index.css + *_DS/*.css,
+      tokens.css, styles.css, font.css (классы и токены не выгружались из Figma заново);
+    • из Figma-макета — только состав контейнера (какие компоненты внутри) и его геометрия
+      (размеры/отступы) для сверки. DS-библиотека в Figma не читалась;
+    • hex в комментариях — из макета-донора (донор может быть любой); в CSS ни один hex не используется —
+      всё на токенах ДС.
+
+  ПОВЕДЕНИЕ ПОЛЕЙ (по ДС-компоненту Input: Variant Empty → Focus / Populated):
+    • покой: Label лежит внутри поля (16/24, Text/Primary) — так поле показано и в макете;
+    • клик: Label уезжает наверх — 12/16, при фокусе акцент (#448AFF), как в ДС
+      (.ds-input__frame:focus-within .ds-input__label); строка ввода встаёт под лейбл;
+    • ввод значения: Label остаётся наверху (#616161), текст — под ним;
+    • очистить + потерять фокус: Label возвращается в поле (Variant Empty).
+    Механика — CSS прототипа на токенах ДС (в компонентном CSS само всплытие не описано);
+    «Описание процесса» — та же механика (в макете это тот же Input, растянутый по высоте).
+    Для скриншотов: ?demo=focus (фокус в первом поле), ?demo=filled (заполненные поля).
+
+  СВЕРЕНО С РЕНДЕРОМ МАКЕТА (пиксель-замеры по PNG 1184×633) — каркас и структура:
+    • шапка 36 в y=24; иконка-кнопка 24×24 с глифом 16 (Button icon XS), заголовок от x=74
+    • кнопка в шапке (акцентная, filled) прижата вправо: правый край 1152 = 1184−32
+    • степпер y=80, счётчики 24, разделители 8×1; линия в макете 1114
+    • карточка в y=168, ширина 720; отступы каркаса: 20 / 20 / 16 / 24 / 16 / 32
+    • Input M 48 в колонке; футер «1 из 6 + Далее» — справа
+  Где ДС отличается от макета по размерам, приоритет у ДС — поэтому низ карточки и футер стоят
+  выше макета (~6 px): строка тумблера в ДС 20 против макетных 24, паддинг Card content — 16.
+
+  ПОДСКАЗКИ ПО ДС (только косяки самой ДС — компоненты/токены/CSS; макет-донор ни при чём):
+    • в шапке ширины — ссылка «Подсказки ДС · 4» (или ?hints=1): номера-маркеры на местах
+      проблем (отдельный слой поверх страницы — overflow компонентов номер не режет),
+      клик по номеру — пузырь ДС-подсказки с текстом находки; полный список — под шапкой:
+      что отрисовано неправильно и что доправить (Фигма/токены/CSS);
+    • расхождения с макетом-донором не ведём (донор может быть любой — Figma/Balsamiq/текст),
+      прототип собирается строго по ДС; ?ui=0 — чистый кадр без подсказок.
+
+  ВЁРСТКА ПО ДС: компоненты рендерятся строго по ДС. Расхождения с макетом-донором не ведём —
+  донор может быть любым (Figma, Balsamiq, текстовое описание). Косяки самой ДС — в «Подсказках» выше.
+
+  АДАПТИВ (ширина кадра; подробности — в CSS-блоке «Ширина кадра»):
+    • один кадр вместо статичной пары: ширину задаёт пользователь — ручкой у правого
+      края или пресетами 1440 / 1184 / 768 / 375;
+    • 1184 — Frame 1276 как есть; мобильная ширина — 375 (iiko-ds-mobile/mobile-block-schemes.md,
+      шаг P4 «Создать мобильную версию · ширина 375»), граница desktop → mobile — 768
+      (iiko-ds-mobile/mobile-mode-notes.md, §10 «Планшет»); между границами десктопная
+      вёрстка ужимается: колонка тянется, подписи степпера — с многоточием;
+    • при ширине ≤ 768 кадр получает data-mode="mobile" (размеры из iiko-ds-mobile/modes.css)
+      и вертикальный степпер .ds-stepper--vertical — до 375 остаётся та же мобильная вёрстка.
+
+    • кадр показывается в подложке устройства: телефон ≤ 480 (375×812), планшет 481–768
+      (768×1024), десктоп ≥ 769 (1440×960) — высота экрана фиксирована (812 / 1024 / 960),
+      тянется только ширина; внутри прокрутка (?ui=0 — без подложки).
+
+  РЕВЬЮ (панель «Решения ревью» справа; ?ui=0 скрывает и её):
+    • значения пробуем в DevTools и смотрим, вердикт — записываем в панель: запись хранит
+      компонент (или «Сетка и отступы» / «Прочее»), ширину и режим на момент записи;
+    • записи живут в localStorage (переживают перезагрузку) и выгружаются в .md —
+      «Скопировать / Скачать», чтобы перенести в план или страницы рекомендаций.
+-->
+<link rel="stylesheet" href="../iiko-ds-web/font.css">
+<link rel="stylesheet" href="../iiko-ds-web/tokens.css">
+<!-- мобильный слой ДС: ось режима + структурные моб-компоненты (порядок обязателен) -->
+<link rel="stylesheet" href="../iiko-ds-mobile/modes.css">
+<link rel="stylesheet" href="../iiko-ds-mobile/components/index.css">
+<script src="ds-frame-nav.js?v=1"></script>
+<link rel="stylesheet" href="../iiko-ds-web/styles.css">
+<link rel="stylesheet" href="../iiko-ds-web/components/index.css">
+<!-- fixes.css — ручной слой правок поверх генерации ДС; обновления из Фигмы его не перезаписывают -->
+<link rel="stylesheet" href="../iiko-ds-web/fixes.css">
+<!-- touch-hover-off.css — статическая глушилка ховеров для тач-режима; генерируется заново после обновлений ДС
+     (node _audit/build-hover-off.mjs), при перегенерации поднять ?v= -->
+<link rel="stylesheet" href="touch-hover-off.css?v=1">
+<!-- app-header — сквозная шапка приложения («App bars: top»): один источник app-header/*.css+js -->
+<link rel="stylesheet" href="app-header/app-header.css?v=6">
+<!-- app-sidenav — свёрнутое боковое меню (десктоп); на планшете/мобильном уезжает в гамбургер шапки -->
+<link rel="stylesheet" href="app-sidenav/app-sidenav.css?v=4">
+<link rel="stylesheet" href="device-chrome/device-chrome.css?v=5">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+<style>
+  /* ── Каркас страницы (у каркаса нет ДС-компонента) ───────── */
+  html,body{margin:0;background:#fff;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--ds-color-text-primary)}
+  body{display:flex;flex-direction:column}
+  .frame{width:100%;min-height:633px;padding:24px 32px 24px 32px;box-sizing:border-box}
+
+  /* ── Ширина кадра: адаптив 1184 → 375 (обвязка ревью; ?ui=0 — скрыть и получить чистый кадр) ──
+     Один кадр вместо статичной пары «десктоп + мобильный». Ширину задаёт пользователь:
+     ручка у правого края или пресеты 1440 / 1184 / 768 / 375.
+     При ширине ≤ 768 панель получает data-mode="mobile" — размеры приходят из
+     iiko-ds-mobile/modes.css, степпер — вертикальный класс из моб-слоя.
+     1440 — типовой экран десктопа; 1184 — Frame 1276 как есть; 768 — граница desktop → mobile (mobile-mode-notes.md, §10);
+     375 — конечная мобильная ширина (mobile-block-schemes.md, шаг P4). */
+  .modes-bar{display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:1px solid var(--ds-color-stroke-default);background:#fff;font-size:var(--ds-typography-font-size-3-5x);line-height:20px}
+  .modes-bar[hidden]{display:none}
+  .modes-bar__title{color:var(--ds-color-text-secondary)}
+  .modes-bar__value{min-width:56px;font-weight:var(--ds-typography-font-weight-medium);color:var(--ds-color-text-accent);font-variant-numeric:tabular-nums}
+  .modes-bar__mode{height:20px;padding:0 6px;border:1px solid var(--ds-color-stroke-default);border-radius:var(--ds-radius-2x);color:var(--ds-color-text-secondary);font-size:12px;line-height:18px}
+  .modes-bar__hint{color:var(--ds-color-text-secondary)}
+  .modes-bar__spacer{flex:1}
+  .modes-bar__btn{height:28px;padding:0 12px;border:1px solid var(--ds-color-stroke-default);border-radius:var(--ds-radius-2x);background:transparent;font-family:inherit;font-size:var(--ds-typography-font-size-3-5x);font-weight:var(--ds-typography-font-weight-medium);color:var(--ds-color-text-primary);cursor:pointer}
+  .modes-bar__btn:hover{background:var(--ds-color-button-neutral-hover)}
+  .modes-bar__btn.is-active{border-color:var(--ds-color-brand-accent-default);background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive)}
+  /* «Подсказки ДС» — ссылка-переключатель, а не кнопка-пресет: не спорит с пресетами ширины.
+     Отступ слева больше общего гэпа — чтобы не сливалась с текстом про размеры */
+  .modes-bar__link{margin-left:16px;border:0;background:none;padding:0;font-family:inherit;font-size:inherit;line-height:20px;color:var(--ds-color-text-accent);cursor:pointer;white-space:nowrap}
+  .modes-bar__link:hover{text-decoration:underline}
+  .modes-bar__link.is-active{font-weight:var(--ds-typography-font-weight-medium);text-decoration:underline}
+
+  /* ── Подсказки по ДС (обвязка ревью; цель — дизайн в Фигме совпадает с вёрсткой):
+     ссылка в шапке или ?hints=1 — пунктирные маркеры с номерами на местах расхождений
+     + список находок под шапкой. В чистом кадре (?ui=0) подсказки недоступны. ── */
+  .hints{display:none;padding:10px 24px 12px;border-bottom:1px solid var(--ds-color-stroke-default);background:var(--ds-color-brand-accent-super-lightest,#f5f9ff);font-size:var(--ds-typography-font-size-3-5x);line-height:20px;color:var(--ds-color-text-primary)}
+  body.hints-on .hints{display:block}
+  body.ui-clean .hints{display:none!important}
+  .hints__list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;max-width:1120px}
+  .hints__item{display:flex;gap:8px}
+  .hints__num{flex:0 0 auto;width:20px;height:20px;border-radius:9999px;background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive);font-size:12px;line-height:20px;text-align:center;font-weight:var(--ds-typography-font-weight-medium)}
+  .hints__text{min-width:0}
+  body.hints-on .hint-mark{outline:2px dashed var(--ds-color-brand-accent-default);outline-offset:-2px}
+  /* Номера-маркеры — отдельный fixed-слой поверх страницы: overflow компонентов
+     (table-wrap, ячейки, кнопки) их не режет, номер видно в любом месте.
+     Слой прозрачен для кликов; кликабельны только сами номера. */
+  .hints-layer{position:fixed;inset:0;z-index:120;pointer-events:none}
+  .hint-badge{position:absolute;box-sizing:border-box;min-width:20px;height:20px;padding:0 6px;border:0;border-radius:9999px;background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive);font-family:'Roboto','Helvetica Neue',Arial,sans-serif;font-size:12px;line-height:20px;font-weight:var(--ds-typography-font-weight-medium);text-align:center;cursor:pointer;pointer-events:auto;box-shadow:0 0 0 2px var(--ds-color-text-inversive)}
+  .hint-badge:hover{box-shadow:0 0 0 2px var(--ds-color-text-inversive),var(--ds-shadow-shadows-08-dp-s,0 2px 8px rgba(0,0,0,.2))}
+  .hint-badge.is-open{box-shadow:0 0 0 2px var(--ds-color-text-inversive),0 0 0 4px var(--ds-color-brand-accent-default)}
+  /* Пузырь по клику на номер — композит ДС через контейнер: ds-hint-container--default +
+     ds-hint-content--single-content; ширина увеличена для читаемости, текст переносится.
+     Позиция и сторона стрелки (вверх/вниз) — обвязка прототипа */
+  .hint-pop{position:absolute;z-index:2;pointer-events:auto}
+  .hint-pop .ds-hint-container{width:auto}
+  .hint-pop .ds-hint-content{width:340px}
+  .hint-pop .ds-hint-content__label{white-space:normal}
+  .hint-pop .ds-hint-container__arrow{justify-content:center}
+  .hint-pop--above .ds-hint-container{flex-direction:column-reverse}
+
+  .view{display:flex;gap:16px;align-items:flex-start;padding:24px}
+  body.ui-clean .view{padding:0}
+  /* Кадр не ужимается сам: ширину держит панель (ручка/пресеты), страница скроллится */
+  .panel{position:relative;flex:0 0 auto;width:1184px}
+  /* Реальный размер «экрана»: высота панели = высота устройства (960/1024/812), приложение живёт
+     внутри (шапка + кадр + системные полосы устройства), кадр занимает остаток (flex). Экран
+     не подстраивается под высоту шапки/рейла — у монитора он так и остаётся 960 */
+  body.device-phone .panel,body.device-tablet .panel,body.device-desktop .panel{display:flex;flex-direction:column;height:var(--device-screen-h,812px)}
+  body:not(.ui-clean) .panel .frame{outline:1px solid var(--ds-color-stroke-default)}
+  body.ui-clean .panel__handle{display:none}
+
+  /* Ручка изменения ширины — у правого края кадра; тянется мышью/пальцем */
+  .panel__handle{position:absolute;top:0;right:-8px;width:16px;height:100%;display:flex;align-items:center;justify-content:center;cursor:ew-resize;touch-action:none;z-index:2}
+  .panel__handle::before{content:"";width:4px;height:64px;border-radius:9999px;background:var(--ds-color-stroke-default);transition:background .12s ease}
+  .panel__handle:hover::before{background:var(--ds-color-brand-accent-default)}
+  body.is-dragging{cursor:ew-resize;user-select:none}
+  body.is-dragging .panel__handle::before{background:var(--ds-color-brand-accent-default)}
+
+  /* Мобильная вёрстка (ширина ≤ 768): кадр — компактные паддинги, карточка и поля —
+     на всю ширину. Размеры самих компонентов приходят из modes.css по data-mode. */
+  .panel[data-mode="mobile"] .frame{min-height:0;padding:16px}
+  .panel[data-mode="mobile"] .content-col{max-width:none}
+  .panel[data-mode="mobile"] .title-row{height:auto;min-height:44px;gap:8px}
+  .panel[data-mode="mobile"] .stepper-row{margin-top:16px}
+  .panel[data-mode="mobile"] .content-col__heading{margin:16px 0 12px}
+  .panel[data-mode="mobile"] .form-footer{margin-top:24px}
+
+  /* ── Подложка устройства (обвязка ревью): телефон ≤ 480 — iPhone 375×812,
+     планшет 481–768 — iPad 768×1024, десктоп ≥ 769 — монитор 1440×960; высота экрана
+     фиксирована (812 / 1024 / 960) — тянется только ширина; внутри — прокрутка.
+     В чистом кадре (?ui=0) подложки нет. ── */
+  body.device-phone .panel::before,body.device-tablet .panel::before,body.device-desktop .panel::before{content:"";position:absolute;inset:-14px;border:14px solid var(--ds-color-brand-neutral-super-dark);border-radius:38px;pointer-events:none;z-index:1}
+  body.device-tablet .panel::before{inset:-16px;border-width:16px;border-radius:30px}
+  body.device-desktop .panel::before{border-radius:30px}
+  body.device-phone .panel::after{content:"";position:absolute;top:2px;left:50%;transform:translateX(-50%);width:96px;height:18px;border-radius:9999px;background:var(--ds-color-brand-neutral-super-dark);pointer-events:none;z-index:1}
+  body.device-tablet .panel::after{content:"";position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:9999px;background:var(--ds-color-stroke-hover);pointer-events:none;z-index:1}
+  body.device-desktop .panel::after{content:"";position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:9999px;background:var(--ds-color-stroke-hover);pointer-events:none;z-index:1}
+  body.device-phone .frame,body.device-tablet .frame,body.device-desktop .frame{flex:1 1 0;min-height:0;overflow:auto}   /* высоту даёт панель-экран; 960 = шапка 64 + кадр 896 */
+
+  /* ── Решения ревью (обвязка): значения пробуем в DevTools, вердикт по компоненту —
+     сюда. Запись хранит компонент, ширину и режим; живёт в localStorage и выгружается
+     в .md («Скопировать / Скачать»). ?ui=0 скрывает панель (чистый кадр).
+     Панель сжимается, чтобы к кадру 1184 влезать без горизонтальной прокрутки. */
+  .review{position:sticky;top:24px;flex:0 1 340px;min-width:250px;box-sizing:border-box;max-height:calc(100vh - 48px);display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--ds-color-stroke-default);border-radius:var(--ds-radius-2x);background:#fff;font-size:var(--ds-typography-font-size-3-5x);line-height:20px}
+  body.ui-clean .review{display:none}
+  .review__head{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px}
+  .review__title{font-weight:var(--ds-typography-font-weight-medium)}
+  .review__count{min-width:20px;padding:0 6px;border-radius:9999px;background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive);font-size:var(--ds-typography-font-size-3x);line-height:20px;text-align:center}
+  .review__count--zero{background:var(--ds-color-stroke-default);color:var(--ds-color-text-secondary)}
+  .review__spacer{flex:1}
+  .review__act{height:28px;padding:0 10px;border:1px solid var(--ds-color-stroke-default);border-radius:var(--ds-radius-2x);background:transparent;font-family:inherit;font-size:var(--ds-typography-font-size-3x);color:var(--ds-color-text-primary);cursor:pointer}
+  .review__act:hover{background:var(--ds-color-button-neutral-hover)}
+  .review__act:disabled{border-color:var(--ds-color-stroke-disable);color:var(--ds-color-text-disable);background:transparent;cursor:default}
+  .review__form{display:flex;flex-direction:column;gap:8px}
+  .review__select,.review__input{width:100%;box-sizing:border-box;border:1px solid var(--ds-color-stroke-default);border-radius:var(--ds-radius-2x);background:#fff;font-family:inherit;font-size:var(--ds-typography-font-size-3-5x);line-height:20px;color:var(--ds-color-text-primary)}
+  .review__select{height:32px;padding:0 8px}
+  .review__input{min-height:64px;padding:6px 8px;resize:vertical}
+  .review__select:focus,.review__input:focus{outline:none;border-color:var(--ds-color-stroke-accent)}
+  .review__hint{font-size:var(--ds-typography-font-size-3x);line-height:16px;color:var(--ds-color-text-secondary)}
+  .review__add{height:32px;border:none;border-radius:var(--ds-radius-2x);background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive);font-family:inherit;font-size:var(--ds-typography-font-size-3-5x);font-weight:var(--ds-typography-font-weight-medium);cursor:pointer}
+  .review__list{list-style:none;margin:0;padding:0;overflow:auto;display:flex;flex-direction:column}
+  .review__item{padding:10px 0;border-top:1px solid var(--ds-color-stroke-default)}
+  .review__meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .review__chip{padding:0 6px;border:1px solid var(--ds-color-stroke-default);border-radius:6px;font-size:var(--ds-typography-font-size-3x);line-height:18px;color:var(--ds-color-text-secondary)}
+  .review__ctx{font-size:var(--ds-typography-font-size-3x);line-height:16px;color:var(--ds-color-text-secondary)}
+  .review__flag{margin-left:auto;border:none;background:none;padding:0;font-family:inherit;font-size:var(--ds-typography-font-size-3x);color:var(--ds-color-text-accent);cursor:pointer}
+  .review__flag--done{color:var(--ds-color-text-secondary)}
+  .review__del{border:none;background:none;padding:0 0 0 8px;font-family:inherit;font-size:var(--ds-typography-font-size-4x);line-height:16px;color:var(--ds-color-text-secondary);cursor:pointer}
+  .review__del:hover{color:var(--ds-color-text-primary)}
+  .review__body{margin-top:6px;white-space:pre-wrap}
+  .review__body--done{color:var(--ds-color-text-secondary)}
+  .review__empty{margin:0;color:var(--ds-color-text-secondary)}
+
+  /* title row: иконочная кнопка + заголовок + кнопка справа (1120×36)
+     кнопка-иконка — 24 px (Button icon XS), до текста 16 px — как в макете */
+  .title-row{display:flex;align-items:center;gap:16px;height:36px}
+  .title-row__title{margin:0;flex:1;min-width:0;font:var(--ds-font-header-m-24-normal-medium);/* 24/500 */color:var(--ds-color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .stepper-row{margin-top:20px;min-width:0}
+  /* В макете линия 1114 px и при 1184 стоит как есть. Когда кадр уже — строка не
+     переносится и не скроллится: ужимаются подписи шагов (многоточие), маркеры и
+     разделители остаются. Полные подписи возвращает вертикальный вариант (≤ 768). */
+  .stepper-row .ds-step{min-width:0}
+  .stepper-row .ds-step>span:not(.ds-step__num){min-width:0;overflow:hidden;text-overflow:ellipsis}
+
+  .content-col{width:100%;max-width:720px;margin-top:20px;min-width:0}
+  .content-col__heading{margin:0 0 16px;font:var(--ds-font-header-s-20-normal-medium);/* 20/500 */color:var(--ds-color-text-primary)}
+
+  /* Card content: паддинги — из ДС; гэпы между блоками — структура макета (24 / 16) */
+  .content-col .ds-card__content{display:flex;flex-direction:column;gap:24px}
+
+  /* группы контента: между блоками 24, внутри блока «поле + textarea» — 16 (структура макета) */
+  .group{display:flex;flex-direction:column;gap:24px}
+  .group--16{gap:16px}
+  .group__fields{display:flex;flex-direction:column;gap:16px}
+
+  /* лейаут: в форме textarea тянется по ширине колонки (у компонента ДС дефолт 250) */
+  .content-col .ds-textarea{width:100%}
+
+  /* поле внутри рамки — стили как у .ds-input__field (16/24, Text/Primary, без своей рамки) */
+  .ds-textarea__field{flex:1;width:100%;min-height:0;box-sizing:border-box;border:none;outline:none;resize:none;background:transparent;padding:0;font-family:inherit;font-size:var(--ds-font-body-m-16-normal-regular-size);line-height:var(--ds-font-body-m-16-normal-regular-line);color:var(--ds-color-text-primary)}
+
+  /* «Описание процесса»: высота рамки 109 (в макете 109; ДС: min 96); рамка и паддинги — из ДС.
+     Поле растягивается по высоте рамки (без align-items:flex-start), паддинги рамки 4/12/12/12 */
+  .field-109 .ds-textarea__input-frame{height:109px;box-sizing:border-box}
+
+  /* ── Поведение полей (по ДС-компоненту Input: Empty → Focus / Populated) ──────
+     Покой: Label внутри поля — строка 16/24 по центру рамки (12 px от краёв при h=48 — как в макете).
+     Фокус/значение: Label наверх — 12/16 на 4 px от кромки; строка ввода уезжает на 20 (низ 44):
+     48 = 4 + 16 (Label) + 24 (строка) + 4. При фокусе цвет лейбла — акцент (как в ДС).
+     Сдвиг строки — transform (не margin), чтобы колонка контента не раздувалась и центрирование не ехало.
+     Размеры/цвета — токены ДС; позиционирование — обвязка прототипа (в CSS ДС всплытие не описано). */
+  .js-field .ds-input__content{position:relative}
+  .js-field .ds-input__label{position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:var(--ds-typography-font-size-4x);line-height:24px;color:var(--ds-color-text-primary);white-space:nowrap;pointer-events:none;transition:top .12s ease,transform .12s ease,font-size .12s ease,color .12s ease}
+  .js-field .ds-input__content:focus-within .ds-input__label,
+  .js-field .ds-input__content:has(.ds-input__field:not(:placeholder-shown)) .ds-input__label{top:-8px;transform:none;font-size:var(--ds-typography-font-size-3x);line-height:16px;color:var(--ds-color-text-secondary)}
+  .js-field .ds-input__content:focus-within .ds-input__label{color:var(--ds-color-text-accent)}
+  .js-field .ds-input__content:focus-within .ds-input__field,
+  .js-field .ds-input__content:has(.ds-input__field:not(:placeholder-shown)) .ds-input__field{transform:translateY(8px)}
+
+  /* «Описание процесса» — та же механика (в макете это тот же Input, растянутый по высоте),
+     только в покое подпись стоит вверху рамки, как в макете; поле тянется по высоте рамки */
+  .js-area .ds-textarea__input-frame{position:relative}
+  .js-area .ds-textarea__label{position:absolute;left:12px;top:12px;font-size:var(--ds-typography-font-size-4x);line-height:24px;color:var(--ds-color-text-primary);white-space:nowrap;pointer-events:none;transition:top .12s ease,font-size .12s ease,color .12s ease}
+  .js-area .ds-textarea__input-frame:focus-within .ds-textarea__label,
+  .js-area .ds-textarea__input-frame:has(.ds-textarea__field:not(:placeholder-shown)) .ds-textarea__label{top:4px;font-size:var(--ds-typography-font-size-3x);line-height:16px;color:var(--ds-color-text-secondary)}
+  .js-area .ds-textarea__input-frame:focus-within .ds-textarea__label{color:var(--ds-color-text-accent)}
+  .js-area .ds-textarea__input-frame:focus-within .ds-textarea__field,
+  .js-area .ds-textarea__input-frame:has(.ds-textarea__field:not(:placeholder-shown)) .ds-textarea__field{padding-top:16px}
+
+  /* футер: карточка → «1 из 6 + Далее» 32 px (в макете y=573 при низе карточки 541) */
+  .form-footer{display:flex;justify-content:flex-end;margin-top:32px}
+
+  /* Только для скриншотов (?state=hover|focus): псевдоклассы классом не включить —
+     повторяем поведение ДС теми же токенами. В обычном просмотре не используется. */
+  .demo-hover .ds-input__frame{background:var(--ds-color-shapes-hover);border-color:var(--ds-color-stroke-hover)}
+  .demo-focus .ds-input__frame{background:var(--ds-color-shapes-default-variant);border-color:var(--ds-color-stroke-accent)}
+
+  /* ── Глифы Material Icons: размер = размеру слота ДС (20; у Button icon XS — 16 по токену) ── */
+  /* Иконки — всегда аутлайновые (правило проекта): базовый класс material-icons
+     переводим на семейство Outlined (второй Google-линк) */
+  .material-icons{font-family:'Material Icons Outlined'}
+  .ds-btn-icon__icon.material-icons{font-size:20px;line-height:20px}
+  .ds-btn-icon--xs .ds-btn-icon__icon.material-icons{font-size:16px;line-height:16px}
+  .ds-banner__icon.material-icons{font-size:20px;line-height:20px}
+</style>
+<!-- Тач-режим (планшет/телефон ≤768): ховер → тап, подсказки — долгим нажатием; см. touch-mode.css/js -->
+<link rel="stylesheet" href="touch-mode.css?v=6">
+<script src="touch-mode.js?v=10" defer></script>
+<script src="ds-sizes-toggle.js?v=6" defer></script>
+<script src="app-header/app-header.js?v=3" defer></script>
+<script src="app-sidenav/app-sidenav.js?v=2" defer></script>
+<script src="device-chrome/device-chrome.js?v=1" defer></script>
+</head>
+<body>
+<!-- Шапка ревью: ширина кадра — пресеты и ручка (обвязка; ?ui=0 — скрыть, ?w=… — задать) -->
+<div class="modes-bar" id="modes-bar" role="group" aria-label="Ширина макета">
+  <span class="modes-bar__title">Ширина макета</span>
+  <span class="modes-bar__value" id="w-value">1184 px</span>
+  <span class="modes-bar__mode" id="w-mode">desktop</span>
+  <span class="modes-bar__hint">тяни за правый край · от 375 до 1440</span>
+  <button class="modes-bar__link" type="button" id="hints-btn" aria-pressed="false" title="Показать/скрыть подсказки по расхождениям с ДС (Фигма ↔ вёрстка)">Подсказки ДС · 4</button>
+  <span class="modes-bar__spacer"></span>
+  <button class="modes-bar__btn" type="button" data-w="1440">Десктоп · 1440</button>
+  <button class="modes-bar__btn is-active" type="button" data-w="1184">Десктоп · 1184</button>
+  <button class="modes-bar__btn" type="button" data-w="768">Планшет · 768</button>
+  <button class="modes-bar__btn" type="button" data-w="375">Телефон · 375</button>
+</div>
+
+<!-- Подсказки по ДС (показать — ссылкой в шапке или ?hints=1): находки для правки ДС, цель — Фигма совпадает с вёрсткой -->
+<div class="hints" id="hints" role="note" aria-label="Подсказки по ДС">
+  <ol class="hints__list">
+    <li class="hints__item"><span class="hints__num">1</span><span class="hints__text">Input: механика Label (Empty → Focus / Populated) в CSS ДС не описана — поле не работает само (в Фигме статика, поведение скриптами не показать). Доправить: механика — в CSS Input_DS, в Фигме — статичные варианты состояний. (CSS + Фигма)</span></li>
+    <li class="hints__item"><span class="hints__num">2</span><span class="hints__text">Textarea: состояния не прорисованы (hover/focus правлены в CSS вручную 2026-09-11 — ждёт ревью; error нет); моб-размеров нет. Доправить: стили — в CSS, статичные варианты — в Фигме. (CSS + Фигма)</span></li>
+    <li class="hints__item"><span class="hints__num">3</span><span class="hints__text">Card: в моб-слое нет паддингов — на мобильной ширине компонент без отступов. Доправить: моб-значения. (iiko-ds-mobile + Фигма)</span></li>
+    <li class="hints__item"><span class="hints__num">4</span><span class="hints__text">Button icon XS: нет моб-значений (не задана тач-зона). Доправить: моб-размеры. (iiko-ds-mobile + Фигма)</span></li>
+  </ol>
+</div>
+<!-- Слой номеров-маркеров (строит скрипт подсказок; клик по номеру — пузырь с текстом находки) -->
+<div class="hints-layer" id="hints-layer"></div>
+
+<div class="view">
+
+<!-- Один кадр: ширину задаёт пользователь (ручка справа или пресеты в шапке) -->
+<div class="panel" id="panel" data-mode="desktop">
+<div class="frame">
+
+  <!-- Title+Search+Button (7408:44406) -->
+  <div class="title-row">
+    <!-- Button icon XS: 24×24, иконка 16 px — как в макете (глиф 16×16 в боксе 24) -->
+    <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--neutral ds-btn-icon--text" type="button" aria-label="Назад">
+      <span class="ds-btn-icon__icon material-icons">arrow_back</span>
+    </button>
+    <h1 class="title-row__title">Метро</h1>
+    <button class="ds-btn ds-btn--m ds-btn--accent ds-btn--filled" type="button">
+      <span class="ds-btn__label">Сохранить</span>
+    </button>
+  </div>
+
+  <!-- Stepper line (7408:44430) -->
+  <div class="stepper-row">
+    <div class="ds-stepper">
+      <button class="ds-step ds-step--selected" type="button"><span class="ds-step__num">1</span><span>Общие настройки</span></button>
+      <span class="ds-stepper__divider"></span>
+      <button class="ds-step" type="button"><span class="ds-step__num">2</span><span>Создание заказа</span></button>
+      <span class="ds-stepper__divider"></span>
+      <button class="ds-step" type="button"><span class="ds-step__num">3</span><span>Подтверждение заказа</span></button>
+      <span class="ds-stepper__divider"></span>
+      <button class="ds-step" type="button"><span class="ds-step__num">4</span><span>Отправка заказа</span></button>
+      <span class="ds-stepper__divider"></span>
+      <button class="ds-step" type="button"><span class="ds-step__num">5</span><span>Подтверждение поставщиком</span></button>
+      <span class="ds-stepper__divider"></span>
+      <button class="ds-step" type="button"><span class="ds-step__num">6</span><span>Приёмка</span></button>
+    </div>
+  </div>
+
+  <!-- Контент-колонка 720 (7408:44407) -->
+  <div class="content-col">
+    <h2 class="content-col__heading">Общие настройки</h2>
+
+    <div class="ds-card ds-card--outlined">
+      <div class="ds-card__content">
+
+        <!-- группа 1: тумблер (24) + [поле 48 + textarea 109] с гэпом 16 -->
+        <div class="group">
+          <label class="ds-slide-toggle">
+            <span class="ds-slide-toggle__row">
+              <input type="checkbox" class="ds-slide-toggle__input">
+              <span class="ds-slide-toggle__track"></span>
+              <span class="ds-slide-toggle__title">Активный</span>
+            </span>
+          </label>
+
+          <div class="group__fields">
+            <div class="ds-input ds-input--m js-field">
+              <div class="ds-input__frame">
+                <div class="ds-input__content">
+                  <!-- Label по ДС: в покое лежит внутри поля, при фокусе/значении уезжает наверх -->
+                  <span class="ds-input__label" id="label-name">Название процесса</span>
+                  <input class="ds-input__field" type="text" placeholder=" " aria-labelledby="label-name">
+                </div>
+              </div>
+            </div>
+
+            <div class="ds-textarea ds-textarea--empty field-109 js-area">
+              <div class="ds-textarea__input-frame">
+                <span class="ds-textarea__label" id="label-desc">Описание процесса</span>
+                <textarea class="ds-textarea__field" placeholder=" " aria-labelledby="label-desc"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- группа 2: тумблер (24) + поле 48, гэп 16 -->
+        <div class="group group--16">
+          <label class="ds-slide-toggle">
+            <span class="ds-slide-toggle__row">
+              <input type="checkbox" class="ds-slide-toggle__input">
+              <span class="ds-slide-toggle__track"></span>
+              <span class="ds-slide-toggle__title">Выбор поставщика в заказе</span>
+            </span>
+          </label>
+
+          <div class="ds-input ds-input--m js-field">
+            <div class="ds-input__frame">
+              <div class="ds-input__content">
+                <!-- в макете стрелки у поля нет; Label — по механике ДС (внутри → наверх) -->
+                <span class="ds-input__label" id="label-supplier">Выберите внешнего поставщика</span>
+                <input class="ds-input__field" type="text" placeholder=" " aria-labelledby="label-supplier">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Stepper button (7408:44429) -->
+    <div class="form-footer">
+      <div class="ds-stepper-button">
+        <span class="ds-stepper-button__counter">1 из 6</span>
+        <div class="ds-stepper-button__group">
+          <button class="ds-btn ds-btn--m ds-btn--accent ds-btn--outlined" type="button">
+            <span class="ds-btn__label">Далее</span>
+            <span class="ds-btn__icon material-icons">keyboard_arrow_right</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="panel__handle" id="panel-handle" title="Тяни, чтобы менять ширину (375–1440)"></div>
+</div><!-- /.panel -->
+
+<!-- Журнал ревью: значение меняем в DevTools, решение записываем к компоненту
+     (или к общему — сетка, отступы). Хранится в localStorage, выгружается в .md -->
+<aside class="review" id="review" aria-label="Решения ревью">
+  <div class="review__head">
+    <span class="review__title">Решения ревью</span>
+    <span class="review__count" id="review-count">0</span>
+    <span class="review__spacer"></span>
+    <button class="review__act" type="button" id="review-copy" title="Скопировать журнал как Markdown">Скопировать .md</button>
+    <button class="review__act" type="button" id="review-download" title="Скачать журнал файлом">Скачать .md</button>
+  </div>
+  <div class="review__form">
+    <select class="review__select" id="review-target" aria-label="К чему относится решение"></select>
+    <textarea class="review__input" id="review-text" rows="3" placeholder="Что решаем и что менять: напр. «pad-left 12 → 16; подписи не обрезать»"></textarea>
+    <div class="review__hint" id="review-hint">Контекст запишется сам: 1184 px · desktop</div>
+    <button class="review__add" type="button" id="review-add">Записать решение</button>
+  </div>
+  <ul class="review__list" id="review-list"></ul>
+  <p class="review__empty" id="review-empty">Пока пусто. Значения пробуем в DevTools, а решение — сюда: оно останется после перезагрузки.</p>
+</aside>
+
+</div><!-- /.view -->
+
+<script>
+  // Невидимая обвязка для скриншотов (в обычном просмотре ничего не меняет):
+  //   ?state=hover|focus|error|disabled — визуальные состояния полей
+  //   ?demo=focus|filled — состояния поведения (клик в первое поле / заполненные значения)
+  //   ?w=812 | ?view=desktop|mobile — стартовая ширина кадра (по умолчанию 1184)
+  //   ?ui=0 — скрыть обвязку ширины и получить чистый кадр
+  (function () {
+    var STATES = {
+      default: [],
+      hover: ['demo-hover'],
+      focus: ['demo-focus'],
+      error: ['ds-input--error'],
+      disabled: ['ds-input--disabled']
+    };
+    var ALL = ['demo-hover', 'demo-focus', 'ds-input--error', 'ds-input--disabled'];
+    var q = new URLSearchParams(location.search);
+
+    var st = q.get('state');
+    if (st && STATES[st]) {
+      Array.prototype.forEach.call(document.querySelectorAll('.js-field'), function (el) {
+        ALL.forEach(function (c) { el.classList.remove(c); });
+        STATES[st].forEach(function (c) { el.classList.add(c); });
+      });
+    }
+
+    var demo = q.get('demo');
+    if (demo === 'focus') {
+      var first = document.querySelector('.js-field .ds-input__field');
+      if (first) first.focus();
+    } else if (demo === 'filled') {
+      var samples = ['Заказ на пятницу', 'ООО «Ромашка»'];
+      Array.prototype.forEach.call(document.querySelectorAll('.js-field .ds-input__field'), function (el, i) {
+        el.value = samples[i] || 'Значение';
+      });
+      var area = document.querySelector('.js-area .ds-textarea__field');
+      if (area) area.value = 'Комментарий к процессу';
+    }
+
+    // ── Ширина кадра: адаптив 1184 → 375 (обвязка ревью) ───────
+    // Один кадр вместо статичной пары «десктоп + мобильный». Ширину задаёт
+    // пользователь — ручкой у правого края или пресетами 1440 / 1184 / 768 / 375.
+    // Переход через границу 768 px переключает режим: панель получает
+    // data-mode="mobile" (размеры из modes.css) и вертикальный степпер.
+    var bar = document.getElementById('modes-bar');
+    var panel = document.getElementById('panel');
+    var handle = document.getElementById('panel-handle');
+    var stepper = panel.querySelector('.ds-stepper');
+    var wValue = document.getElementById('w-value');
+    var wMode = document.getElementById('w-mode');
+    var MIN = 375, MAX = 1440, MOBILE_MAX = 768, DEFAULT_W = 1184;   // 1440 — экран десктопа, 1184 — макет, 768 — граница mobile, 375 — телефон
+    var clean = q.get('ui') === '0';
+
+    function setWidth(w) {
+      w = Math.round(Math.min(MAX, Math.max(MIN, w)));
+      panel.style.width = w + 'px';
+      var mobile = w <= MOBILE_MAX;
+      panel.dataset.mode = mobile ? 'mobile' : 'desktop';
+      if (stepper) stepper.classList.toggle('ds-stepper--vertical', mobile);
+      if (wValue) wValue.textContent = w + ' px';
+      if (wMode) wMode.textContent = mobile ? 'mobile' : 'desktop';
+      if (hintEl) hintEl.textContent = 'Контекст запишется сам: ' + w + ' px · ' + (mobile ? 'mobile' : 'desktop');
+      // Подложка устройства (обвязка ревью): телефон ≤ 480 — iPhone 375×812, планшет 481–768 —
+      // iPad 768×1024, десктоп ≥ 769 — монитор 1440×960: высота экрана фиксирована
+      // (812 / 1024 / 960) — тянется только ширина; ?ui=0 — без подложки
+      var deviceKind = clean ? '' : (w <= 480 ? 'phone' : (w <= MOBILE_MAX ? 'tablet' : 'desktop'));
+      document.body.classList.toggle('device-phone', deviceKind === 'phone');
+      document.body.classList.toggle('device-tablet', deviceKind === 'tablet');
+      document.body.classList.toggle('device-desktop', deviceKind === 'desktop');
+      if (deviceKind) {
+        var deviceH = deviceKind === 'phone' ? 812
+          : deviceKind === 'tablet' ? 1024
+          : 960;
+        panel.style.setProperty('--device-screen-h', Math.round(deviceH) + 'px');
+      }
+      Array.prototype.forEach.call(bar.querySelectorAll('.modes-bar__btn'), function (b) {
+        b.classList.toggle('is-active', Number(b.dataset.w) === w);
+      });
+    }
+
+    function startWidth() {
+      var w = parseFloat(q.get('w'));            // ?w=812 — точная ширина
+      if (w) return w;
+      var view = q.get('view');                  // ?view=mobile — конечная мобильная
+      if (view === 'mobile') return MIN;
+      if (view === 'both') return MOBILE_MAX;    // наследие «Рядом» → планшетная граница
+      return DEFAULT_W;
+    }
+
+    if (clean) {
+      bar.hidden = true;
+      document.body.classList.add('ui-clean');
+    } else {
+      bar.addEventListener('click', function (e) {
+        var btn = e.target.closest ? e.target.closest('.modes-bar__btn') : null;
+        if (btn) setWidth(Number(btn.dataset.w));
+      });
+      // Ручка у правого края: тянем — ширина идёт за курсором
+      var drag = { on: false, x: 0, w: 0, id: null };
+      function drop() {
+        if (!drag.on) return;
+        drag.on = false;
+        document.body.classList.remove('is-dragging');
+        if (handle.releasePointerCapture && drag.id !== null) { try { handle.releasePointerCapture(drag.id); } catch (err) {} }
+        drag.id = null;
+      }
+      if (handle) {
+        handle.addEventListener('pointerdown', function (e) {
+          drag.on = true; drag.x = e.clientX; drag.w = panel.offsetWidth; drag.id = e.pointerId;
+          document.body.classList.add('is-dragging');
+          if (handle.setPointerCapture) { try { handle.setPointerCapture(e.pointerId); } catch (err) {} }
+          e.preventDefault();
+        });
+        handle.addEventListener('pointermove', function (e) {
+          if (drag.on) setWidth(drag.w + (e.clientX - drag.x));
+        });
+        handle.addEventListener('pointerup', drop);
+        handle.addEventListener('pointercancel', drop);
+      }
+    }
+
+    // ── Решения ревью: журнал по компонентам (обвязка) ────────
+    // Значения меняем в DevTools, решение фиксируем здесь. Запись знает, к какому
+    // компоненту относится, на какой ширине принята и какой был режим. Живёт в
+    // localStorage, выгружается в .md — чтобы перенести в план или рекомендации.
+    var hintEl = null;
+    var reviewRoot = document.getElementById('review');
+    if (reviewRoot) {
+      var REVIEW_KEY = 'iiko-figma-1276-review-v1';
+      var TARGETS = [
+        ['title', 'Шапка'], ['button', 'Кнопка'], ['button-icon', 'Кнопка-иконка'],
+        ['stepper', 'Степпер'], ['card', 'Карточка'], ['toggle', 'Тумблер'],
+        ['field', 'Поле (Input)'], ['textarea', 'Textarea'], ['footer', 'Футер'],
+        ['grid', 'Сетка и отступы'], ['common', 'Прочее']
+      ];
+      var LABEL = {};
+      TARGETS.forEach(function (t) { LABEL[t[0]] = t[1]; });
+
+      var select = document.getElementById('review-target');
+      var input = document.getElementById('review-text');
+      var addBtn = document.getElementById('review-add');
+      var listEl = document.getElementById('review-list');
+      var emptyEl = document.getElementById('review-empty');
+      var countEl = document.getElementById('review-count');
+      var copyBtn = document.getElementById('review-copy');
+      var dlBtn = document.getElementById('review-download');
+      hintEl = document.getElementById('review-hint');
+
+      [['Компоненты экрана', TARGETS.slice(0, 9)], ['Общее', TARGETS.slice(9)]].forEach(function (g) {
+        var og = document.createElement('optgroup');
+        og.label = g[0];
+        g[1].forEach(function (t) {
+          var o = document.createElement('option');
+          o.value = t[0];
+          o.textContent = t[1];
+          og.appendChild(o);
+        });
+        select.appendChild(og);
+      });
+
+      var notes = [];
+      try { notes = JSON.parse(localStorage.getItem(REVIEW_KEY) || '[]'); } catch (err) { notes = []; }
+      if (!notes || !notes.length) notes = [];
+
+      function saveNotes() { try { localStorage.setItem(REVIEW_KEY, JSON.stringify(notes)); } catch (err) {} }
+      function ctxOf(n) { return n.w + ' px · ' + n.m; }
+      function pad2(v) { return (v < 10 ? '0' : '') + v; }
+      function whenOf(ts) { var d = new Date(ts); return pad2(d.getDate()) + '.' + pad2(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes()); }
+
+      function renderReview() {
+        listEl.textContent = '';
+        notes.slice().reverse().forEach(function (n) {
+          var li = document.createElement('li');
+          li.className = 'review__item';
+          var meta = document.createElement('div');
+          meta.className = 'review__meta';
+          var chip = document.createElement('span');
+          chip.className = 'review__chip';
+          chip.textContent = LABEL[n.t] || n.t;
+          var ctx = document.createElement('span');
+          ctx.className = 'review__ctx';
+          ctx.textContent = ctxOf(n);
+          var flag = document.createElement('button');
+          flag.type = 'button';
+          flag.className = 'review__flag' + (n.done ? ' review__flag--done' : '');
+          flag.textContent = n.done ? 'решено' : 'вопрос';
+          flag.title = 'Переключить статус';
+          flag.addEventListener('click', function () { n.done = !n.done; saveNotes(); renderReview(); });
+          var del = document.createElement('button');
+          del.type = 'button';
+          del.className = 'review__del';
+          del.textContent = '×';
+          del.title = 'Удалить';
+          del.addEventListener('click', function () {
+            notes = notes.filter(function (m) { return m !== n; });
+            saveNotes();
+            renderReview();
+          });
+          meta.appendChild(chip); meta.appendChild(ctx); meta.appendChild(flag); meta.appendChild(del);
+          var body = document.createElement('div');
+          body.className = 'review__body' + (n.done ? ' review__body--done' : '');
+          body.textContent = n.x;
+          li.appendChild(meta);
+          li.appendChild(body);
+          listEl.appendChild(li);
+        });
+        var open = notes.filter(function (n) { return !n.done; }).length;
+        countEl.textContent = String(open);
+        countEl.classList.toggle('review__count--zero', open === 0);
+        emptyEl.hidden = notes.length > 0;
+        copyBtn.disabled = dlBtn.disabled = notes.length === 0;
+      }
+
+      function reviewMd() {
+        var lines = ['# Ревью: Frame 1276 «Метро» — адаптив 1184 → 375', ''];
+        lines.push('Источник: `figma-1276-metro-desktop.html` · выгружено ' + whenOf(Date.now()), '');
+        var any = false;
+        TARGETS.forEach(function (t) {
+          var group = notes.filter(function (n) { return n.t === t[0]; });
+          if (!group.length) return;
+          any = true;
+          lines.push('## ' + t[1], '');
+          group.forEach(function (n) {
+            lines.push('- **[' + (n.done ? 'решено' : 'вопрос') + ']** ' + ctxOf(n) + ' — ' + String(n.x).replace(/\n/g, ' '));
+          });
+          lines.push('');
+        });
+        if (!any) lines.push('_Пока пусто._');
+        return lines.join('\n');
+      }
+
+      addBtn.addEventListener('click', function () {
+        var text = input.value.trim();
+        if (!text) { input.focus(); return; }
+        notes.push({ t: select.value, x: text, w: Math.round(panel.offsetWidth), m: panel.dataset.mode, ts: Date.now(), done: false });
+        saveNotes();
+        renderReview();
+        input.value = '';
+        input.focus();
+      });
+
+      function legacyCopy(s) {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = s;
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand('copy');
+          ta.remove();
+          return ok;
+        } catch (err) { return false; }
+      }
+
+      copyBtn.addEventListener('click', function () {
+        var mdText = reviewMd();
+        function okCopy() {
+          copyBtn.textContent = 'Скопировано';
+          setTimeout(function () { copyBtn.textContent = 'Скопировать .md'; }, 1500);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(mdText).then(okCopy, function () { if (legacyCopy(mdText)) okCopy(); });
+        } else if (legacyCopy(mdText)) { okCopy(); }
+      });
+
+      dlBtn.addEventListener('click', function () {
+        var blob = new Blob([reviewMd()], { type: 'text/markdown;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'figma-1276-review.md';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+      });
+
+      renderReview();
+    }
+
+    // ── Подсказки по ДС (обвязка ревью; цель — дизайн в Фигме совпадает с вёрсткой) ──
+    // Ссылка в шапке или ?hints=1: номера-маркеры на местах расхождений + список под шапкой.
+    // Номера живут в отдельном fixed-слое (overflow компонентов их не режет); клик по номеру
+    // открывает пузырь ДС-подсказки с текстом находки на месте — читать текст сверху не нужно.
+    // Список находок — материал для правки ДС (Фигма/токены/CSS), а не обход в прототипе.
+    (function initHints() {
+      var btn = document.getElementById('hints-btn');
+      var strip = document.getElementById('hints');
+      var layer = document.getElementById('hints-layer');
+      if (!btn || !strip || !layer) return;
+      var marks = [
+        { n: '1', sel: '.js-field' },
+        { n: '2', sel: '.ds-textarea' },
+        { n: '3', sel: '.ds-card' },
+        { n: '4', sel: '.ds-btn-icon--xs' }
+      ];
+      // Тексты — из списка под шапкой (номер → описание): пузырь и список не расходятся
+      var texts = {};
+      Array.prototype.forEach.call(strip.querySelectorAll('.hints__item'), function (li) {
+        var num = li.querySelector('.hints__num');
+        var txt = li.querySelector('.hints__text');
+        if (num && txt) texts[num.textContent.trim()] = txt.textContent.trim();
+      });
+      var on = false, items = [], pop = null, popItem = null, raf = 0;
+      var vw = 0, vh = 0;
+
+      // Номера и пузырь позиционируются в координатах окна (fixed-слой), пересчёт — каждый кадр:
+      // так они едут за элементами при скролле/перетаскивании ширины и не режутся overflow
+      function place() {
+        vw = document.documentElement.clientWidth;
+        vh = document.documentElement.clientHeight;
+        Array.prototype.forEach.call(items, function (it) {
+          var r = it.host.getBoundingClientRect();
+          var vis = r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < vh && r.right > 0 && r.left < vw;
+          it.btn.style.display = vis ? '' : 'none';
+          if (!vis) return;
+          var x = r.left + (it.m.dx !== undefined ? it.m.dx : -9);
+          var y = r.top + (it.m.dy !== undefined ? it.m.dy : -9);
+          var bw = it.btn.offsetWidth || 20, bh = it.btn.offsetHeight || 20;
+          // номер виден, только когда виден его угол: без прижатия к краям окна —
+          // иначе у уехавших за край элементов номера слипались бы у рамки
+          if (x + bw < 0 || x > vw || y + bh < 0 || y > vh) { it.btn.style.display = 'none'; return; }
+          it.btn.style.left = Math.round(x) + 'px';
+          it.btn.style.top = Math.round(y) + 'px';
+        });
+        if (pop && popItem && popItem.btn.style.display === 'none') closePop();
+        if (pop && popItem) placePop();
+      }
+      function placePop() {
+        var r = popItem.btn.getBoundingClientRect();
+        var w = pop.offsetWidth, h = pop.offsetHeight;
+        var below = r.bottom + 6 + h <= vh - 8;      // не влезает снизу — показываем сверху
+        pop.classList.toggle('hint-pop--above', !below);
+        pop.querySelector('.ds-hint-container__arrow .material-icons').textContent = below ? 'arrow_drop_up' : 'arrow_drop_down';
+        var y = below ? r.bottom + 6 : r.top - h - 6;
+        var x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), vw - w - 8);
+        pop.style.left = Math.round(x) + 'px';
+        pop.style.top = Math.round(Math.min(Math.max(4, y), vh - h - 4)) + 'px';
+      }
+      function closePop() {
+        if (popItem) popItem.btn.classList.remove('is-open');
+        if (pop && pop.parentNode) pop.parentNode.removeChild(pop);
+        pop = null; popItem = null;
+      }
+      // Пузырь — сборка ДС по правилу «композиты — всегда через контейнер»:
+      // ds-hint-container--default + ds-hint-content--single-content; показ/позиция — обвязка
+      function openPop(it) {
+        closePop();
+        popItem = it;
+        it.btn.classList.add('is-open');
+        pop = document.createElement('div');
+        pop.className = 'hint-pop';
+        pop.innerHTML = '<span class="ds-hint-container ds-hint-container--default" role="tooltip">' +
+          '<span class="ds-hint-container__arrow" aria-hidden="true"><span class="material-icons">arrow_drop_up</span></span>' +
+          '<div class="ds-hint-content ds-hint-content--single-content">' +
+          '<span class="ds-hint-content__label"></span></div></span>';
+        pop.querySelector('.ds-hint-content__label').textContent = texts[it.m.n] || '';
+        layer.appendChild(pop);
+        place();
+      }
+      function tick() {
+        raf = requestAnimationFrame(tick);
+        place();
+      }
+      function setHints(v) {
+        on = v;
+        document.body.classList.toggle('hints-on', on);
+        btn.classList.toggle('is-active', on);
+        btn.setAttribute('aria-pressed', String(on));
+        closePop();
+        Array.prototype.forEach.call(items, function (it) { if (it.btn.parentNode) it.btn.parentNode.removeChild(it.btn); });
+        items = [];
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
+        Array.prototype.forEach.call(marks, function (m) {
+          var el = document.querySelectorAll(m.sel)[m.idx || 0];
+          if (!el) return;
+          el.classList.toggle('hint-mark', on);
+          if (on) el.setAttribute('data-hint', m.n); else el.removeAttribute('data-hint');
+          if (!on) return;
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'hint-badge';
+          b.textContent = m.n;
+          b.setAttribute('aria-label', 'Подсказка ДС ' + m.n);
+          var it = { m: m, host: el, btn: b };
+          b.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (popItem === it) closePop(); else openPop(it);
+          });
+          items.push(it);
+          layer.appendChild(b);
+        });
+        if (on) { place(); tick(); }
+      }
+      btn.addEventListener('click', function () { setHints(!on); });
+      // Номера едут за элементами: пересчёт по scroll/resize (capture ловит и внутренние
+      // скроллы кадра/таблицы) + rAF-кадр — чтобы позиции не зависли, даже если кадр замер
+      window.addEventListener('scroll', function () { if (on) place(); }, { passive: true, capture: true });
+      window.addEventListener('resize', function () { if (on) place(); });
+      document.addEventListener('click', function (e) { if (pop && !pop.contains(e.target)) closePop(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePop(); });
+      if (q.get('hints') === '1' && !clean) setHints(true);
+    })();
+
+    setWidth(startWidth());
+  })();
+</script>
+</body>
+</html>

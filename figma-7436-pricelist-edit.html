@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frame 919 «Прайс-лист» (редактирование) — отрисовка на компонентах ДС (адаптив 1184 → 375)</title>
+<!--
+  Источник: Figma, файл «Новый список товаров, заказа - поставщики», node 7436:69655
+  (Frame 919, 1184×572) — карточка поставщика, «Прайс-лист» в режиме РЕДАКТИРОВАНИЯ.
+  Третий экран тройки: 7422 «Поставщики» → 7431 «Прайс-лист» → этот (правка прайса).
+  Значения — из переменных фрейма (get_variable_defs):
+    Label #212121 · Text/UI #333333 · Caption #616161 · Secondary #448AFF · Error #FF5252
+    Warning #FFAB40 (чип «Редактирование») · Table head #F0F6FF · Surface #FFFFFF
+    Dividers #E0E0E0 · Gray/050 #FAFAFA (ховер строки в макете) · Placeholder #BDBDBD
+    Overlay/Error (фон строк с ошибками) #FFF2F2 · Тени 01/02 dp
+    Заголовок 24/24/500 · подпись 12/16 · ячейки 14/20/400 ls 0.25 · кнопки Caps 14/16/500 ls 1.25
+  Геометрия из дерева фрейма (get_metadata / get_design_context):
+    кадр pad 32/24, гэп 20 · шапка 48 (назад + титул + чип + подпись Coffee Supplier) ·
+    строка фильтров 56 («Начало действия» 142 + разделитель + тумблер + «Добавить товар») ·
+    таблица 1124: шапка 49 (фон #F0F6FF) + 7 строк по 49; колонки: 100 / flex / 200 / 125 / 151 / 151 / 130 / 56;
+    строки с ошибками — 4-я, 6-я, 7-я (фон #FFF2F2); 2-я строка — ховер (видна корзина)
+  Компоненты — ТОЛЬКО ДС (iiko-ds-web/components + iiko-ds-mobile). Состав ячеек — из редакторского
+  семейства Table_DS: ds-input-cell / ds-select-cell / ds-input-number (+ слот __icon как «×»);
+  шапка — ds-table-header-row/cell; чип — ds-status--warning--filled; тумблер — ds-slide-toggle;
+  дата — ds-input-datepicker; кнопки — ds-btn / ds-btn-icon; поиск — ds-search (XS-круг).
+  Правок поверх компонентов нет: косяки самой ДС — в «Подсказки ДС» (шапка страницы) и review-notes.md.
+
+  ОТКУДА ЧТО ВЗЯТО:
+    • разметка/стили компонентов — из файлов ДС: ds-input-cell, ds-select-cell, ds-input-number
+      (Table_DS), ds-input-datepicker (Datepicker_DS), ds-slide-toggle, ds-status, ds-btn, ds-btn-icon,
+      ds-search, ds-table-*; токены — tokens.css; шорткаты шрифтов — styles.css;
+    • иконки — Google Material Icons (аутлайн): arrow_back · search · delete · save_alt (стрелка вниз —
+      опознана по ассету кнопки) · add · expand_more (стрелки селектов) · close (очистка цены) ·
+      calendar_today;
+    • из макета — состав, тексты, ширины колонок, строки с ошибками (4/6/7), ховер 2-й строки,
+      значения полей (00001 / Fair Trade Ground Coffee / Ground Coffee / Pack / 800 / 10 / 80);
+    • обвязка (каркас, раскладка, интерактив) — прототипа; капс кнопок макета (Button/Caps)
+      НЕ переносим — у кнопок ДС обычный регистр (правило проекта);
+    • инпуты в ячейках таблицы — метрика размера S ДС (кадр 36, паддинги 6/12, текст 16/24) —
+      решение заказчика для таблицы (вопреки правилу «неоднозначный размер — максимальный»);
+      правила по таблице будут прописаны отдельно позже.
+
+  ИНТЕРАКТИВ (рабочие элементы живые):
+    • «назад» и «Отмена»/«Сохранить» — возврат к «Прайс-листу» (figma-7431); поиск — разворот
+      круга в поле + живой фильтр строк (как на 7431);
+    • поля в ячейках — настоящие input (правка значений работает); «×» у цены очищает поле;
+    • селекты ячеек («Название продукта», «Упаковка») — по клику демо-меню: у «Название продукта»
+      блок из макета 4551:20512 «Select Modifier» (Создать продукт + поиск + товары с иконкой), у «Упаковки» — простой список;
+    • тумблер «Показать только товары с ошибками» — фильтрует строки до ошибочных;
+    • «+ Добавить товар» — добавляет пустую демо-строку; корзина в строке (по ховеру) — удаляет строку;
+    • ?demo=hover — включить состояние 2-й строки (ковер + корзина, как в макете).
+
+  ПОДСКАЗКИ ПО ДС (только косяки самой ДС — компоненты/токены/CSS; макет-донор ни при чём):
+    • в шапке ширины — ссылка «Подсказки ДС · 5» (или ?hints=1): номера-маркеры на местах
+      проблем (отдельный слой поверх страницы — overflow компонентов номер не режет),
+      клик по номеру — пузырь ДС-подсказки с текстом находки; полный список — под шапкой:
+      что отрисовано неправильно и что доправить (Фигма/токены/CSS);
+    • расхождения с макетом-донором не ведём (донор может быть любой — Figma/Balsamiq/текст),
+      прототип собирается строго по ДС; ?ui=0 — чистый кадр без подсказок.
+
+  ВЁРСТКА ПО ДС: компоненты рендерятся строго по ДС. Сборные компоненты (композиты) — всегда через
+  контейнер: базовый контейнер + его слоты (пример: подсказка — ds-hint-container + ds-hint-content).
+-->
+<link rel="stylesheet" href="../iiko-ds-web/font.css">
+<link rel="stylesheet" href="../iiko-ds-web/tokens.css">
+<!-- мобильный слой ДС: ось режима + структурные моб-компоненты (порядок обязателен) -->
+<link rel="stylesheet" href="../iiko-ds-mobile/modes.css">
+<link rel="stylesheet" href="../iiko-ds-mobile/components/index.css">
+<script src="ds-frame-nav.js?v=1"></script>
+<link rel="stylesheet" href="../iiko-ds-web/styles.css">
+<link rel="stylesheet" href="../iiko-ds-web/components/index.css">
+<!-- fixes.css — ручной слой правок поверх генерации ДС; обновления из Фигмы его не перезаписывают -->
+<link rel="stylesheet" href="../iiko-ds-web/fixes.css">
+<!-- touch-hover-off.css — статическая глушилка ховеров для тач-режима; генерируется заново после обновлений ДС
+     (node _audit/build-hover-off.mjs), при перегенерации поднять ?v= -->
+<link rel="stylesheet" href="touch-hover-off.css?v=1">
+<!-- app-header — сквозная шапка приложения («App bars: top»): один источник app-header/*.css+js -->
+<link rel="stylesheet" href="app-header/app-header.css?v=6">
+<!-- app-sidenav — свёрнутое боковое меню (десктоп); на планшете/мобильном уезжает в гамбургер шапки -->
+<link rel="stylesheet" href="app-sidenav/app-sidenav.css?v=4">
+<link rel="stylesheet" href="device-chrome/device-chrome.css?v=5">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+<style>
+  /* ── Каркас страницы (у каркаса нет ДС-компонента) ───────── */
+  html,body{margin:0;background:#fff;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--ds-color-text-primary)}
+  body{display:flex;flex-direction:column}
+  .frame{width:100%;min-height:572px;padding:24px 32px;box-sizing:border-box}
+
+  /* ── Ширина кадра: адаптив (обвязка ревью; ?ui=0 — чистый кадр) ── */
+  .modes-bar{display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:1px solid var(--ds-color-stroke-default);background:#fff;font-size:var(--ds-typography-font-size-3-5x);line-height:20px}
+  .modes-bar[hidden]{display:none}
+  .modes-bar__title{color:var(--ds-color-text-secondary)}
+  .modes-bar__value{min-width:56px;font-weight:var(--ds-typography-font-weight-medium);color:var(--ds-color-text-accent);font-variant-numeric:tabular-nums}
+  .modes-bar__mode{height:20px;padding:0 6px;border:1px solid var(--ds-color-stroke-default);border-radius:var(--ds-radius-2x);color:var(--ds-color-text-secondary);font-size:12px;line-height:18px}
+  .modes-bar__hint{color:var(--ds-color-text-secondary)}
+  .modes-bar__spacer{flex:1}
+  .modes-bar__btn{height:28px;padding:0 12px;border:1px solid var(--ds-color-stroke-default);border-radius:var(--ds-radius-2x);background:transparent;font-family:inherit;font-size:var(--ds-typography-font-size-3-5x);font-weight:var(--ds-typography-font-weight-medium);color:var(--ds-color-text-primary);cursor:pointer}
+  .modes-bar__btn:hover{background:var(--ds-color-button-neutral-hover)}
+  .modes-bar__btn.is-active{border-color:var(--ds-color-brand-accent-default);background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive)}
+  .modes-bar__link{margin-left:16px;border:0;background:none;padding:0;font-family:inherit;font-size:inherit;line-height:20px;color:var(--ds-color-text-accent);cursor:pointer;white-space:nowrap}
+  .modes-bar__link:hover{text-decoration:underline}
+  .modes-bar__link.is-active{font-weight:var(--ds-typography-font-weight-medium);text-decoration:underline}
+
+  .view{display:flex;gap:16px;align-items:flex-start;padding:24px}
+  body.ui-clean .view{padding:0}
+  .panel{position:relative;flex:0 0 auto;width:1184px}
+  /* Реальный размер «экрана»: высота панели = высота устройства (960/1024/812), приложение живёт
+     внутри (шапка + кадр + системные полосы устройства), кадр занимает остаток (flex). Экран
+     не подстраивается под высоту шапки/рейла — у монитора он так и остаётся 960 */
+  body.device-phone .panel,body.device-tablet .panel,body.device-desktop .panel{display:flex;flex-direction:column;height:var(--device-screen-h,812px)}
+  body:not(.ui-clean) .panel .frame{outline:1px solid var(--ds-color-stroke-default)}
+  body.ui-clean .panel__handle{display:none}
+
+  /* Ручка изменения ширины — у правого края кадра */
+  .panel__handle{position:absolute;top:0;right:-8px;width:16px;height:100%;display:flex;align-items:center;justify-content:center;cursor:ew-resize;touch-action:none;z-index:2}
+  .panel__handle::before{content:"";width:4px;height:64px;border-radius:9999px;background:var(--ds-color-stroke-default);transition:background .12s ease}
+  .panel__handle:hover::before{background:var(--ds-color-brand-accent-default)}
+  body.is-dragging{cursor:ew-resize;user-select:none}
+  body.is-dragging .panel__handle::before{background:var(--ds-color-brand-accent-default)}
+
+  /* ── Подложка устройства (обвязка ревью): телефон ≤ 480 — 375×812,
+     планшет 481–768 — 768×1024, десктоп ≥ 769 — 1440×960; высота фиксирована,
+     тянется только ширина; внутри прокрутка. В чистом кадре (?ui=0) подложки нет. ── */
+  body.device-phone .panel::before,body.device-tablet .panel::before,body.device-desktop .panel::before{content:"";position:absolute;inset:-14px;border:14px solid var(--ds-color-brand-neutral-super-dark);border-radius:38px;pointer-events:none;z-index:1}
+  body.device-tablet .panel::before{inset:-16px;border-width:16px;border-radius:30px}
+  body.device-desktop .panel::before{border-radius:30px}
+  body.device-phone .panel::after{content:"";position:absolute;top:2px;left:50%;transform:translateX(-50%);width:96px;height:18px;border-radius:9999px;background:var(--ds-color-brand-neutral-super-dark);pointer-events:none;z-index:1}
+  body.device-tablet .panel::after{content:"";position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:9999px;background:var(--ds-color-stroke-hover);pointer-events:none;z-index:1}
+  body.device-desktop .panel::after{content:"";position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:9999px;background:var(--ds-color-stroke-hover);pointer-events:none;z-index:1}
+  body.device-phone .frame,body.device-tablet .frame,body.device-desktop .frame{flex:1 1 0;min-height:0;overflow:auto}   /* высоту даёт панель-экран; 960 = шапка 64 + кадр 896 */
+
+  /* ── Шапка карточки: назад + «Прайс-лист» + чип «Редактирование» + подпись (48) ── */
+  .title-row{display:flex;align-items:flex-start;gap:32px}
+  .title-row__left{display:flex;align-items:flex-start;gap:16px;flex:1;min-width:0}
+  .title-block{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .title-block__top{display:flex;align-items:center;gap:16px;height:28px;min-width:0}
+  .title-block__title{margin:0;font:var(--ds-font-header-m-24-normal-medium);/* 24/500 */color:var(--ds-color-text-primary);white-space:nowrap}
+  .title-block__sub{padding-left:40px;font:var(--ds-font-caption-l-12-normal-regular);/* 12/16 */color:var(--ds-color-text-ui-text-label-color,#616161)}
+  .title-row__controls{display:flex;align-items:center;gap:24px;flex:0 0 auto}
+  .title-row__actions{display:flex;align-items:center;gap:8px}
+
+  /* Тултипы у иконочных кнопок шапки: пузырь — компоненты ДС; сборка по правилу «композиты —
+     всегда через контейнер»: ds-hint-container--default + ds-hint-content--single-content (Single).
+     Хедер не используем: у контейнера и __label фон не задан — label невидим (косяк ДС, подсказка №6).
+     Показ по наведению/фокусу и позиция — обвязка */
+  .tip-wrap{position:relative;display:inline-flex}
+  .tip{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);display:none;z-index:30}
+  .tip-wrap:hover .tip,.tip-wrap:focus-within .tip{display:block}
+  .tip .ds-hint-container__arrow{justify-content:center}
+
+  /* ── Поиск: круг ДС (Search XS, 36) по клику разворачивается в поле (Search M, 243) ── */
+  .js-search{transition:width .16s ease;cursor:pointer}
+  .js-search.is-open{width:243px;cursor:text}
+  .js-search__input{flex:1 1 auto;min-width:0;border:0;background:transparent;outline:none;padding:0;font:var(--ds-font-body-m-16-normal-regular);color:var(--ds-color-text-primary)}
+  .js-search__input::placeholder{color:var(--ds-color-search-default-text-color,#d6d6d6)}
+  .js-search__clear{display:none;border:0;background:none;padding:0;cursor:pointer;color:var(--ds-color-icon-primary)}
+  .js-search.is-open .js-search__clear{display:inline-flex}
+  .ds-search__icon.material-icons,.js-search__clear.material-icons{font-size:20px;line-height:20px}
+
+  /* ── Строка фильтров: дата + разделитель + тумблер + «Добавить товар» (56) ──
+     Разделитель 1×16 и гэпы — из макета (обвязка) ── */
+  .filter-row{display:flex;align-items:flex-end;gap:16px;margin-top:20px;min-height:56px}
+  .filter-row__div{flex:0 0 auto;width:1px;height:16px;background:var(--ds-color-stroke-default)}
+  .filter-row__spacer{flex:1}
+  /* Поле даты: кадру — box-sizing лечилово (в ДС его нет, 48 px превращаются в 74 —
+     тот же баг, что у input-number); значение — 16/24 (как в ДС и макете), паддинг уже у кадра */
+  .ds-input-datepicker__frame{box-sizing:border-box}
+  .ds-input-datepicker__icon .material-icons{font-size:20px;line-height:20px}
+  .pp-field.pp-date{font:var(--ds-font-body-m-16-normal-regular);padding:0}
+
+  /* ── Таблица: шапка и строки — компоненты ДС (ds-table-*), полосы разворачиваем
+     в строку для таблицы (у ДС полосы свёрстаны колонкой — известный косяк, подсказка на 7422).
+     Ширины колонок — из макета (обвязка). Ячейки-редакторы — семейство Table_DS:
+     ds-input-cell / ds-select-cell / ds-input-number; внутренние input — наши (стиль поля),
+     рамка/фон/радиус — из компонента ── */
+  .table-wrap{margin-top:8px;overflow-x:auto}
+  .ds-table{width:100%;min-width:1000px}
+  .ds-table .ds-table-header-row,.ds-table .ds-table-content-row{flex-direction:row;width:100%}
+  .c-num{width:100px}
+  .c-name{flex:1 1 auto;min-width:0}
+  .c-prod{width:200px}
+  .c-pack{width:125px}
+  .c-price{width:151px}
+  .c-perc{width:151px}
+  .c-rub{width:130px}
+  .c-act{width:56px;justify-content:flex-end;background:transparent}
+
+  /* Паддинг ячейки — всегда 8 (правило заказчика): у ячеек ДС он вшит
+     (input-cell / select-cell, токены --ds-table-cell-pad-*), а у колонок цены,
+     отклонений и действий корень — не ячейка, а поле/слот (паддинга нет) —
+     навешиваем тот же глобальный токен ячейки ДС. У кнопки-корзины фон гасим
+     (у слота он белый и перекрывал фон ховера / ошибочной строки) */
+  .c-price,.c-perc,.c-rub,.c-act{padding:var(--ds-table-cell-pad-top,8px) var(--ds-table-cell-pad-right,8px) var(--ds-table-cell-pad-bottom,8px) var(--ds-table-cell-pad-left,8px)}
+
+  /* Внутренние поля ячеек — метрика размера S (решение заказчика: в таблице S, не максимум):
+     кадр 36, паддинги 6/12, текст 16/24; рамку и фон даёт кадр компонента.
+     Кадры растягиваем на ширину ячейки (обвязка раскладки) */
+  .ds-input-cell__frame{flex:1 1 auto;min-width:0}
+  .pp-field{border:0;background:transparent;font:var(--ds-font-body-m-16-normal-regular);color:var(--ds-color-text-ui-text-color,#333333);outline:none;width:100%;min-width:0;padding:var(--ds-space-1-5x,6px) var(--ds-space-3x,12px)}
+  .pp-field--num{text-align:right}
+  .ds-input-number__frame .pp-field{padding:0}
+  .pp-field::placeholder{color:var(--ds-color-form-field-filled-default-placeholder-text-color,#bdbdbd)}
+
+  /* Колонки-селекты ячеек: подпись тянется, стрелка — слот ДС; клик — демо-меню (обвязка) */
+  .ds-select-cell{cursor:pointer}
+  .ds-select-cell__label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .ds-select-cell__icon .material-icons{font-size:20px;line-height:20px;color:var(--ds-color-text-ui-text-label-color,#616161)}
+
+  /* Цена/отклонения: рамка — кадр ДС; «×» — слот __icon; суффиксы % / ₽ — слот __support.
+     Размер — S (как инпуты ячеек: кадр 36 / паддинги 6-12), а не M из спеки;
+     gap 8 — из макета (в ДС у .ds-input-number 18 — контролы далеко от поля);
+     box-sizing: border-box — известное лечилово (в ДС у кадра его нет, см. подсказку №4);
+     align-items: center — обвязка: в ДС у .ds-input-number его нет — в растянутой строке
+     «×» липнет к верху, «%»/«₽» — к низу (подсказка №5) */
+  .ds-input-number{align-items:center;gap:var(--ds-space-2x,8px)}
+  .ds-input-number__frame{box-sizing:border-box;flex:1 1 auto;min-width:0;height:36px;padding:var(--ds-space-1-5x,6px) var(--ds-space-3x,12px)}
+  .ds-input-number__icon{border:0;background:none;padding:0;cursor:pointer;color:var(--ds-color-icon-primary,#616161)}
+  .ds-input-number__icon .material-icons{font-size:20px;line-height:20px}
+  .ds-input-number__support{font:var(--ds-font-body-s-14-normal-regular);color:var(--ds-color-text-ui-text-color,#333333);align-items:center;white-space:nowrap}
+
+  /* Меню-селект ячеек — из компонентов ДС семейства Select: подложка Select (Container),
+     строки — Select item со слотом Element select (иконка+текст), разделители — Divider,
+     поиск — Search. Здесь только обвязка: позиционирование (fixed — чтобы не резалось
+     overflow таблицы) и размеры контекста ячейки (350 и ряды 48 — из макета 4551:20512).
+     Правки поверх ДС (пробелы, см. журнал): у контейнера жёстко 240×406 — нужна высота по контенту;
+     у строки ширина 258 захардкожена — в выпадающем списке нужен филл; у строки нет состояния Selected
+     в CSS; слоты белят фон */
+  .cselect-menu{position:fixed;z-index:40;display:none;max-height:280px;overflow:auto;min-height:0}
+  .cselect-menu.is-open{display:flex}
+  .cselect-menu .ds-select-item{width:100%}                                                       /* косяк ДС: ширина строки 258 захардкожена — нужен филл */
+  .cselect-menu .ds-select-container__scroll{padding:0}                                           /* слот скролла добавляет 2px по краям — строки не совпадали с остальными (в макете всё 350) */
+  .cselect-menu--prod{width:350px;--ds-select-item-pad-top:12px;--ds-select-item-pad-bottom:12px}   /* 350 и ряды 48 — из макета 4551:20512 */
+  .cselect-menu .ds-select-item__element-left,.cselect-menu .ds-element-select{background:transparent}   /* косяк ДС: служебные слоты красят фон белым (перекрыли бы ховер) */
+  .cselect-menu .ds-element-select__icon .material-icons{font-size:24px;line-height:24px}          /* иконки слотов — 24 (из макета) */
+  .cselect-menu .ds-element-select__icon svg{display:block;width:24px;height:24px;flex-shrink:0}
+  .cselect-action{background:var(--ds-palette-neutral-10,#fafafa)}                                 /* фон строки действия — из макета */
+  /* Ховер строки — родной у ДС (фон #f5f5f5), не трогаем.
+     Выбранное значение — состояние Selected из Фигмы: у ДС в CSS его нет (пробел) — фон + акцент текста/иконки */
+  .cselect-menu--prod .ds-select-item.is-selected{background:var(--ds-palette-neutral-50,#f5f5f5)}
+  .cselect-menu--prod .ds-select-item.is-selected .ds-element-select,
+  .cselect-menu--prod .ds-select-item.is-selected .ds-element-select__label{color:var(--ds-color-text-accent,#448aff)}
+  /* поиск — компонент ДС Search в слоте контейнера; поле внутри — обвязка (у Search нет класса для input) */
+  .cselect-menu .ds-search{width:100%}
+  .cselect-menu .ds-search__icon .material-icons{font-size:24px;line-height:24px}
+  .cselect-menu .ds-search input{flex:1 1 auto;min-width:0;border:0;outline:none;background:transparent;font:var(--ds-font-body-m-16-normal-regular);color:var(--ds-color-text-primary);padding:0}
+  .cselect-menu .ds-search input::placeholder{color:var(--ds-color-search-default-text-color,#d6d6d6)}
+
+  /* ── Панель «Создать продукт» (макет 7450:70291) — обвязка прототипа ──
+     Десктоп: панель справа 700 на всю высоту экрана; планшет: во всю ширину;
+     телефон: во весь экран, поля в одну колонку, кнопки футера на всю ширину.
+     Поля/кнопки — компоненты ДС; затемнение — Backdrop из ДС (у него нет CSS — цвет обвязки),
+     клик по затемнению закрывает (в макете данных для сохранения нет). */
+  /* z-index:60 — выше шапки приложения (z-index:3). Полосы устройства — системные зоны:
+     оверлей живёт между ними (--dev-status-h/--dev-nav-h, на мониторе 0) и их не затемняет */
+  .pp-overlay{position:absolute;inset:var(--dev-status-h,0) 0 var(--dev-nav-h,0);z-index:60;display:none}
+  .pp-overlay.is-open{display:block}
+  /* Монитор: углы «экрана» скруглены (кадр r16) — квадратный оверлей вылезал белым углом панели
+     поверх безеля («углы острые» — замечание заказчика); повторяем радиус кадра, содержимое подрезается */
+  body.device-desktop:not(.ui-clean) .pp-overlay{border-radius:16px;overflow:hidden}
+  /* Телефон/планшет: 1px внахлёст под системные полосы (они выше оверлея — device-chrome.css, z-index 61):
+     субпиксельный стык полосы и панели не просветит белым фоном кадра */
+  body.device-phone .pp-overlay,body.device-tablet .pp-overlay{inset:calc(var(--dev-status-h) - 1px) 0 calc(var(--dev-nav-h) - 1px)}
+  .pp-overlay__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.4)}
+  .pp-panel{position:absolute;top:0;right:0;bottom:0;width:700px;max-width:100%;display:flex;flex-direction:column;background:var(--ds-color-brand-neutral-default,#ffffff)}
+  .pp-panel__head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:24px 24px 0}
+  .pp-panel__title{margin:0;font:var(--ds-font-header-m-24-normal-medium);color:var(--ds-color-text-primary,#212121)}   /* 24/500 — из макета */
+  .pp-panel__body{flex:1 1 auto;min-height:0;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
+  /* Футер: кнопки — группой ДС (Button group, вариант Margins — он для футеров): её паддинг 8/16
+     плюс отступы контейнера 0/8/16 дают макетные 24 от краёв и 32 от контента */
+  .pp-panel__foot{display:flex;justify-content:flex-end;padding:0 8px 16px}
+  /* Сетка полей. Ряды пар — 16, разрывы 24 = 16 сетки + 8 надбавки (в макете: пары 16, блоки 24).
+     grid, а не flex-wrap: пары не разваливаются от субпиксельного округления.
+     Обёртка поля — .pp-panel__field (НЕ .pp-field: это имя занято инпутами ячеек таблицы —
+     их padding 6/12 раздувал обёртки, отступы между полями «вырастали» вдвое) */
+  .pp-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:16px;row-gap:16px}
+  .pp-panel__field{min-width:0}
+  .pp-panel__field--full{grid-column:1 / -1}
+  .pp-panel__field--gap24{margin-top:8px}   /* разрыв 24 между блоками (16 + 8) */
+  /* Селекты панели — семья ДС Select form; раскладка «подпись над значением» и box-sizing —
+     из принятого паттерна прототипов (1277); пустое значение — цвет Empty-состояния */
+  .pp-panel .ds-select-form{width:100%}
+  .pp-panel .ds-select-form__input-frame{box-sizing:border-box;height:48px;padding:var(--ds-space-1x) var(--ds-space-3x);align-items:center}
+  .pp-panel .ds-select-form__stack{display:flex;flex-direction:column;flex:1;min-width:0}
+  .pp-panel .ds-select-form__label{font-size:var(--ds-typography-font-size-3x);line-height:16px;color:var(--ds-color-form-field-input-label-text-color,#616161)}
+  .pp-panel .ds-select-form__value{font:var(--ds-font-body-m-16-normal-regular);color:var(--ds-color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pp-panel .ds-select-form--empty .ds-select-form__value{color:var(--ds-color-form-field-input-label-text-color,#616161)}
+  /* косяк ДС: у .ds-select-form--empty:hover фон/рамка красятся на КОРНЕ (radius 0) — прямоугольник
+     поверх скруглённого кадра; переносим ховер на кадр (как у Textarea), значения — токены ДС */
+  body:not([data-touch]) .pp-panel .js-pp-select:hover{background:transparent;border:0}
+  body:not([data-touch]) .pp-panel .js-pp-select:hover .ds-select-form__input-frame{border-color:var(--ds-color-form-field-filled-hover-border-color,#9e9e9e);background:var(--ds-color-form-field-filled-hover-input-background-hover,#f5f5f5)}
+  .pp-panel .ds-select-form__icon.material-icons{font-size:20px;line-height:20px;color:var(--ds-color-icon-primary)}
+  /* Секция «Фасовка»: заголовок + «Добавить»; таблица — компоненты ДС.
+     min-width:0 — иначе мини-таблица наследует min-width:1000 главной таблицы прайса */
+  .pp-fs__head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}   /* 8 до таблицы — из макета */
+  .pp-fs__title{font-size:var(--ds-font-body-m-16-normal-medium-size,16px);line-height:var(--ds-font-body-m-16-normal-medium-line,24px);font-weight:var(--ds-font-body-m-16-normal-medium-weight,500);letter-spacing:var(--ds-font-body-m-16-normal-medium-spacing,.15px);color:var(--ds-color-text-primary,#212121)}
+  .pp-fs__table{min-width:0}
+  .pp-fs .ds-table-header-cell__label{white-space:normal}   /* шапка мини-таблицы переносится (в отличие от главной) */
+  .c-fs-num{width:56px;flex:0 0 auto}
+  .c-fs-pack,.c-fs-qty{flex:1 1 120px;min-width:120px}
+  .c-fs-act{width:80px;flex:0 0 auto}
+  .pp-fs .js-pf-row .row-actions{visibility:hidden}
+  body:not([data-touch]) .pp-fs .js-pf-row:hover .row-actions{visibility:visible}
+  body[data-touch] .pp-fs .js-pf-row .row-actions{visibility:visible}   /* на таче действия строки видны всегда */
+  /* Планшет и телефон — во всю ширину; телефон — одноколоночная сетка и кнопки футера на всю ширину */
+  body.device-tablet .pp-panel,body.device-phone .pp-panel{width:100%}
+  body.device-phone .pp-grid{grid-template-columns:1fr}
+  body.device-phone .pp-fs__table .c-fs-num{width:40px;min-width:40px}
+  body.device-phone .pp-fs__table .c-fs-pack,body.device-phone .pp-fs__table .c-fs-qty{min-width:0}
+  body.device-phone .pp-fs__table .c-fs-act{width:56px}
+  /* Телефон: кнопки — В СТРОКУ, раз умещаются (правило заказчика 2026-09-13);
+     в столбик — только когда не влезают (тогда главная сверху) — сейчас влезают всегда (≈208 из 327) */
+
+  /* Строки с ошибками — в ДС состояния нет (подсказка №1): фон — палитра Negative/50 из макета */
+  .js-row.row-error{background:var(--ds-palette-negative-50,#fff2f2)}
+  /* Ховер строки для скриншотов (?demo=hover): фон/корзина как в макете;
+     живой ховер мышью (вне тач-режима) показывает корзину, как на 7422 */
+  .js-row .row-actions{visibility:hidden}
+  body:not([data-touch]) .js-row:hover .row-actions{visibility:visible}
+  .js-row.is-hover{background:var(--ds-color-table-row-content-hover-background)}
+  .js-row.is-hover .row-actions{visibility:visible}
+  [hidden]{display:none!important}
+
+  /* Иконки — всегда аутлайновые (правило проекта) */
+  .material-icons{font-family:'Material Icons Outlined'}
+  .ds-btn-icon__icon.material-icons{font-size:20px;line-height:20px}
+  .ds-btn-icon--xs .ds-btn-icon__icon.material-icons{font-size:16px;line-height:16px}
+  .ds-btn__icon.material-icons{font-size:20px;line-height:20px}
+  .ds-table-header-cell__label{white-space:nowrap}
+
+  /* ── Подсказки по ДС (обвязка ревью; цель — дизайн в Фигме совпадает с вёрсткой):
+     ссылка в шапке или ?hints=1 — номера-маркеры на местах расхождений + список находок
+     под шапкой. В чистом кадре (?ui=0) подсказки недоступны. ── */
+  .hints{display:none;padding:10px 24px 12px;border-bottom:1px solid var(--ds-color-stroke-default);background:var(--ds-color-brand-accent-super-lightest,#f5f9ff);font-size:var(--ds-typography-font-size-3-5x);line-height:20px;color:var(--ds-color-text-primary)}
+  body.hints-on .hints{display:block}
+  body.ui-clean .hints{display:none!important}
+  .hints__list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;max-width:1120px}
+  .hints__item{display:flex;gap:8px}
+  .hints__num{flex:0 0 auto;width:20px;height:20px;border-radius:9999px;background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive);font-size:12px;line-height:20px;text-align:center;font-weight:var(--ds-typography-font-weight-medium)}
+  .hints__text{min-width:0}
+  body.hints-on .hint-mark{outline:2px dashed var(--ds-color-brand-accent-default);outline-offset:-2px}
+  /* Номера-маркеры — отдельный fixed-слой поверх страницы: overflow компонентов
+     (table-wrap, ячейки, кнопки) их не режет, номер видно в любом месте.
+     Слой прозрачен для кликов; кликабельны только сами номера. */
+  .hints-layer{position:fixed;inset:0;z-index:120;pointer-events:none}
+  .hint-badge{position:absolute;box-sizing:border-box;min-width:20px;height:20px;padding:0 6px;border:0;border-radius:9999px;background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive);font-family:'Roboto','Helvetica Neue',Arial,sans-serif;font-size:12px;line-height:20px;font-weight:var(--ds-typography-font-weight-medium);text-align:center;cursor:pointer;pointer-events:auto;box-shadow:0 0 0 2px var(--ds-color-text-inversive)}
+  .hint-badge:hover{box-shadow:0 0 0 2px var(--ds-color-text-inversive),var(--ds-shadow-shadows-08-dp-s,0 2px 8px rgba(0,0,0,.2))}
+  .hint-badge.is-open{box-shadow:0 0 0 2px var(--ds-color-text-inversive),0 0 0 4px var(--ds-color-brand-accent-default)}
+  /* Пузырь по клику на номер — композит ДС через контейнер: ds-hint-container--default +
+     ds-hint-content--single-content; ширина увеличена для читаемости, текст переносится.
+     Позиция и сторона стрелки (вверх/вниз) — обвязка прототипа */
+  .hint-pop{position:absolute;z-index:2;pointer-events:auto}
+  .hint-pop .ds-hint-container{width:auto}
+  .hint-pop .ds-hint-content{width:340px}
+  .hint-pop .ds-hint-content__label{white-space:normal}
+  .hint-pop .ds-hint-container__arrow{justify-content:center}
+  .hint-pop--above .ds-hint-container{flex-direction:column-reverse}
+
+  /* ── Мобильная вёрстка (≤ 768): кадр 16, шапка переносится, таблица скроллится ── */
+  .panel[data-mode="mobile"] .frame{min-height:0;padding:16px}
+  .panel[data-mode="mobile"] .title-row{flex-wrap:wrap;gap:12px}
+  .panel[data-mode="mobile"] .title-row__left{flex:1 1 100%}
+  .panel[data-mode="mobile"] .title-block__title{white-space:normal}
+  .panel[data-mode="mobile"] .title-row__controls{flex:1 1 auto;justify-content:flex-start;flex-wrap:wrap;gap:16px}
+  .panel[data-mode="mobile"] .filter-row{flex-wrap:wrap;margin-top:16px}
+  .panel[data-mode="mobile"] .table-wrap{margin-top:12px}
+</style>
+<!-- Тач-режим (планшет/телефон ≤768): ховер → тап, подсказки — долгим нажатием; см. touch-mode.css/js -->
+<link rel="stylesheet" href="touch-mode.css?v=6">
+<script src="touch-mode.js?v=10" defer></script>
+<script src="ds-sizes-toggle.js?v=6" defer></script>
+<script src="app-header/app-header.js?v=3" defer></script>
+<script src="app-sidenav/app-sidenav.js?v=2" defer></script>
+<script src="device-chrome/device-chrome.js?v=1" defer></script>
+</head>
+<body>
+<!-- Шапка ревью: ширина кадра — пресеты и ручка (обвязка; ?ui=0 — скрыть, ?w=… — задать) -->
+<div class="modes-bar" id="modes-bar" role="group" aria-label="Ширина макета">
+  <span class="modes-bar__title">Ширина макета</span>
+  <span class="modes-bar__value" id="w-value">1184 px</span>
+  <span class="modes-bar__mode" id="w-mode">desktop</span>
+  <span class="modes-bar__hint">тяни за правый край · от 375 до 1440</span>
+  <button class="modes-bar__link" type="button" id="hints-btn" aria-pressed="false" title="Показать/скрыть подсказки по расхождениям с ДС (Фигма ↔ вёрстка)">Подсказки ДС · 6</button>
+  <span class="modes-bar__spacer"></span>
+  <button class="modes-bar__btn" type="button" data-w="1440">Десктоп · 1440</button>
+  <button class="modes-bar__btn is-active" type="button" data-w="1184">Десктоп · 1184</button>
+  <button class="modes-bar__btn" type="button" data-w="768">Планшет · 768</button>
+  <button class="modes-bar__btn" type="button" data-w="375">Телефон · 375</button>
+</div>
+
+<!-- Подсказки по ДС (показать — ссылкой в шапке или ?hints=1): находки для правки ДС, цель — Фигма совпадает с вёрсткой -->
+<div class="hints" id="hints" role="note" aria-label="Подсказки по ДС">
+  <ol class="hints__list">
+    <li class="hints__item"><span class="hints__num">1</span><span class="hints__text">Table content row: нет состояния «строка с ошибкой» — в макете ошибочные строки подсвечены фоном (переменная Overlay/Error → Negative/50), под них завязан фильтр «Показать только товары с ошибками». Доправить: вариант/модификатор Error у строки + CSS-токен фона. (Фигма + CSS)</span></li>
+    <li class="hints__item"><span class="hints__num">2</span><span class="hints__text">Редактируемые ячейки (input-cell / select-cell / input-number): ховер вешает рамку #9E9E9E на САМУ ячейку — в покое рамки нет, при наведении +1 px и раскладка «скачет», а рамка дублирует рамку поля внутри. Доправить: рамку состояния рисовать кадру поля, а не ячейке. (CSS)</span></li>
+    <li class="hints__item"><span class="hints__num">3</span><span class="hints__text">Input number: в Фигме есть свойство Close icon (вариант с иконкой «×»), класса/варианта в CSS нет — очистку поля пришлось собрать слотом __icon. Доправить: вариант Close icon + CSS (как у Input). (Фигма + CSS)</span></li>
+    <li class="hints__item"><span class="hints__num">4</span><span class="hints__text">Кадры полей (__frame): у input-cell__frame / select-cell__frame не заданы внутренние паддинги (текст липнет к рамке); у input-number__frame и input-datepicker__frame нет box-sizing: border-box — при height: 48 px и паддингах 12 (×2) кадр фактически 74 px (тот же корень, что на странице рекомендаций). Доправить: паддинги + box-sizing в CSS. (CSS)</span></li>
+    <li class="hints__item"><span class="hints__num">5</span><span class="hints__text">Input number: у .ds-input-number не задан align-items — когда ячейка тянется по высоте строки (редактируемая таблица), «×» прилипает к верху, «%»/«₽» — к низу: детали разъезжаются по вертикали. В прототипе центрируем на странице. Доправить: align-items: center в CSS. (CSS)</span></li>
+    <li class="hints__item"><span class="hints__num">6</span><span class="hints__text">Статус: подпись не берёт цвет варианта — у .ds-status__label жёстко прописан нейтральный цвет (--ds-color-status-neutral-filled-text-color), поэтому у Warning/Filled текст серый #616161 вместо #ea7806 (в макете подпись оранжевая). Рядом — автоген у .ds-status__content: background задан color-токеном. Доправить: цвет подписи не задавать (наследуется от варианта), background у __content — из Background-токена. (CSS)</span></li>
+  </ol>
+</div>
+<!-- Слой номеров-маркеров (строит скрипт подсказок; клик по номеру — пузырь с текстом находки) -->
+<div class="hints-layer" id="hints-layer"></div>
+
+<div class="view">
+
+<!-- Один кадр: ширину задаёт пользователь (ручка справа или пресеты в шапке) -->
+<div class="panel" id="panel" data-mode="desktop">
+  <div class="frame">
+
+    <!-- Шапка: назад + «Прайс-лист» + чип «Редактирование» + подпись + контролы (48) -->
+    <div class="title-row">
+      <div class="title-row__left">
+        <span class="tip-wrap">
+          <button class="ds-btn-icon ds-btn-icon--m ds-btn-icon--neutral ds-btn-icon--text" type="button" id="back" aria-label="Назад к прайс-листу" aria-describedby="back-tip">
+            <span class="ds-btn-icon__icon material-icons" aria-hidden="true">arrow_back</span>
+          </button>
+          <!-- Тултип — сборка ДС через контейнер: ds-hint-container--default + ds-hint-content--single-content -->
+          <span class="ds-hint-container ds-hint-container--default tip" id="back-tip" role="tooltip">
+            <span class="ds-hint-container__arrow" aria-hidden="true"><span class="material-icons">arrow_drop_up</span></span>
+            <div class="ds-hint-content ds-hint-content--single-content">
+              <span class="ds-hint-content__label">Назад к прайс-листу</span>
+            </div>
+          </span>
+        </span>
+        <div class="title-block">
+          <div class="title-block__top">
+            <h1 class="title-block__title">Прайс-лист</h1>
+            <!-- Чип режима — компонент ДС (ds-status, warning filled) -->
+            <span class="ds-status ds-status--warning ds-status--filled" id="edit-chip">
+              <span class="ds-status__label">Редактирование</span>
+            </span>
+          </div>
+          <div class="title-block__sub">Coffee Supplier</div>
+        </div>
+      </div>
+      <div class="title-row__controls">
+        <!-- Поиск: круг ДС (Search XS) → по клику поле (Search M) с живым фильтром строк -->
+        <div class="ds-search ds-search--xs js-search" id="search">
+          <span class="ds-search__icon material-icons" aria-hidden="true">search</span>
+          <input class="js-search__input" type="text" placeholder="Поиск по товарам" aria-label="Поиск по товарам" hidden>
+          <button class="js-search__clear material-icons" type="button" title="Очистить" aria-label="Очистить">close</button>
+        </div>
+        <div class="title-row__actions">
+          <span class="tip-wrap">
+            <button class="ds-btn-icon ds-btn-icon--m ds-btn-icon--negative ds-btn-icon--filled" type="button" id="delete" aria-label="Удалить прайс-лист" aria-describedby="delete-tip">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span>
+            </button>
+            <!-- Тултип — сборка ДС через контейнер: ds-hint-container--default + ds-hint-content--single-content -->
+            <span class="ds-hint-container ds-hint-container--default tip" id="delete-tip" role="tooltip">
+              <span class="ds-hint-container__arrow" aria-hidden="true"><span class="material-icons">arrow_drop_up</span></span>
+              <div class="ds-hint-content ds-hint-content--single-content">
+                <span class="ds-hint-content__label">Удалить прайс-лист</span>
+              </div>
+            </span>
+          </span>
+          <span class="tip-wrap">
+            <button class="ds-btn-icon ds-btn-icon--m ds-btn-icon--accent ds-btn-icon--filled" type="button" id="export" aria-label="Скачать прайс-лист" aria-describedby="export-tip">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">save_alt</span>
+            </button>
+            <!-- Тултип — сборка ДС через контейнер: ds-hint-container--default + ds-hint-content--single-content -->
+            <span class="ds-hint-container ds-hint-container--default tip" id="export-tip" role="tooltip">
+              <span class="ds-hint-container__arrow" aria-hidden="true"><span class="material-icons">arrow_drop_up</span></span>
+              <div class="ds-hint-content ds-hint-content--single-content">
+                <span class="ds-hint-content__label">Скачать прайс-лист</span>
+              </div>
+            </span>
+          </span>
+          <button class="ds-btn ds-btn--m ds-btn--neutral ds-btn--outlined" type="button" id="cancel">
+            <span class="ds-btn__label">Отмена</span>
+          </button>
+          <button class="ds-btn ds-btn--m ds-btn--accent ds-btn--filled" type="button" id="save">
+            <span class="ds-btn__label">Сохранить</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Строка фильтров (56): дата «Начало действия» + разделитель + тумблер + «Добавить товар» -->
+    <div class="filter-row">
+      <!-- Дата — компонент ДС (Input Datepicker) -->
+      <div class="ds-input-datepicker" id="start-date">
+        <span class="ds-input-datepicker__label">Начало действия</span>
+        <div class="ds-input-datepicker__frame">
+          <input class="pp-field pp-date" id="start-date-input" type="text" value="24.10.2023" aria-label="Начало действия">
+          <span class="ds-input-datepicker__icon" aria-hidden="true"><span class="material-icons">calendar_today</span></span>
+        </div>
+      </div>
+      <span class="filter-row__div" aria-hidden="true"></span>
+      <!-- Тумблер — компонент ДС (Slide toggle): фильтр ошибочных строк -->
+      <label class="ds-slide-toggle" id="errors-only">
+        <span class="ds-slide-toggle__row">
+          <input type="checkbox" class="ds-slide-toggle__input">
+          <span class="ds-slide-toggle__track"></span>
+          <span class="ds-slide-toggle__title">Показать только товары с ошибками</span>
+        </span>
+      </label>
+      <span class="filter-row__spacer"></span>
+      <button class="ds-btn ds-btn--m ds-btn--neutral ds-btn--text" type="button" id="add-product">
+        <span class="ds-btn__icon material-icons" aria-hidden="true">add</span>
+        <span class="ds-btn__label">Добавить товар</span>
+      </button>
+    </div>
+
+    <!-- Таблица правки прайса: шапка — ds-table-header-row/cell; строки — ds-table-content-row,
+         ячейки — редакторское семейство Table_DS (input-cell / select-cell / input-number).
+         Ширины колонок — из макета (100 / flex / 200 / 125 / 151 / 151 / 130 / 56);
+         ошибочные строки (4, 6, 7) — фон Negative/50 (в ДС состояния нет — подсказка №1) -->
+    <div class="table-wrap">
+      <div class="ds-table" id="table" role="table" aria-label="Прайс-лист">
+        <div class="ds-table-header-row" role="row">
+          <div class="ds-table-header-cell c-num" role="columnheader"><span class="ds-table-header-cell__label">Номер</span></div>
+          <div class="ds-table-header-cell c-name" role="columnheader"><span class="ds-table-header-cell__label">Название</span></div>
+          <div class="ds-table-header-cell c-prod" role="columnheader"><span class="ds-table-header-cell__label">Название продукта</span></div>
+          <div class="ds-table-header-cell c-pack c-right" role="columnheader"><span class="ds-table-header-cell__label">Упаковка</span></div>
+          <div class="ds-table-header-cell c-price c-right" role="columnheader"><span class="ds-table-header-cell__label">Цена, ₽</span></div>
+          <div class="ds-table-header-cell c-perc c-right" role="columnheader"><span class="ds-table-header-cell__label">Отклонение, %</span></div>
+          <div class="ds-table-header-cell c-rub c-right" role="columnheader"><span class="ds-table-header-cell__label">Отклонение, ₽</span></div>
+          <div class="ds-table-header-cell c-act" role="columnheader"></div>
+        </div>
+
+        <div class="ds-table-content-row js-row" role="row">
+          <div class="ds-input-cell c-num"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="00001" aria-label="Номер"></div></div>
+          <div class="ds-input-cell c-name"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="Fair Trade Ground Coffee" aria-label="Название"></div></div>
+          <div class="ds-select-cell c-prod js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Ground Coffee</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-select-cell c-pack js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Pack</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-input-number c-price">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="800" aria-label="Цена, ₽"></div>
+            <button class="ds-input-number__icon js-clear" type="button" aria-label="Очистить цену"><span class="material-icons" aria-hidden="true">close</span></button>
+          </div>
+          <div class="ds-input-number c-perc">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="10" aria-label="Отклонение, %"></div>
+            <span class="ds-input-number__support">%</span>
+          </div>
+          <div class="ds-input-number c-rub">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="80" aria-label="Отклонение, ₽"></div>
+            <span class="ds-input-number__support">₽</span>
+          </div>
+          <div class="ds-element-cell ds-element-cell--button-icon c-act row-actions">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" aria-label="Удалить строку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span></button>
+          </div>
+        </div>
+
+        <div class="ds-table-content-row js-row" role="row">
+          <div class="ds-input-cell c-num"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="00001" aria-label="Номер"></div></div>
+          <div class="ds-input-cell c-name"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="Fair Trade Ground Coffee" aria-label="Название"></div></div>
+          <div class="ds-select-cell c-prod js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Ground Coffee</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-select-cell c-pack js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Pack</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-input-number c-price">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="800" aria-label="Цена, ₽"></div>
+            <button class="ds-input-number__icon js-clear" type="button" aria-label="Очистить цену"><span class="material-icons" aria-hidden="true">close</span></button>
+          </div>
+          <div class="ds-input-number c-perc">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="10" aria-label="Отклонение, %"></div>
+            <span class="ds-input-number__support">%</span>
+          </div>
+          <div class="ds-input-number c-rub">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="80" aria-label="Отклонение, ₽"></div>
+            <span class="ds-input-number__support">₽</span>
+          </div>
+          <div class="ds-element-cell ds-element-cell--button-icon c-act row-actions">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" aria-label="Удалить строку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span></button>
+          </div>
+        </div>
+
+        <div class="ds-table-content-row js-row" role="row">
+          <div class="ds-input-cell c-num"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="00001" aria-label="Номер"></div></div>
+          <div class="ds-input-cell c-name"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="Fair Trade Ground Coffee" aria-label="Название"></div></div>
+          <div class="ds-select-cell c-prod js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Ground Coffee</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-select-cell c-pack js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Pack</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-input-number c-price">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="800" aria-label="Цена, ₽"></div>
+            <button class="ds-input-number__icon js-clear" type="button" aria-label="Очистить цену"><span class="material-icons" aria-hidden="true">close</span></button>
+          </div>
+          <div class="ds-input-number c-perc">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="10" aria-label="Отклонение, %"></div>
+            <span class="ds-input-number__support">%</span>
+          </div>
+          <div class="ds-input-number c-rub">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="80" aria-label="Отклонение, ₽"></div>
+            <span class="ds-input-number__support">₽</span>
+          </div>
+          <div class="ds-element-cell ds-element-cell--button-icon c-act row-actions">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" aria-label="Удалить строку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span></button>
+          </div>
+        </div>
+
+        <div class="ds-table-content-row js-row row-error" role="row">
+          <div class="ds-input-cell c-num"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="00001" aria-label="Номер"></div></div>
+          <div class="ds-input-cell c-name"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="Fair Trade Ground Coffee" aria-label="Название"></div></div>
+          <div class="ds-select-cell c-prod js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Ground Coffee</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-select-cell c-pack js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Pack</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-input-number c-price">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="800" aria-label="Цена, ₽"></div>
+            <button class="ds-input-number__icon js-clear" type="button" aria-label="Очистить цену"><span class="material-icons" aria-hidden="true">close</span></button>
+          </div>
+          <div class="ds-input-number c-perc">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="10" aria-label="Отклонение, %"></div>
+            <span class="ds-input-number__support">%</span>
+          </div>
+          <div class="ds-input-number c-rub">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="80" aria-label="Отклонение, ₽"></div>
+            <span class="ds-input-number__support">₽</span>
+          </div>
+          <div class="ds-element-cell ds-element-cell--button-icon c-act row-actions">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" aria-label="Удалить строку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span></button>
+          </div>
+        </div>
+
+        <div class="ds-table-content-row js-row" role="row">
+          <div class="ds-input-cell c-num"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="00001" aria-label="Номер"></div></div>
+          <div class="ds-input-cell c-name"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="Fair Trade Ground Coffee" aria-label="Название"></div></div>
+          <div class="ds-select-cell c-prod js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Ground Coffee</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-select-cell c-pack js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Pack</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-input-number c-price">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="800" aria-label="Цена, ₽"></div>
+            <button class="ds-input-number__icon js-clear" type="button" aria-label="Очистить цену"><span class="material-icons" aria-hidden="true">close</span></button>
+          </div>
+          <div class="ds-input-number c-perc">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="10" aria-label="Отклонение, %"></div>
+            <span class="ds-input-number__support">%</span>
+          </div>
+          <div class="ds-input-number c-rub">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="80" aria-label="Отклонение, ₽"></div>
+            <span class="ds-input-number__support">₽</span>
+          </div>
+          <div class="ds-element-cell ds-element-cell--button-icon c-act row-actions">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" aria-label="Удалить строку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span></button>
+          </div>
+        </div>
+
+        <div class="ds-table-content-row js-row row-error" role="row">
+          <div class="ds-input-cell c-num"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="00001" aria-label="Номер"></div></div>
+          <div class="ds-input-cell c-name"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="Fair Trade Ground Coffee" aria-label="Название"></div></div>
+          <div class="ds-select-cell c-prod js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Ground Coffee</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-select-cell c-pack js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Pack</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-input-number c-price">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="800" aria-label="Цена, ₽"></div>
+            <button class="ds-input-number__icon js-clear" type="button" aria-label="Очистить цену"><span class="material-icons" aria-hidden="true">close</span></button>
+          </div>
+          <div class="ds-input-number c-perc">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="10" aria-label="Отклонение, %"></div>
+            <span class="ds-input-number__support">%</span>
+          </div>
+          <div class="ds-input-number c-rub">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="80" aria-label="Отклонение, ₽"></div>
+            <span class="ds-input-number__support">₽</span>
+          </div>
+          <div class="ds-element-cell ds-element-cell--button-icon c-act row-actions">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" aria-label="Удалить строку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span></button>
+          </div>
+        </div>
+
+        <div class="ds-table-content-row js-row row-error" role="row">
+          <div class="ds-input-cell c-num"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="00001" aria-label="Номер"></div></div>
+          <div class="ds-input-cell c-name"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="Fair Trade Ground Coffee" aria-label="Название"></div></div>
+          <div class="ds-select-cell c-prod js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Ground Coffee</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-select-cell c-pack js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">Pack</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+          <div class="ds-input-number c-price">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="800" aria-label="Цена, ₽"></div>
+            <button class="ds-input-number__icon js-clear" type="button" aria-label="Очистить цену"><span class="material-icons" aria-hidden="true">close</span></button>
+          </div>
+          <div class="ds-input-number c-perc">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="10" aria-label="Отклонение, %"></div>
+            <span class="ds-input-number__support">%</span>
+          </div>
+          <div class="ds-input-number c-rub">
+            <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="80" aria-label="Отклонение, ₽"></div>
+            <span class="ds-input-number__support">₽</span>
+          </div>
+          <div class="ds-element-cell ds-element-cell--button-icon c-act row-actions">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" aria-label="Удалить строку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="panel__handle" id="panel-handle" role="separator" aria-label="Тяни, чтобы менять ширину (375–1440)" title="Тяни, чтобы менять ширину (375–1440)"></div>
+
+  <!-- Панель «Создать продукт» (макет 7450:70291): справа 700 на десктопе, во всю ширину на планшете,
+       во весь экран на телефоне. Собрана из компонентов ДС: Input, Select form, Button/Button icon,
+       Table (шапка+строки); затемнение — Backdrop (структура/поведение из ДС) -->
+  <div class="pp-overlay" id="pp-overlay" hidden>
+    <div class="pp-overlay__backdrop js-pp-close" aria-hidden="true"></div>
+    <div class="pp-panel" role="dialog" aria-modal="true" aria-labelledby="pp-title">
+      <div class="pp-panel__head">
+        <h2 class="pp-panel__title" id="pp-title">Создать продукт</h2>
+        <button class="ds-btn-icon ds-btn-icon--m ds-btn-icon--neutral ds-btn-icon--text js-pp-close" type="button" aria-label="Закрыть">
+          <span class="ds-btn-icon__icon material-icons" aria-hidden="true">close</span>
+        </button>
+      </div>
+      <div class="pp-panel__body">
+        <div class="pp-grid">
+          <div class="ds-input ds-input--m pp-panel__field pp-panel__field--full">
+            <div class="ds-input__frame">
+              <div class="ds-input__content">
+                <span class="ds-input__label">Название товара</span>
+                <input class="ds-input__field" type="text" value="Ground Coffee XL (000-510)" aria-label="Название товара">
+              </div>
+            </div>
+          </div>
+          <div class="ds-select-form ds-select-form--empty pp-panel__field pp-panel__field--full pp-panel__field--gap24 js-pp-select" role="button" tabindex="0" aria-haspopup="listbox">
+            <div class="ds-select-form__input">
+              <div class="ds-select-form__input-frame">
+                <span class="ds-select-form__stack">
+                  <span class="ds-select-form__label">Тип товара</span>
+                  <span class="ds-select-form__value">Выберите значение</span>
+                </span>
+                <span class="ds-select-form__icon material-icons" aria-hidden="true">keyboard_arrow_down</span>
+              </div>
+            </div>
+          </div>
+          <div class="ds-select-form ds-select-form--empty pp-panel__field pp-panel__field--gap24 js-pp-select" role="button" tabindex="0" aria-haspopup="listbox">
+            <div class="ds-select-form__input">
+              <div class="ds-select-form__input-frame">
+                <span class="ds-select-form__stack">
+                  <span class="ds-select-form__label">Родительская группа</span>
+                  <span class="ds-select-form__value">Выберите значение</span>
+                </span>
+                <span class="ds-select-form__icon material-icons" aria-hidden="true">keyboard_arrow_down</span>
+              </div>
+            </div>
+          </div>
+          <div class="ds-input ds-input--m pp-panel__field pp-panel__field--gap24">
+            <div class="ds-input__frame">
+              <div class="ds-input__content">
+                <span class="ds-input__label">Бухгалтерская категория</span>
+                <input class="ds-input__field" type="text" value="" placeholder="Введите значение" aria-label="Бухгалтерская категория">
+              </div>
+            </div>
+          </div>
+          <div class="ds-select-form ds-select-form--empty pp-panel__field js-pp-select" role="button" tabindex="0" aria-haspopup="listbox">
+            <div class="ds-select-form__input">
+              <div class="ds-select-form__input-frame">
+                <span class="ds-select-form__stack">
+                  <span class="ds-select-form__label">Категория</span>
+                  <span class="ds-select-form__value">Выберите значение</span>
+                </span>
+                <span class="ds-select-form__icon material-icons" aria-hidden="true">keyboard_arrow_down</span>
+              </div>
+            </div>
+          </div>
+          <div class="ds-input ds-input--m pp-panel__field">
+            <div class="ds-input__frame">
+              <div class="ds-input__content">
+                <span class="ds-input__label">Налог</span>
+                <input class="ds-input__field" type="text" value="" placeholder="Введите значение" aria-label="Налог">
+              </div>
+            </div>
+          </div>
+          <div class="ds-select-form ds-select-form--populated pp-panel__field pp-panel__field--gap24 js-pp-select" role="button" tabindex="0" aria-haspopup="listbox">
+            <div class="ds-select-form__input">
+              <div class="ds-select-form__input-frame">
+                <span class="ds-select-form__stack">
+                  <span class="ds-select-form__label">Базовая единица</span>
+                  <span class="ds-select-form__value">Кг</span>
+                </span>
+                <span class="ds-select-form__icon material-icons" aria-hidden="true">keyboard_arrow_down</span>
+              </div>
+            </div>
+          </div>
+          <div class="ds-input ds-input--m pp-panel__field pp-panel__field--gap24">
+            <div class="ds-input__frame">
+              <div class="ds-input__content">
+                <span class="ds-input__label">Объем единицы измерения, кг</span>
+                <input class="ds-input__field" type="text" value="" placeholder="Введите значение" aria-label="Объем единицы измерения, кг">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pp-fs">
+          <div class="pp-fs__head">
+            <span class="pp-fs__title">Фасовка</span>
+            <button class="ds-btn ds-btn--m ds-btn--neutral ds-btn--text" type="button" id="pp-add-fs">
+              <span class="ds-btn__icon material-icons" aria-hidden="true">add</span>
+              <span class="ds-btn__label">Добавить</span>
+            </button>
+          </div>
+          <div class="ds-table pp-fs__table" role="table" aria-label="Фасовка">
+            <div class="ds-table-header-row" role="row">
+              <div class="ds-table-header-cell c-fs-num" role="columnheader"><span class="ds-table-header-cell__label">№</span></div>
+              <div class="ds-table-header-cell c-fs-pack" role="columnheader"><span class="ds-table-header-cell__label">Фасовка</span></div>
+              <div class="ds-table-header-cell c-fs-qty" role="columnheader"><span class="ds-table-header-cell__label">Количество в фасовке</span></div>
+              <div class="ds-table-header-cell c-fs-act" role="columnheader"></div>
+            </div>
+            <div class="ds-table-content-row js-pf-row" role="row">
+              <div class="ds-table-content-cell c-fs-num" role="cell"><span class="ds-table-content-cell__label">1</span></div>
+              <div class="ds-table-content-cell c-fs-pack" role="cell"><span class="ds-table-content-cell__label">Box 10 kg</span></div>
+              <div class="ds-table-content-cell c-fs-qty" role="cell"><span class="ds-table-content-cell__label">10</span></div>
+              <div class="ds-element-cell ds-element-cell--button-icon c-fs-act row-actions" role="cell"></div>
+            </div>
+            <div class="ds-table-content-row js-pf-row" role="row">
+              <div class="ds-table-content-cell c-fs-num" role="cell"><span class="ds-table-content-cell__label">2</span></div>
+              <div class="ds-table-content-cell c-fs-pack" role="cell"><span class="ds-table-content-cell__label">Box 10 kg</span></div>
+              <div class="ds-table-content-cell c-fs-qty" role="cell"><span class="ds-table-content-cell__label">10</span></div>
+              <div class="ds-element-cell ds-element-cell--button-icon c-fs-act row-actions" role="cell">
+                <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--neutral ds-btn-icon--text" type="button" aria-label="Изменить фасовку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">edit</span></button>
+                <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-pf-del" type="button" aria-label="Удалить фасовку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pp-panel__foot">
+        <!-- Кнопки — групповой компонент ДС: Button group (вариант Margins — для футеров) -->
+        <div class="ds-btn-group ds-btn-group--horizontal ds-btn-group--margins">
+          <button class="ds-btn ds-btn--m ds-btn--neutral ds-btn--outlined js-pp-close" type="button"><span class="ds-btn__label">Отмена</span></button>
+          <button class="ds-btn ds-btn--m ds-btn--accent ds-btn--filled" type="button" id="pp-create"><span class="ds-btn__label">Создать</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- Меню опций селектов ячеек (обвязка; у ДС select-cell меню нет — ячейка только подпись+стрелка) -->
+<div class="cselect-menu ds-select-container ds-select-container--container" id="cselect-menu" role="listbox" aria-label="Опции"></div>
+
+<!-- Демо-строка для «Добавить товар» (в приложении — строка правки с пустыми полями) -->
+<template id="row-template">
+  <div class="ds-table-content-row js-row" role="row">
+    <div class="ds-input-cell c-num"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="" placeholder="00000" aria-label="Номер"></div></div>
+    <div class="ds-input-cell c-name"><div class="ds-input-cell__frame"><input class="pp-field" type="text" value="" placeholder="Название" aria-label="Название"></div></div>
+    <div class="ds-select-cell c-prod js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">—</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+    <div class="ds-select-cell c-pack js-cselect" role="button" tabindex="0" aria-haspopup="listbox"><span class="ds-select-cell__label">—</span><span class="ds-select-cell__icon" aria-hidden="true"><span class="material-icons">expand_more</span></span></div>
+    <div class="ds-input-number c-price">
+      <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="" aria-label="Цена, ₽"></div>
+      <button class="ds-input-number__icon js-clear" type="button" aria-label="Очистить цену"><span class="material-icons" aria-hidden="true">close</span></button>
+    </div>
+    <div class="ds-input-number c-perc">
+      <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="" aria-label="Отклонение, %"></div>
+      <span class="ds-input-number__support">%</span>
+    </div>
+    <div class="ds-input-number c-rub">
+      <div class="ds-input-number__frame"><input class="pp-field pp-field--num" type="text" inputmode="numeric" value="" aria-label="Отклонение, ₽"></div>
+      <span class="ds-input-number__support">₽</span>
+    </div>
+    <div class="ds-element-cell ds-element-cell--button-icon c-act row-actions">
+      <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" aria-label="Удалить строку"><span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span></button>
+    </div>
+  </div>
+</template>
+
+<script>
+  // Невидимая обвязка для скриншотов (в обычном просмотре ничего не меняет):
+  //   ?w=812 | ?view=desktop|mobile — стартовая ширина кадра (по умолчанию 1184)
+  //   ?ui=0 — скрыть обвязку ширины и получить чистый кадр
+  //   ?demo=hover — показать состояние 2-й строки (ховер + корзина, как в макете)
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var bar = document.getElementById('modes-bar');
+    var panel = document.getElementById('panel');
+    var handle = document.getElementById('panel-handle');
+    var wValue = document.getElementById('w-value');
+    var wMode = document.getElementById('w-mode');
+    var MIN = 375, MAX = 1440, MOBILE_MAX = 768, DEFAULT_W = 1184;
+    var clean = q.get('ui') === '0';
+
+    function setWidth(w) {
+      w = Math.round(Math.min(MAX, Math.max(MIN, w)));
+      panel.style.width = w + 'px';
+      var mobile = w <= MOBILE_MAX;
+      panel.dataset.mode = mobile ? 'mobile' : 'desktop';
+      if (wValue) wValue.textContent = w + ' px';
+      if (wMode) wMode.textContent = mobile ? 'mobile' : 'desktop';
+      var deviceKind = clean ? '' : (w <= 480 ? 'phone' : (w <= MOBILE_MAX ? 'tablet' : 'desktop'));
+      document.body.classList.toggle('device-phone', deviceKind === 'phone');
+      document.body.classList.toggle('device-tablet', deviceKind === 'tablet');
+      document.body.classList.toggle('device-desktop', deviceKind === 'desktop');
+      if (deviceKind) {
+        var deviceH = deviceKind === 'phone' ? 812 : deviceKind === 'tablet' ? 1024 : 960;
+        panel.style.setProperty('--device-screen-h', Math.round(deviceH) + 'px');
+      }
+      Array.prototype.forEach.call(bar.querySelectorAll('.modes-bar__btn[data-w]'), function (b) {
+        b.classList.toggle('is-active', Number(b.dataset.w) === w);
+      });
+    }
+
+    function startWidth() {
+      var w = parseFloat(q.get('w'));
+      if (w) return w;
+      var view = q.get('view');
+      if (view === 'mobile') return MIN;
+      if (view === 'both') return MOBILE_MAX;
+      return DEFAULT_W;
+    }
+
+    if (clean) {
+      bar.hidden = true;
+      document.body.classList.add('ui-clean');
+    } else {
+      bar.addEventListener('click', function (e) {
+        var btn = e.target.closest ? e.target.closest('.modes-bar__btn') : null;
+        if (btn && btn.dataset.w) setWidth(Number(btn.dataset.w));
+      });
+      var drag = { on: false, x: 0, w: 0, id: null };
+      function drop() {
+        if (!drag.on) return;
+        drag.on = false;
+        document.body.classList.remove('is-dragging');
+        if (handle.releasePointerCapture && drag.id !== null) { try { handle.releasePointerCapture(drag.id); } catch (err) {} }
+        drag.id = null;
+      }
+      if (handle) {
+        handle.addEventListener('pointerdown', function (e) {
+          drag.on = true; drag.x = e.clientX; drag.w = panel.offsetWidth; drag.id = e.pointerId;
+          document.body.classList.add('is-dragging');
+          if (handle.setPointerCapture) { try { handle.setPointerCapture(e.pointerId); } catch (err) {} }
+          e.preventDefault();
+        });
+        handle.addEventListener('pointermove', function (e) {
+          if (drag.on) setWidth(drag.w + (e.clientX - drag.x));
+        });
+        handle.addEventListener('pointerup', drop);
+        handle.addEventListener('pointercancel', drop);
+      }
+    }
+
+    // ── Интерактив прототипа (рабочие элементы — живые) ──
+    (function initInteractions() {
+      var table = document.getElementById('table');
+      var search = document.getElementById('search');
+      var input = search.querySelector('.js-search__input');
+      var clear = search.querySelector('.js-search__clear');
+      var onlyErrors = false;
+
+      // Фильтр строк: текстовый поиск + тумблер «только с ошибками»
+      function applyFilter() {
+        var v = (input.value || '').trim().toLowerCase();
+        Array.prototype.forEach.call(table.querySelectorAll('.js-row'), function (row) {
+          var hide = (onlyErrors && !row.classList.contains('row-error')) ||
+                     (v !== '' && row.textContent.toLowerCase().indexOf(v) === -1);
+          row.hidden = hide;
+        });
+      }
+
+      // «Назад» / «Отмена» / «Сохранить» — к прайс-листу (экран 2)
+      function toPricelist() { location.href = dsFrameNav('figma-7431-pricelist.html'); }
+      var back = document.getElementById('back');
+      if (back) back.addEventListener('click', toPricelist);
+      document.getElementById('cancel').addEventListener('click', toPricelist);
+      document.getElementById('save').addEventListener('click', toPricelist);
+
+      // Поиск: круг XS разворачивается в поле и фильтрует строки
+      function openSearch() {
+        search.classList.add('is-open');
+        input.hidden = false;
+        input.focus();
+      }
+      function closeSearch() {
+        search.classList.remove('is-open');
+        input.hidden = true;
+        input.value = '';
+        applyFilter();
+      }
+      search.addEventListener('click', function (e) {
+        if (e.target.closest && e.target.closest('.js-search__clear')) {
+          input.value = '';
+          applyFilter();
+          input.focus();
+          return;
+        }
+        if (!search.classList.contains('is-open')) openSearch();
+      });
+      input.addEventListener('input', applyFilter);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeSearch();
+      });
+      document.addEventListener('click', function (e) {
+        if (search.classList.contains('is-open') && !search.contains(e.target) && !input.value) closeSearch();
+      });
+
+      // Тумблер «Показать только товары с ошибками» — фильтр ошибочных строк
+      var toggle = document.querySelector('#errors-only .ds-slide-toggle__input');
+      if (toggle) {
+        toggle.addEventListener('change', function () {
+          onlyErrors = toggle.checked;
+          applyFilter();
+        });
+      }
+
+      // «Добавить товар» — демо-строка из шаблона; корзина в строке — удаляет строку
+      var tpl = document.getElementById('row-template');
+      document.getElementById('add-product').addEventListener('click', function () {
+        table.appendChild(tpl.content.cloneNode(true));
+        bindRow(table.lastElementChild);
+        applyFilter();
+      });
+      document.getElementById('delete').addEventListener('click', function () {});
+      document.getElementById('export').addEventListener('click', function () {});
+
+      // «×» у цены — очищает поле
+      function bindRow(row) {
+        var clr = row.querySelector('.js-clear');
+        if (clr) {
+          clr.addEventListener('click', function () {
+            var f = row.querySelector('.ds-input-number__frame input');
+            if (f) { f.value = ''; f.focus(); }
+          });
+        }
+        var del = row.querySelector('.js-del');
+        if (del) {
+          del.addEventListener('click', function () {
+            if (row.parentNode) row.parentNode.removeChild(row);
+          });
+        }
+      }
+      Array.prototype.forEach.call(table.querySelectorAll('.js-row'), bindRow);
+
+      // Селекты ячеек: клик — демо-меню опций (fixed, не режется overflow таблицы)
+      var menu = document.getElementById('cselect-menu');
+      var menuFor = null;
+      var OPTIONS = {
+        'prod': ['Ground Coffee S (000-509)', 'Ground Coffee M (000-509)', 'Ground Coffee L (000-509)'],
+        'pack': ['Pack', 'Box', 'Kg', 'Litre']
+      };
+      // Иконка «товар» — выгрузка из макета 4551:20517 (кастомный глиф iiko, не Material);
+      // как в ДС-меню — инлайн svg с fill: currentColor, чтобы иконка слушала цвет пункта/ховера
+      var TOVAR_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.95C22 17.368 21.7667 17.731 21.4111 17.918L12.6333 22.802C12.4556 22.934 12.2333 23 12 23C11.7667 23 11.5444 22.934 11.3667 22.802L2.58889 17.918C2.23333 17.731 2 17.368 2 16.95V7.05C2 6.632 2.23333 6.269 2.58889 6.082L11.3667 1.198C11.5444 1.066 11.7667 1 12 1C12.2333 1 12.4556 1.066 12.6333 1.198L21.4111 6.082C21.7667 6.269 22 6.632 22 7.05V16.95ZM12 3.365L9.9 4.542L16.4444 8.271L18.6222 7.05L12 3.365ZM5.37778 7.05L12 10.735L14.1778 9.525L7.64444 5.785L5.37778 7.05ZM4.22222 16.301L10.8889 20.019V12.638L4.22222 8.931V16.301ZM19.7778 16.301V8.931L13.1111 12.638V20.019L19.7778 16.301Z" fill="currentColor"/></svg>';
+      function closeMenu() {
+        menu.classList.remove('is-open');
+        menu.classList.remove('cselect-menu--prod');
+        menu.innerHTML = '';
+        menuFor = null;
+      }
+      function divider() {
+        var d = document.createElement('div');
+        d.className = 'ds-divider';   /* разделитель — компонент ДС */
+        return d;
+      }
+      // Строка выпадающего списка — компонент ДС Select item (Subtitle=False);
+      // иконка и текст — слот ДС Element select (Content=Icon size)
+      function optionItem(cell, opt, iconHtml, extraCls, action) {
+        var b = document.createElement('div');
+        b.className = 'ds-select-item ds-select-item--false' + (extraCls ? ' ' + extraCls : '');
+        if (iconHtml) {
+          b.innerHTML = '<div class="ds-select-item__element-left"><div class="ds-element-select ds-element-select--icon-size"><span class="ds-element-select__icon">' + iconHtml + '</span><span class="ds-element-select__label"></span></div></div>';
+        } else {
+          b.innerHTML = '<div class="ds-select-item__element-left"><div class="ds-element-select ds-element-select--text-default"><span class="ds-element-select__label"></span></div></div>';
+        }
+        var label = b.querySelector('.ds-element-select__label');
+        label.textContent = opt;
+        if (action) {
+          b.setAttribute('aria-label', opt);
+        } else {
+          b.setAttribute('role', 'option');
+        }
+        b.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (action) { openPanel(); return; }   // «Создать продукт» → панель 7450:70291
+          cell.querySelector('.ds-select-cell__label').textContent = opt;
+          closeMenu();
+        });
+        return b;
+      }
+      // Блок селекта «Название продукта» — макет 4551:20512, собран из компонентов ДС:
+      // подложка — Select (Container), «+ Создать продукт» — Select item (слот Element select, add),
+      // разделители — Divider, поиск — Search в слоте контейнера, товары — Select item (глиф «товар»)
+      function buildProdMenu(cell) {
+        menu.appendChild(optionItem(cell, 'Создать продукт', '<span class="material-icons">add</span>', 'cselect-action', true));
+        menu.appendChild(divider());
+        var search = document.createElement('div');
+        search.className = 'ds-select-container__search';
+        search.innerHTML = '<div class="ds-search"><span class="ds-search__icon"><span class="material-icons">search</span></span><input type="text" placeholder="Поиск" aria-label="Поиск продукта"></div>';
+        menu.appendChild(search);
+        menu.appendChild(divider());
+        var scroll = document.createElement('div');
+        scroll.className = 'ds-select-container__scroll';
+        menu.appendChild(scroll);
+        var items = [];
+        var cur = cell.querySelector('.ds-select-cell__label').textContent;
+        OPTIONS.prod.forEach(function (opt) {
+          var it = optionItem(cell, opt, TOVAR_SVG, opt === cur ? 'is-selected' : '');
+          items.push(it);
+          scroll.appendChild(it);
+        });
+        var input = search.querySelector('input');
+        input.addEventListener('input', function () {
+          var q = input.value.trim().toLowerCase();
+          items.forEach(function (it) { it.hidden = !!q && it.textContent.toLowerCase().indexOf(q) === -1; });
+        });
+        return function () { input.focus(); };
+      }
+      function openMenu(cell) {
+        closeMenu();
+        var kind = cell.classList.contains('c-prod') ? 'prod' : 'pack';
+        var r = cell.getBoundingClientRect();
+        var afterOpen = null;
+        if (kind === 'prod') {
+          menu.classList.add('cselect-menu--prod');
+          menu.style.minWidth = '';
+          afterOpen = buildProdMenu(cell);
+        } else {
+          Array.prototype.forEach.call(OPTIONS.pack, function (opt) { menu.appendChild(optionItem(cell, opt, '')); });
+          menu.style.minWidth = r.width + 'px';
+        }
+        menu.classList.add('is-open');
+        menuFor = cell;
+        menu.style.left = Math.round(r.left) + 'px';
+        menu.style.top = Math.round(r.bottom + 4) + 'px';
+        if (menu.offsetHeight + r.bottom + 8 > window.innerHeight) {
+          menu.style.top = Math.round(Math.max(8, r.top - menu.offsetHeight - 4)) + 'px';
+        }
+        if (afterOpen) afterOpen();
+      }
+      // ── Панель «Создать продукт» (макет 7450:70291): открытие из меню селекта ──
+      var ppOverlay = document.getElementById('pp-overlay');
+      function openPanel() {
+        closeMenu();
+        ppOverlay.hidden = false;
+        ppOverlay.classList.add('is-open');
+      }
+      function closePanel() {
+        ppOverlay.classList.remove('is-open');
+        ppOverlay.hidden = true;
+      }
+      Array.prototype.forEach.call(document.querySelectorAll('.js-pp-close'), function (b) {
+        b.addEventListener('click', closePanel);
+      });
+      var ppCreate = document.getElementById('pp-create');
+      if (ppCreate) ppCreate.addEventListener('click', closePanel);   // демо: «Создать» просто закрывает (строку в селект не добавляем)
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePanel(); });
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest) return;
+        var del = e.target.closest('.js-pf-del');
+        if (del) { var row = del.closest('.js-pf-row'); if (row && row.parentNode) row.parentNode.removeChild(row); }
+      });
+      table.addEventListener('click', function (e) {
+        var cell = e.target.closest ? e.target.closest('.js-cselect') : null;
+        if (cell) { e.stopPropagation(); if (menuFor === cell) closeMenu(); else openMenu(cell); return; }
+        closeMenu();
+      });
+      document.addEventListener('click', function (e) {
+        if (menuFor && !menu.contains(e.target) && !(e.target.closest && e.target.closest('.js-cselect'))) closeMenu();
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+      window.addEventListener('scroll', function () { closeMenu(); }, { passive: true, capture: true });
+      window.addEventListener('resize', function () { closeMenu(); });
+
+      // Скриншотный режим: состояние 2-й строки — как в макете (ховер + корзина)
+      if (q.get('demo') === 'hover') {
+        var rows = table.querySelectorAll('.js-row');
+        if (rows[1]) rows[1].classList.add('is-hover');
+      }
+    })();
+
+    // ── Подсказки по ДС (обвязка ревью; цель — дизайн в Фигме совпадает с вёрсткой) ──
+    // Ссылка в шапке или ?hints=1: номера-маркеры на местах расхождений + список под шапкой.
+    // Номера живут в отдельном fixed-слое (overflow компонентов их не режет); клик по номеру
+    // открывает пузырь ДС-подсказки с текстом находки на месте — читать текст сверху не нужно.
+    // Список находок — материал для правки ДС (Фигма/токены/CSS), а не обход в прототипе.
+    (function initHints() {
+      var btn = document.getElementById('hints-btn');
+      var strip = document.getElementById('hints');
+      var layer = document.getElementById('hints-layer');
+      if (!btn || !strip || !layer) return;
+      var marks = [
+        { n: '1', sel: '.js-row.row-error' },         // состояние «строка с ошибкой»
+        { n: '2', sel: '.ds-input-cell' },            // ховер-рамка редактируемой ячейки
+        { n: '3', sel: '.ds-input-number' },          // Close icon: вариант есть в Фигме, CSS нет
+        { n: '4', sel: '.ds-input-number__frame', dx: 22 },  // кадр: нет box-sizing/паддингов
+        { n: '5', sel: '.ds-input-number__icon' },           // детали не центрируются по вертикали
+        { n: '6', sel: '#edit-chip' }                        // подпись статуса: цвет варианта не применяется
+      ];
+      // Тексты — из списка под шапкой (номер → описание): пузырь и список не расходятся
+      var texts = {};
+      Array.prototype.forEach.call(strip.querySelectorAll('.hints__item'), function (li) {
+        var num = li.querySelector('.hints__num');
+        var txt = li.querySelector('.hints__text');
+        if (num && txt) texts[num.textContent.trim()] = txt.textContent.trim();
+      });
+      var on = false, items = [], pop = null, popItem = null, raf = 0;
+      var vw = 0, vh = 0;
+
+      // Номера и пузырь позиционируются в координатах окна (fixed-слой), пересчёт — каждый кадр:
+      // так они едут за элементами при скролле/перетаскивании ширины и не режутся overflow
+      function place() {
+        vw = document.documentElement.clientWidth;
+        vh = document.documentElement.clientHeight;
+        Array.prototype.forEach.call(items, function (it) {
+          var r = it.host.getBoundingClientRect();
+          var vis = r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < vh && r.right > 0 && r.left < vw;
+          it.btn.style.display = vis ? '' : 'none';
+          if (!vis) return;
+          var x = r.left + (it.m.dx !== undefined ? it.m.dx : -9);
+          var y = r.top + (it.m.dy !== undefined ? it.m.dy : -9);
+          var bw = it.btn.offsetWidth || 20, bh = it.btn.offsetHeight || 20;
+          // номер виден, только когда виден его угол: без прижатия к краям окна —
+          // иначе у уехавших за край элементов номера слипались бы у рамки
+          if (x + bw < 0 || x > vw || y + bh < 0 || y > vh) { it.btn.style.display = 'none'; return; }
+          it.btn.style.left = Math.round(x) + 'px';
+          it.btn.style.top = Math.round(y) + 'px';
+        });
+        if (pop && popItem && popItem.btn.style.display === 'none') closePop();
+        if (pop && popItem) placePop();
+      }
+      function placePop() {
+        var r = popItem.btn.getBoundingClientRect();
+        var w = pop.offsetWidth, h = pop.offsetHeight;
+        var below = r.bottom + 6 + h <= vh - 8;      // не влезает снизу — показываем сверху
+        pop.classList.toggle('hint-pop--above', !below);
+        pop.querySelector('.ds-hint-container__arrow .material-icons').textContent = below ? 'arrow_drop_up' : 'arrow_drop_down';
+        var y = below ? r.bottom + 6 : r.top - h - 6;
+        var x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), vw - w - 8);
+        pop.style.left = Math.round(x) + 'px';
+        pop.style.top = Math.round(Math.min(Math.max(4, y), vh - h - 4)) + 'px';
+      }
+      function closePop() {
+        if (popItem) popItem.btn.classList.remove('is-open');
+        if (pop && pop.parentNode) pop.parentNode.removeChild(pop);
+        pop = null; popItem = null;
+      }
+      // Пузырь — сборка ДС по правилу «композиты — всегда через контейнер»:
+      // ds-hint-container--default + ds-hint-content--single-content; показ/позиция — обвязка
+      function openPop(it) {
+        closePop();
+        popItem = it;
+        it.btn.classList.add('is-open');
+        pop = document.createElement('div');
+        pop.className = 'hint-pop';
+        pop.innerHTML = '<span class="ds-hint-container ds-hint-container--default" role="tooltip">' +
+          '<span class="ds-hint-container__arrow" aria-hidden="true"><span class="material-icons">arrow_drop_up</span></span>' +
+          '<div class="ds-hint-content ds-hint-content--single-content">' +
+          '<span class="ds-hint-content__label"></span></div></span>';
+        pop.querySelector('.ds-hint-content__label').textContent = texts[it.m.n] || '';
+        layer.appendChild(pop);
+        place();
+      }
+      function tick() {
+        raf = requestAnimationFrame(tick);
+        place();
+      }
+      function setHints(v) {
+        on = v;
+        document.body.classList.toggle('hints-on', on);
+        btn.classList.toggle('is-active', on);
+        btn.setAttribute('aria-pressed', String(on));
+        closePop();
+        Array.prototype.forEach.call(items, function (it) { if (it.btn.parentNode) it.btn.parentNode.removeChild(it.btn); });
+        items = [];
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
+        Array.prototype.forEach.call(marks, function (m) {
+          var el = document.querySelectorAll(m.sel)[m.idx || 0];
+          if (!el) return;
+          el.classList.toggle('hint-mark', on);
+          if (on) el.setAttribute('data-hint', m.n); else el.removeAttribute('data-hint');
+          if (!on) return;
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'hint-badge';
+          b.textContent = m.n;
+          b.setAttribute('aria-label', 'Подсказка ДС ' + m.n);
+          var it = { m: m, host: el, btn: b };
+          b.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (popItem === it) closePop(); else openPop(it);
+          });
+          items.push(it);
+          layer.appendChild(b);
+        });
+        if (on) { place(); tick(); }
+      }
+      btn.addEventListener('click', function () { setHints(!on); });
+      // Номера едут за элементами: пересчёт по scroll/resize (capture ловит и внутренние
+      // скроллы кадра/таблицы) + rAF-кадр — чтобы позиции не зависли, даже если кадр замер
+      window.addEventListener('scroll', function () { if (on) place(); }, { passive: true, capture: true });
+      window.addEventListener('resize', function () { if (on) place(); });
+      document.addEventListener('click', function (e) { if (pop && !pop.contains(e.target)) closePop(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePop(); });
+      if (q.get('hints') === '1' && !clean) setHints(true);
+    })();
+
+    setWidth(startWidth());
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,1077 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KDS — доработки UX (сценарии поверх экрана)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<!-- Иконки Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+  :root{
+    --bg:#0d0d0f; --panel:#161618; --panel-2:#1d1d20; --line:#2a2a2e;
+    --text:#f2f2f3; --text-2:#a5a5ab; --text-3:#6f6f77;
+    --accent:#448aff; --positive:#14b456; --warning:#ffab40; --negative:#ff5252;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:20px;
+    display:flex;overflow:hidden;
+  }
+  /* тонкие тёмные скроллбары вместо системных */
+  *{scrollbar-width:thin;scrollbar-color:#3a4463 transparent}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{
+    background:#3a4463;border-radius:8px;border:2px solid transparent;background-clip:content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover{background:#4d5878;background-clip:content-box;border:2px solid transparent}
+  ::-webkit-scrollbar-corner{background:transparent}
+
+  /* ── Левое меню ─────────────────────────────────────────────── */
+  .menu{
+    width:300px;flex:0 0 300px;height:100vh;overflow-y:auto;
+    background:#151a26;border-right:1px solid #333a49;
+    box-shadow:inset -12px 0 24px -18px rgba(0,0,0,.9);
+    padding-bottom:24px;
+  }
+  .menu__head{display:flex;align-items:center;gap:12px;padding:18px 20px 12px}
+  .menu__title{font-size:18px;font-weight:500;letter-spacing:.3px}
+  .menu .burger{border-color:#3a4358;background:#1e2434;color:#c9c9d2}
+  .menu__group{
+    margin-top:10px;border-top:1px solid #2e3648;padding:10px 20px 6px;
+    color:#95959f;font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;
+  }
+  .item{
+    display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;
+    padding:8px 20px;border:0;background:transparent;color:#e8e8ec;
+    font:inherit;cursor:pointer;border-left:3px solid transparent;
+  }
+  .item.is-nodemo{background:#0a0e14}
+  .item.is-viewed{color:#8f8f99}
+  .item:hover{background:#22293a;color:#fff}
+  .item.is-active{background:#2b3448;color:#fff;border-left-color:var(--accent);box-shadow:inset 0 0 0 1px #3d4861}
+  .item__t{flex:1;min-width:0}
+
+  /* Проблема / Решение — сворачиваемый блок под шапкой (высота как была) */
+  .brief{
+    position:relative;flex:0 0 auto;display:flex;flex-direction:column;padding:0 24px 8px;
+  }
+  .brief__toggle{
+    flex:0 0 auto;height:26px;padding:0 10px 0 8px;
+    display:inline-flex;align-items:center;gap:4px;
+    border:1px solid #5a6688;border-radius:8px;background:rgba(45,53,80,.75);color:#e8e8ee;
+    font:inherit;font-size:13px;font-weight:500;line-height:1;cursor:pointer;opacity:.85;
+  }
+  .brief__toggle .material-icons{font-size:18px;line-height:1}
+  .brief__toggle:hover{background:#3a4463;opacity:1}
+  .nav-btn{
+    flex:0 0 auto;height:26px;padding:0 8px;
+    display:inline-flex;align-items:center;gap:4px;
+    border:1px solid #5a6688;border-radius:8px;background:rgba(45,53,80,.75);color:#e8e8ee;
+    font:inherit;font-size:13px;font-weight:500;line-height:1;cursor:pointer;opacity:.85;
+  }
+  .nav-btn:hover{background:#3a4463;opacity:1}
+  .nav-btn .material-icons{font-size:18px;line-height:1}
+  .brief.is-collapsed{display:none}
+  .brief__body{border-radius:12px;padding:9px 14px;background:#242b3b}
+  .brief__row{display:block}
+  .brief__row + .brief__row{border-top:1px solid #46506d;margin-top:6px;padding-top:6px}
+  .brief__label{display:inline;margin-right:8px;font-size:14px;font-weight:500;color:#fff}
+  .brief__label--problem{color:#ff9e94}
+  .brief__label--solution{color:#7ff0b4}
+  .brief p{display:inline;margin:0;font-size:15px;line-height:23px;color:#fff}
+  .brief__note{display:inline;color:#d6d6dc;font-size:14px;line-height:23px}
+  .brief__note:not(:empty)::before{content:" · "}
+
+  /* ── Ревью: статус решения и комментарий ─────────────────────── */
+  .review__btn{
+    font:inherit;font-size:13px;font-weight:500;line-height:18px;padding:8px 12px;border-radius:9px;cursor:pointer;
+    border:1px solid #4d5878;background:#2a3040;color:#d6d6dc;
+    display:inline-flex;align-items:center;gap:6px;
+    transition:background-color .15s ease,color .15s ease,border-color .15s ease;
+  }
+  .review__btn .material-icons{font-size:16px;line-height:1}
+  .review__btn:hover{background:#323a4f;color:#fff}
+  .review__btn.is-on[data-st="accepted"]{background:#146c33;border-color:#2f9e57;color:#fff}
+  .review__btn.is-on[data-st="later"]{background:#96601a;border-color:#c98a2e;color:#fff}
+  .review__btn.is-on[data-st="rejected"]{background:#8f221b;border-color:#d34a41;color:#fff}
+  .review__comment{
+    display:block;width:100%;min-height:160px;resize:vertical;box-sizing:border-box;margin-top:2px;
+    background:#1b2130;border:1px solid #46506d;border-radius:10px;color:#f2f2f3;
+    font:inherit;font-size:14px;line-height:20px;padding:7px 10px;
+  }
+  .review__comment::placeholder{color:#8b93a7}
+  .review__comment:focus{outline:none;border-color:#5a6f9e}
+  .review__progress{padding:12px 20px 8px;color:#c3c3ca;font-size:14px;line-height:20px}
+  .review__progress b{color:#fff;font-weight:500}
+  .review__progress .is-ok{color:#4cc36c}
+  .review__progress .is-later{color:#ffb74d}
+  .review__progress .is-no{color:#ff6b6b}
+  .review__progress .material-icons{font-size:16px;line-height:1;vertical-align:-3px}
+  .review__tools{display:flex;flex-wrap:wrap;gap:8px;padding:2px 20px 8px}
+  .review__tools > button,.json-menu__btn{
+    font:inherit;font-size:12px;font-weight:500;padding:4px 10px;border-radius:8px;cursor:pointer;
+    border:1px solid #333a49;background:#1d2331;color:#c3c3ca;
+  }
+  .review__tools > button:hover,.json-menu__btn:hover{background:#242c3e;color:#fff}
+  .review__tools .material-icons{font-size:16px;line-height:1;vertical-align:-3px}
+  .json-menu{position:relative}
+  .json-menu__btn{display:inline-flex;align-items:center;gap:3px}
+  .json-menu__btn .material-icons{font-size:16px;line-height:1}
+  .json-menu__list{
+    position:absolute;z-index:60;top:calc(100% + 6px);left:0;min-width:140px;padding:4px;
+    background:#242b3b;border:1px solid #4a5570;border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.5);
+    display:flex;flex-direction:column;gap:2px;
+  }
+  .json-menu__list[hidden]{display:none}
+  .json-menu__list button{
+    font:inherit;font-size:12px;font-weight:500;text-align:left;padding:7px 10px;border:0;border-radius:7px;
+    background:transparent;color:#c3c3ca;cursor:pointer;
+  }
+  .json-menu__list button:hover{background:#323a4f;color:#fff}
+  .item__st{flex:0 0 auto;width:16px;padding-top:2px;text-align:center}
+  .item__st .material-icons{font-size:16px;line-height:1}
+  .item__st.is-accepted{color:#4cc36c}
+  .item__st.is-later{color:#ffb74d}
+  .item__st.is-rejected{color:#ff6b6b}
+  .item__cm{flex:0 0 auto;padding-top:2px;opacity:.9}
+  .item__cm .material-icons{font-size:16px;line-height:1}
+
+  /* ── Основная область ───────────────────────────────────────── */
+  .main{flex:1;min-width:0;height:100vh;overflow-y:auto;scrollbar-gutter:stable;display:flex;flex-direction:column}
+  .top{
+    position:sticky;top:0;flex:0 0 auto;z-index:5;background:#0d0d0f;
+    border-bottom:1px solid var(--line);padding:12px 24px;display:flex;align-items:center;gap:20px;
+  }
+  .top__title{font-size:16px;font-weight:500;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .top__fill{flex:1 1 auto}
+  .top__nav{flex:0 0 auto;display:inline-flex;gap:8px}
+  /* Режим презентации */
+  #presPlayBtn,#presExitBtn{display:none}
+  body.pres-mode #presBtn,body.pres-mode #presPlayBtn,body.pres-mode #presExitBtn,
+  body.pres-mode #prevBtn,body.pres-mode #nextBtn{display:none}
+  /* внизу — крупные полупрозрачные кнопки управления показом */
+  .pres-ctl{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);display:none;gap:8px;z-index:96}
+  body.pres-mode .pres-ctl{display:flex}
+  .pres-ctl button{
+    width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;padding:0;
+    background:rgba(26,32,46,.42);color:rgba(255,255,255,.88);
+    display:inline-flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+    transition:background-color .15s ease,color .15s ease;
+  }
+  .pres-ctl button:hover{background:rgba(40,50,70,.68);color:#fff}
+  .pres-ctl button .material-icons{font-size:22px;line-height:1}
+  .pres-ctl #presCtlExit{margin-left:10px}
+  .pres-ctl__count{
+    display:inline-flex;align-items:center;justify-content:center;
+    height:44px;padding:0 14px;border-radius:12px;white-space:nowrap;
+    background:rgba(26,32,46,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    color:rgba(255,255,255,.92);font-size:15px;font-weight:500;line-height:1;
+    font-variant-numeric:tabular-nums;box-shadow:0 6px 18px rgba(0,0,0,.35);
+  }
+  body.pres-mode .menu{display:none}
+  body.pres-mode .burger{display:none}
+  body.pres-mode .review__row{display:none}
+  body.pres-mode #seg{display:none}
+  body.pres-mode .brief{display:none}
+  body.pres-mode .brief__toggle{display:none}
+  #presBar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:100}
+  .pres-hint{
+    position:fixed;z-index:95;width:340px;padding:14px 16px;border-radius:14px;
+    background:#fff;color:#141418;box-shadow:0 18px 50px rgba(0,0,0,.6);
+  }
+  .pres-hint__t{font-weight:500;font-size:17px;line-height:24px;margin-bottom:8px}
+  .pres-hint__row{display:flex;gap:10px;align-items:baseline;font-size:13.5px;line-height:20px}
+  .pres-hint__row + .pres-hint__row{margin-top:6px}
+  .pres-hint__lab{flex:0 0 82px;font-size:13px;color:#3c3c46}
+  .pres-hint__lab--problem{color:#b3261e}
+  .pres-hint__lab--solution{color:#146c33}
+  .pres-hint__note{margin-top:8px;padding-top:8px;border-top:1px dashed #b4b4bf;color:#3c3c46;font-size:13px;line-height:20px}
+  .pres-hint__note:empty{display:none}
+  .pres-line{position:fixed;inset:0;z-index:94;width:100%;height:100%;pointer-events:none}
+  .seg{
+    display:flex;gap:4px;background:#2a3040;border:1px solid #4d5878;
+    border-radius:12px;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.4);
+  }
+  .segrow{flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 0 12px;margin:0 auto}
+  .review__row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
+  .review__cmt{
+    position:relative;width:36px;padding:8px 0;border-radius:9px;cursor:pointer;
+    border:1px solid #4d5878;background:#2a3040;color:#d6d6dc;font-size:15px;line-height:18px;
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+  .review__cmt:hover{background:#323a4f}
+  .review__cmt.has-note{border-color:#448aff}
+  .review__cmt-badge{
+    position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;
+    background:#448aff;box-shadow:0 0 0 2px #0d0d0f;display:none;
+  }
+  .review__cmt.has-note .review__cmt-badge{display:block}
+  .review__pop{
+    position:fixed;z-index:60;width:480px;padding:10px;border-radius:12px;
+    background:#242b3b;border:1px solid #4a5570;box-shadow:0 18px 44px rgba(0,0,0,.55);
+  }
+  .review__pop-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+  .review__pop-actions #reviewCommentClear{margin-right:auto}
+  .review__pop-actions .review__btn{padding:6px 14px}
+  .review__btn--primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .review__btn--primary:hover{background:#5a9bff;border-color:#5a9bff;color:#fff}
+  .seg button{
+    border:0;background:transparent;color:#d6d6dc;font:inherit;font-size:15px;font-weight:500;line-height:20px;
+    padding:3px 20px;border-radius:9px;cursor:pointer;
+    transition:background-color .15s ease,color .15s ease;
+  }
+  .seg button:hover{color:#fff}
+  .seg button.is-on{background:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(68,138,255,.55)}
+  .seg button:disabled{opacity:.45;cursor:default}
+  .burger{
+    flex:0 0 auto;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--text-2);font-size:17px;line-height:1;cursor:pointer;
+  }
+  .burger:hover{color:var(--text)}
+  #burgerShow{display:none}
+  body.menu-hidden .menu{display:none}
+  body.menu-hidden #burgerShow{display:inline-block}
+
+  .stage{flex:0 0 auto;padding:14px 20px 22px;display:block}
+  .tablet-wrap{position:relative;margin:0 auto;transition:width .15s ease,height .15s ease}
+  .tablet{
+    position:absolute;left:0;top:0;transform-origin:top left;
+    background:#101013;border:2px solid #c6c6ce;border-radius:44px;padding:22px;
+  }
+  .tablet iframe{display:block;width:1280px;height:800px;border:0;border-radius:22px;background:#333}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+  .card h3{margin:0 0 6px;font-size:13px;font-weight:500;color:var(--text-2);letter-spacing:.2px}
+  .card p{margin:0;color:var(--text);font-size:13px;line-height:20px}
+</style>
+</head>
+<body>
+
+<aside class="menu">
+  <div class="menu__head">
+    <button class="burger" id="burger" type="button" title="Свернуть меню">☰</button>
+    <div class="menu__title">Доработки KDS</div>
+  </div>
+  <div class="review__tools">
+    <button type="button" id="revExportXls" title="Скачать отчёт для Excel (xls): группа, карточка, решение, комментарий">Отчёт xls</button>
+    <div class="json-menu" id="jsonMenu">
+      <button type="button" class="json-menu__btn" id="jsonMenuBtn" title="Резервная копия решений в файле JSON — для переноса между компьютерами и передачи">JSON<span class="material-icons">expand_more</span></button>
+      <div class="json-menu__list" id="jsonMenuList" hidden>
+        <button type="button" id="revExportJson" title="Скачать файл со всеми решениями и комментариями (JSON) — чтобы продолжить позже или передать">Скачать</button>
+        <button type="button" id="revImport" title="Загрузить решения из файла, сохранённого пунктом «Скачать» (JSON). Текущие решения заменятся">Загрузить</button>
+      </div>
+    </div>
+    <button type="button" id="revReset" title="Сбросить всё: решения, комментарии и отметки просмотра"><span class="material-icons">restart_alt</span>Сброс</button>
+    <input type="file" id="revFile" accept=".json,application/json" hidden>
+  </div>
+  <div class="review__progress" id="reviewProgress"></div>
+  <nav id="menu"></nav>
+</aside>
+
+<main class="main">
+  <div class="top">
+    <button class="burger" id="burgerShow" type="button" title="Показать меню">☰</button>
+    <div class="top__title" id="title">Выберите доработку</div>
+    <button class="brief__toggle" id="briefToggle" type="button" title="Свернуть / развернуть"><span class="material-icons">expand_less</span>Описание</button>
+    <span class="top__fill"></span>
+    <span class="top__nav">
+      <button class="nav-btn" id="presBtn" type="button" title="Режим презентации: показ доработок слайдами"><span class="material-icons">slideshow</span>Показ</button>
+      <button class="nav-btn" id="presPlayBtn" type="button" title="Пауза / продолжить"><span class="material-icons">pause</span></button>
+      <button class="nav-btn" id="prevBtn" type="button" title="Предыдущая доработка"><span class="material-icons">chevron_left</span>Назад</button>
+      <button class="nav-btn" id="nextBtn" type="button" title="Следующая доработка">Далее<span class="material-icons">chevron_right</span></button>
+      <button class="nav-btn" id="presExitBtn" type="button" title="Выйти из показа (Esc)"><span class="material-icons">close</span>Выход</button>
+    </span>
+  </div>
+
+  <div class="brief" id="brief">
+    <div class="brief__body">
+      <div class="brief__row">
+        <div class="brief__text"><span class="brief__label brief__label--problem">Проблема</span><p id="problem">—</p></div>
+      </div>
+      <div class="brief__row">
+        <div class="brief__text"><span class="brief__label brief__label--solution">Решение</span><p id="solution">—</p><div class="brief__note" id="note"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="segrow" id="segRow">
+      <div class="seg" id="seg">
+        <button type="button" data-mode="now">Как сейчас</button>
+        <button type="button" data-mode="proposal" class="is-on">Как лучше</button>
+      </div>
+      <div class="review__row">
+        <button class="review__cmt" id="reviewCmtBtn" type="button" title="Комментарий">
+          <span>💬</span><span class="review__cmt-badge"></span>
+        </button>
+        <button class="review__btn" type="button" data-st="accepted"><span class="material-icons">check_circle</span>Берём в работу</button>
+        <button class="review__btn" type="button" data-st="later"><span class="material-icons">schedule</span>Отложить</button>
+        <button class="review__btn" type="button" data-st="rejected"><span class="material-icons">cancel</span>Не берём</button>
+      </div>
+    </div>
+    <div class="tablet-wrap" id="tabletWrap">
+      <div class="tablet" id="tablet">
+        <iframe id="frame" src="kds-screen.html?embed=1" title="Экран KDS"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div id="presBar"></div>
+  <div class="pres-ctl" id="presCtl">
+    <span class="pres-ctl__count" id="presCtlCount">1 из 34</span>
+    <button type="button" id="presCtlPrev" title="Назад"><span class="material-icons">chevron_left</span></button>
+    <button type="button" id="presCtlPlay" title="Пауза / продолжить"><span class="material-icons">pause</span></button>
+    <button type="button" id="presCtlNext" title="Далее"><span class="material-icons">chevron_right</span></button>
+    <button type="button" id="presCtlExit" title="Выйти из показа (Esc)"><span class="material-icons">close</span></button>
+  </div>
+  <svg class="pres-line" id="presLine" hidden>
+    <line id="presLineInner" x1="0" y1="0" x2="0" y2="0" stroke="#448aff" stroke-width="3" stroke-dasharray="3 6" stroke-linecap="round"/>
+    <circle id="presDot" cx="0" cy="0" r="4" fill="#9fb0d6"/>
+  </svg>
+  <div class="pres-hint" id="presHint" hidden>
+    <div class="pres-hint__t" id="presHintTitle"></div>
+    <div class="pres-hint__row"><span class="pres-hint__lab pres-hint__lab--problem">Проблема</span><span id="presHintProblem"></span></div>
+    <div class="pres-hint__row"><span class="pres-hint__lab pres-hint__lab--solution">Решение</span><span id="presHintSolution"></span></div>
+    <div class="pres-hint__note" id="presHintNote"></div>
+  </div>
+
+  <div class="review__pop" id="reviewPop" hidden>
+    <textarea class="review__comment" id="reviewComment" rows="3" placeholder="Комментарий к решению…"></textarea>
+    <div class="review__pop-actions">
+      <button class="review__btn" id="reviewCommentClear" type="button">Стереть</button>
+      <button class="review__btn" id="reviewCommentCancel" type="button">Отменить</button>
+      <button class="review__btn review__btn--primary" id="reviewCommentSave" type="button">Добавить</button>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ── Каталог доработок (сведены дубли из доски Figma «Доработки») ────── */
+const SCENARIOS = [
+  /* Дословно 1:1 с доской Figma «Доработки» (файл 05VEoPOZuAVHLfYI6yqVjz, section 10130:14503):
+     тексты без правок; demo = ключ рабочего сценария в kds-screen.html.
+     2026-09-14: удалены 10 дублей по смыслу (c20,c21,c24,c26,c27,c28,c31,c35,c36,c41).
+     2026-09-15: убраны по решению заказчика c15 (счётчик в шапку), c18 (hit box), c30 (рамка переноса чека), c34 (крупная кнопка) — осталось 30 карточек */
+  {id:'c01', demo:'cancel-collapse',
+   title:'1. Улучшение для «Отмены»: Сворачивание карточки до шапки',
+   problem:'Проблема: Отменённые заказы продолжают занимать место на экране: если их будет 3-4 штуки, развёрнутые списки блюд мешают видеть актуальные заказы.',
+   solution:'Решение: Когда заказ переходит в статус «Отмена», карточка сворачивается до шапки (аккордеон): блюда плавно гаснут, список блюд («Морс», «Паста карбонара», «Пицца от шефа») скрывается — остаются номер заказа, время и красная кнопка «Отмена». Если у повара остались вопросы — тап по карточке разворачивает список обратно. В 95% случаев он просто нажмёт на иконку удаления и уберёт блок с экрана.'},
+  {id:'c02', demo:'swipe',
+   title:'2. Интерактив «Грязные руки»: Свайпы вместо точных касаний',
+   problem:'Проблема: На кухне руки в муке, масле или соусе. Тыкать пальцем в маленькую зелёную галочку или стрелочку — это главный триггер ошибок (ложное нажатие).',
+   solution:'Решение в Figma: Предусмотрите для повара жест «Свайп» (смахивание). Например, чтобы повысить статус заказа (перевести в «Готовится»), повар смахивает карточку вправо. Чтобы понизить статус (вернуть в «Ожидает») — смахивает влево. Это требует меньшей точности, спасает сенсорный экран от жирных разводов и экономит время на точном прицеливании.'},
+  {id:'c03', demo:'courier',
+   title:'3. Агрессивная сигнализация для «Курьер приехал»',
+   problem:'Проблема: Повар готовит, слышит шум, но не видит, что курьер уже ждёт конкретный заказ. В итоге еда остывает на раздаче.',
+   solution:'Решение в Figma: У системы должна быть интеграция с курьерской службой. Когда курьер нажимает «Я на месте» в своём приложении, на экране повара этот конкретный заказ должен мигать пульсирующим оранжево-белым свечением, а бейдж со временем — становиться белым. Это визуальный крик: «Этот заказ нужен прямо сейчас!»'},
+  {id:'c04', demo:'progress',
+   title:'4. Визуализация прогресса внутри одного сложного заказа',
+   problem:'Проблема: Как на вашем скриншоте — заказ «1х Комбо с пастой». Там есть и «Паста карбонара», и «Капучино». Повар сделал пасту (поставил зелёную галочку), а капучино ещё греется. Как это отобразить?',
+   solution:'Решение в Figma: Сделайте полоску прогресса (Progress Bar) справа от каждого блюда или общий прогресс у всего заказа. Например, если из 3-х блюд готово 1, заказ визуально заполнен на 33%. Это освобождает повара от счета: «Ага, две трети заказа уже готовы, скоро отдавать!».'},
+  {id:'c05', demo:'auto-sort',
+   title:'5. Приоритизация по времени готовки (Скрытый помощник)',
+   problem:'Проблема: В заказе есть пицца (15 минут) и салат (5 минут). FIFO (первый пришёл — первый ушёл) здесь не работает. Если повар возьмётся за пиццу, салат начнёт «гореть».',
+   solution:'Решение в Figma: В идеальном интерфейсе алгоритм сам выстраивает карточки. Пицца может висеть в «Ожидании», а салат сразу попасть в статус «Пора готовить», даже если салат пришёл позже. В интерфейсе можно добавить маленькую иконку часов с оценкой времени готовки каждого блюда (в демо: «15 мин» у «Пиццы от шефа», «5 мин» у «Пасты карбонара»), чтобы повар мог самостоятельно принять решение о стратегии.'},
+  {id:'c06', demo:'undo-debounce',
+   title:'6. Кнопка «Аварийный откат»: Защита от двойного нажатия',
+   problem:'Проблема: Синяя кнопка «Отменить прошлое действие» есть (это супер), но в панике повар может нажать её дважды. Отменится предыдущее действие, а затем он отменит предыдущее до предыдущего (перепутает и ухудшит ситуацию).',
+   solution:'Решение в Figma: Добавьте в логику Защиту от дурака (Debounce). Если повар нажал «Отменить», кнопка блокируется на 1.5-2 секунды (можно показать это маленьким круговым таймером прямо на кнопке), чтобы дать повару время подумать, прежде чем нажимать снова.'},
+  {id:'c07', demo:'mod-chips',
+   title:'7. Визуальное выделение «Комментариев» (Не потерять каприз клиента)',
+   problem:'Проблема: Комментарий «Капучино на растительном молоке» спрятан внутри блюда. При этом комментарии, меняющие блюдо, выглядят так же, как обычные просьбы — и легко пропускаются в спешке.',
+   solution:'Решение: Комментарии делим на два типа. Обычные (просьбы и тайминги — «Принести сразу морс», «Побыстрее») остаются как есть. Особые — те, что меняют блюдо («Капучино на растительном молоке», «Убрать лук»), — выделяются жёлтой пунктирной рамкой. Повар видит такой комментарий краем глаза, не читая текст: если это «Убрать лук» — он моментально поймёт, что луковицу брать нельзя.'},
+  {id:'c08', demo:'ingredient-checklist',
+   title:'8. «Ингредиентный чек-лист» (Память на сложные блюда)',
+   problem:'Сценарий: Повар начал собирать «Пиццу от шефа маленькую» (на экране у неё 6 добавок). Внезапно его отвлек звонок таймера. Он вернулся и забыл, добавил он уже «Бекон» или нет.',
+   solution:'Идея решения: Сделайте у каждого ингредиента (Двойной сыр, Толстое, Бекон, Курица, Пепперони, Салями) маленький чекбокс или затемнение. Когда повар кладёт ингредиент на пиццу, он просто тапает по строке с этим ингредиентом — она зачеркивается или становится серой. Тогда повар точно знает, что ингредиент уже в блюде. Это спасает от фатальной ошибки «забыл положить курицу».'},
+  {id:'c09', demo:'stock-block',
+   title:'10. Интеграция «Стоп-листа» продуктов (Не искать то, чего нет)',
+   problem:'Сценарий: На складе закончилась «Паста карбонара». Повар начинает готовить заказ, ищет ингредиент, не находит, паникует, задерживает весь заказ.',
+   solution:'Идея решения: Сделайте глобальную систему уведомлений, которая висит над экраном (или красный ярлык прямо на строке блюда). Если продукт помечен администратором как отсутствующий, у повара на экране строка подсвечивается: плашка «Нет в наличии» и подпись «Свяжитесь с менеджером». Повар не тратит время на поиск и сразу звонит менеджеру, чтобы заменить ингредиент.'},
+  {id:'c10', demo:'freeze',
+   title:'11. Функция «Отложить / Заморозить» заказ',
+   problem:'Сценарий: Настал аврал, и повар видит, что таймер на большом заказе вот-вот начнёт гореть. Он физически не успевает взять его сейчас, потому что спасает другой горящий заказ.',
+   solution:'Идея решения: Кнопка «Заморозить заказ» (например, иконка снежинки). Нажатие убирает «горящий» бейдж со временем, гасит карточку (полупрозрачная и серая) и отправляет заказ в конец ленты с пометкой «Отложено». Повар успокаивается, спасает первый заказ, а затем возвращается к замороженному с ясной головой.'},
+  {id:'c11', demo:'shift-tags',
+   title:'12. Группировка по станциям (Холодный/Горячий цех)',
+   problem:'Сценарий: На экране кухни вперемешку висят заказы (и на пиццу, и на салат, и на суп). Если на кухне несколько зон, повару сложно отфильтровать взглядом только свои блюда.',
+   solution:'Идея решения: Добавьте в начало карточки визуальный тег (чип): «Горячий цех» с иконкой огня и «Холодный цех» со снежинкой (в демо они уже стоят на карточках). И, если у вас есть возможность разделить экраны, сделайте сортировку: повар горячего цеха видит только карточки с огнем, холодного — только со снежинкой.'},
+  {id:'c12', demo:'volume',
+   title:'13. Индикация объёма заказа (Готовим поднос)',
+   problem:'Сценарий: Повар видит большой заказ. Он знает, что нужно взять большой поднос или 3 коробки, но не знает точно. Пока он оглядывается в поисках тары — теряется время.',
+   solution:'Идея решения: В шапке карточки заказа (напротив номера) поставьте маленькую иконку коробки и количество — в демо это чип «4 единицы». Это означает, что в заказе 4 единицы еды, которые потребуют физических контейнеров. Повар сразу, не отвлекаясь, ставит нужное количество коробок перед собой, еще до того, как начал готовить.'},
+  {id:'c13', demo:'load-bar',
+   title:'14. Тепловая карта загрузки (Антистресс)',
+   problem:'Сценарий: У повара 30 заказов, и он чувствует себя загнанным в угол. Стресс приводит к ошибкам.',
+   solution:'Идея решения: Замените скучную цифру «Всего заказов: 34» на графический индикатор. Например, тонкая цветная полоса сверху экрана. Если полоса зеленая — загрузка нормальная. Если желтая — приближается пик. Если красная — аврал (нужно звать подмогу). Повар видит эту полосу периферийным зрением, это убирает стресс от постоянного подсчета цифр.'},
+  {id:'c14', demo:'done-collapse',
+   title:'4.3 Карточки «Приготовлен» занимают место',
+   problem:'Карточка 1027 уже готова — она стоит на экране и вытесняет новые заказы за правую границу. Повар видит 6 карточек, одна из которых уже не требует действий.',
+   solution:'Решение: После отметки «Приготовлен» — плавное сворачивание карточки до компактной строки (в демо — ускоренно, пара секунд; в продукте — через 30 секунд или мгновенно при подтверждении раздачи официантом).'},
+  {id:'c16', demo:'hide-version',
+   title:'5.3 Версия «WebKDS v. 9.4.5.208229» на рабочем экране',
+   problem:'Служебная информация не нужна повару во время работы.',
+   solution:'Решение: Убрать в раздел настроек / информации. Освободить место.'},
+  {id:'c17', demo:'comment-split',
+   title:'6.2 Комментарий к заказу не разделён по адресату',
+   problem:'«Принести сразу морс» — это для повара. «Оставить у дверей» — для курьера. Сейчас оба комментария выглядят одинаково.',
+   solution:'Решение: Разделить на «Комментарий кухне» (всегда видим на KDS) и «Комментарий доставке» (опционально, другой стиль) — в демо на чипах появляются бейджи «Кухня» и «Доставке».'},
+  {id:'c19', demo:'status-debounce',
+   title:'✅ 2. Защита от случайных нажатий (Debounce) на кнопку статуса',
+   problem:'Проблема: Повар в спешке нажимает кнопку «Пора готовить», но случайно задевает соседний заказ.',
+   solution:'Что делать: На кнопки статусов («Пора готовить», «Готовится») навесить защиту от двойного нажатия — в демо кнопка блокируется на 1.5 секунды. Если повар нажал, а через 0.2 секунды нажал снова на соседний заказ — второе нажатие игнорируется. Это убирает ложные переводы статусов в аврале.'},
+  {id:'c22', demo:'cancel-autoclean',
+   title:'✅ 5. Убираем отмененные заказы со временем (Автоматическая очистка)',
+   problem:'Проблема на скриншоте: Отменённые заказы — красные блоки, которые при большом количестве забивают ленту и мешают обзору. Заставлять повара нажимать «свернуть» или «удалить» каждую отмену — бессмысленная трата времени.',
+   solution:'Что делать: Автоматическая очистка. Система сама скрывает отмененный заказ из ленты через 10-15 секунд после того, как статус переключился на «Отмена» (в демо — ускоренно: вспышка и скрытие за пару секунд). Повар видит красную вспышку, понимает, что заказ отменен, а затем он исчезает сам, не засоряя ленту. Это делает кнопку «Очистить отмены» полностью не нужной.'},
+  {id:'c23', demo:'auto-sort',
+   title:'✅ 6. Автоматическая сортировка по таймеру внутри статуса',
+   problem:'Проблема на скриншоте: В ленте висят заказы с разным приоритетом — в том числе в статусе «Пора готовить».',
+   solution:'Что делать: Алгоритм должен сам сортировать заказы. Самые просроченные (с самым большим минусом, как -04:27) должны автоматически всплывать в начало ленты. Повар не должен искать глазами, какой заказ горит сильнее всего. Экран сам подносит ему опасный заказ под нос.'},
+  {id:'c25', demo:'overdue-pulse',
+   title:'1. Агрессивное окрашивание просроченного заказа',
+   problem:'Реальность: Повар смотрит на экран краем глаза. Если таймер ушёл в минус (-04:27), недостаточно просто написать это цифрами.',
+   solution:'Идея: Залить всю карточку (или её нижнюю половину) пульсирующим оранжево-красным градиентом. Повар видит «горящий» блок задолго до того, как прочитает цифры. (Используется в системах типа Square KDS).'},
+  {id:'c29', demo:'night-mode',
+   title:'5. Ночной режим / Адаптивная яркость',
+   problem:'Реальность: На кухне часто полумрак, глаза устают от яркого белого.',
+   solution:'Идея: Автоматический переход на «тёмную тему» с минимальным контрастом, чтобы не слепить повара, когда он отводит взгляд от плиты к экрану.'},
+  {id:'c32', demo:'problem-button',
+   title:'8. Альтернативная кнопка «ОШИБКА / ПРОБЛЕМА»',
+   problem:'Реальность: Если продукта нет, повар должен кричать менеджеру или бежать в офис.',
+   solution:'Идея: Добавить на каждую карточку маленькую красную кнопку «⚠ Проблема». Повар нажимает — система отправляет уведомление администратору о том, что с этим заказом есть сложности, без необходимости кричать через всю кухню.'},
+  {id:'c33', demo:'problem-status',
+   title:'9. Мгновенная визуализация «Нет на складе» для менеджера',
+   problem:'Реальность: Если повар отметил проблему, менеджеру нужно это видеть.',
+   solution:'Идея: Обратная связь менеджеру. Когда повар нажимает кнопку «Проблема», на экране загорается красный статус, который не исчезает, пока менеджер не подтвердит, что продукт заменили.'},
+  {id:'c37', demo:'cooling',
+   title:'13. Индикатор «Остывающей еды» (Держать на виду)',
+   problem:'Реальность: Если приготовленное блюдо долго не забирают, оно остывает.',
+   solution:'Идея: Запускать второй таймер (без звука, только визуально): как только заказ перешёл в «Приготовлен», через 5 минут (в демо — ускоренно) его цвет начинает меняться на синий/серый, сигнализируя, что еда остывает на раздаче.'},
+  {id:'c38', demo:'printer',
+   title:'14. Интеграция с принтером чеков (Kitchen Chit)',
+   problem:'Реальность: В ресторанах часто одновременно работает и экран, и принтер.',
+   solution:'Идея: Показывать на экране, отправлен ли уже заказ на печать — в демо на карточке чип «Печать чека…», после печати — «Чек напечатан». Пока чек не распечатан, карточка приглушена, после — снова активна.'},
+  {id:'c39', demo:'pedal',
+   title:'15. Экран для внешних аппаратных кнопок (Foot Pedal)',
+   problem:'Реальность: Повара ненавидят пачкать тач-скрины. Многие сети закупают для кухни ножные переключатели.',
+   solution:'Идея: В интерфейсе сделать область экрана (или огромную кнопку внизу), которая реагирует на внешний сигнал от педали, при этом на экране вспыхивает крупная кнопка «ВЗЯТЬ СЛЕДУЮЩИЙ» или «ГОТОВО». Экран работает как индикатор, нажатие за него делает нога.'},
+  {id:'c40', demo:'audio',
+   title:'16. Интеграция с системой оповещения (Пейджеры / Шумоподавление)',
+   problem:'Реальность: На кухне очень шумно, звук экрана не слышен. Вспышка «на весь экран» сама по себе не подсказывает, какой именно заказ просрочен — виновника приходится искать глазами.',
+   solution:'Идея: Если заказ просрочен сильно (например, уже на 5 минут), экран даёт не просто звук, а агрессивную вспышку белым на весь экран (в течение 1 секунды) и дублирует сигнал на световую лампу над дверью (интеграция с физическими лампами — используется в крупных dark kitchen). Одновременно подсвечивается сам просроченный заказ — карточка пульсирует красным в такт вспышке, чтобы сразу было видно, кто виноват. Заказы в предупреждении («Пора готовить») не подсвечиваем — это ещё не просрочка.'},
+  {id:'c42', demo:'longpress',
+   title:'18. Многозадачное нажатие (Long press для множественного выбора)',
+   problem:'Реальность: В вечерний бум нужно быстро перевести несколько заказов разом.',
+   solution:'Идея: Если нажать на карточку и держать палец 0.5 секунды, она выделяется — так можно выделить несколько заказов (в демо — обе карточки «Готовится»). Снизу появляется кнопка перевода в следующий статус — «Приготовлен»; нажатие переводит всю группу разом. Перескакивать через статус нельзя. Ускоряет смену в вечерний бум.'},
+  {id:'c43', demo:'status-anim',
+   title:'19. Анимация статусов (Не для красоты, а для фидбека)',
+   problem:'Реальность: Повар должен понимать, что его нажатие засчитано.',
+   solution:'Идея: При нажатии на стрелку, сама стрелка делает круговое движение (спиннер), а карточка коротко отъезжает и возвращается. Визуальная связь «кнопка нажата — заказ пошёл дальше».'},
+  {id:'c44', demo:'cook-time',
+   title:'20. Показ «Примерного времени до готовности» каждого блюда',
+   problem:'Реальность: Пицца готовится 15 минут, паста 5. Если они в одном заказе, повару нужно планировать.',
+   solution:'Идея: Повесить рядом с названием каждого блюда микро-таймер с временем готовки — в демо «15 мин» у «Пиццы от шефа» и «5 мин» у «Пасты карбонара». Это помогает повару решать, что делать первым, без чтения инструкций.'},
+];
+
+
+
+/* ── Подсказки к интерактивным демо (по ключу сценария) ──────────── */
+const UX_NOTES = {
+  'cancel-collapse':  'карточка свёрнута до шапки — тап по ней разворачивает',
+  'swipe':            'анимация: вправо — статус выше («Готовится»), влево — ниже («Ожидает»)',
+  'cancel-autoclean': 'демо: карточка вспыхнет и скроется через пару секунд',
+  'done-collapse':    'демо: карточка свернётся до компактной строки',
+  'status-debounce':  'нажмите кнопку статуса — она заблокируется на 1.5 сек',
+  'undo-debounce':    'нажмите «Отменить прошлое действие» — блокировка 1.5 с',
+  'row-hitbox':       'тап по любой части строки блюда выполняет действие',
+  'mod-chips':        'жёлтым пунктиром — только комментарии, меняющие блюдо; просьбы и тайминги — как обычно',
+  'ingredient-checklist': 'тап по добавке зачёркивает ингредиент',
+  'night-mode':       'экран приглушён — мягче для глаз',
+  'cooling':          'через пару секунд карточка сменит цвет на синий',
+  'auto-sort':        'просроченный заказ автоматически встал первым',
+  'freeze':           'нажмите снежинку — заказ уедет в конец ленты',
+  'longpress':        'держите карточку 0.5 с — появится кнопка перевода выделенных в следующий статус',
+  'status-anim':      'нажмите кнопку статуса — стрелка прокрутится',
+  'printer':          'карточка приглушена, пока не напечатан чек',
+  'pedal':            'пробел или кнопка на экране — имитация сигнала педали',
+  'problem-button':   'нажмите «Проблема» на карточке',
+  'problem-status':   'красный статус сменится на зелёный после «ответа менеджера»'
+};
+SCENARIOS.forEach(s => { if (s.demo && UX_NOTES[s.demo]) s.note = UX_NOTES[s.demo]; });
+
+/* Заголовки карточек показываем без номеров списков («1. », «4.3 », «✅ 2. ») и служебных эмодзи */
+function dispTitle(t){
+  return String(t)
+    .replace(/^✅\s*\d*(?:\.\d+)?\.?\s*/, '')
+    .replace(/^\d+(?:\.\d+)?\.?\s+/, '');
+}
+
+/* ── Состояние ─────────────────────────────────────────────────────── */
+const frame  = document.getElementById('frame');
+const menuEl = document.getElementById('menu');
+const titleEl= document.getElementById('title');
+const probEl = document.getElementById('problem');
+const solEl  = document.getElementById('solution');
+const noteEl = document.getElementById('note');
+const segEl  = document.getElementById('seg');
+
+let current = SCENARIOS.find(s => s.demo) || SCENARIOS[0];
+let mode = 'proposal';
+let presMode = false;   /* режим презентации; объявлен рано — к нему обращается fit() */
+
+/* ── Меню ──────────────────────────────────────────────────────────── */
+/* ── Меню: разделы по смыслу (внутри — карточки 1:1 с доской) ─── */
+const GROUPS = [
+  ['Отмены и очистка',        ['c01','c14','c22']],
+  ['Защита от ошибок',        ['c02','c06','c08','c19']],
+  ['Акценты и читаемость',    ['c07','c09','c16','c17','c25','c29','c37']],
+  ['Очередь и время',         ['c04','c05','c10','c11','c12','c13','c23','c44']],
+  ['Интеграции и аппаратное', ['c03','c32','c33','c38','c39','c40','c42','c43']]
+];
+const byId = {};
+SCENARIOS.forEach(s => { byId[s.id] = s; });
+GROUPS.forEach(function(gr){
+  const g = document.createElement('div');
+  g.className = 'menu__group';
+  g.textContent = gr[0];
+  menuEl.appendChild(g);
+  gr[1].forEach(function(id){
+    const s = byId[id];
+    if (!s) return;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'item' + (s.demo ? '' : ' is-nodemo');
+    b.dataset.id = s.id;
+    b.innerHTML = '<span class="item__t">' + dispTitle(s.title) + '</span><span class="item__st"></span><span class="item__cm"><span class="material-icons">chat_bubble_outline</span></span>';
+    b.addEventListener('click', () => select(s.id));
+    menuEl.appendChild(b);
+  });
+});
+
+function post() {
+  try {
+    frame.contentWindow.postMessage({
+      type: 'kds-ux', scenario: current.demo || '', mode: mode, pres: presMode,
+      title: dispTitle(current.title),
+      problem: current.problem, solution: current.solution, note: current.note || ''
+    }, '*');
+  } catch (e) {}
+}
+
+function render() {
+  [...menuEl.querySelectorAll('.item')].forEach(el => el.classList.toggle('is-active', el.dataset.id === current.id));
+  titleEl.textContent = dispTitle(current.title);
+  probEl.textContent = current.problem;
+  solEl.textContent = current.solution;
+  noteEl.textContent = current.note || '';
+  noteEl.style.display = current.note ? '' : 'none';
+  segEl.querySelectorAll('button').forEach(b => {
+    b.classList.toggle('is-on', b.dataset.mode === mode);
+    b.disabled = !current.demo;
+  });
+  requestAnimationFrame(fit);
+}
+
+function select(id) {
+  const s = SCENARIOS.find(x => x.id === id);
+  if (!s) return;
+  current = s;
+  if (!SEEN[s.id]){ SEEN[s.id] = 1; seenSave(); }
+  history.replaceState(null, '', '#' + s.id);
+  if (presMode){
+    /* в показе: сначала «как сейчас», затем анимированный переход в «как лучше» */
+    presPhaseStart();
+    presSchedule();
+  } else {
+    mode = s.demo ? 'proposal' : 'now';
+    render(); post();
+  }
+  reviewPaint(true);
+  setBrief(false);   /* при переходе на другую карточку блок «Проблема/Решение» — всегда развёрнут */
+  presCountUpdate();
+}
+
+segEl.addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b || b.disabled) return;
+  mode = b.dataset.mode;
+  render(); post();
+});
+
+frame.addEventListener('load', post);
+
+function toggleMenu(){
+  document.body.classList.toggle('menu-hidden');
+  requestAnimationFrame(fit);
+}
+document.getElementById('burger').addEventListener('click', toggleMenu);
+document.getElementById('burgerShow').addEventListener('click', toggleMenu);
+
+/* Пробел на витрине = сигнал ножной педали (сценарий «Foot Pedal» карточек 39/40) */
+document.addEventListener('keydown', function(e){
+  if ((e.key === ' ' || e.code === 'Space') && current && current.demo === 'pedal'){
+    e.preventDefault();
+    try { frame.contentWindow.postMessage({ type: 'kds-pedal' }, '*'); } catch (err) {}
+  }
+});
+
+/* ── Сворачивание блока «Проблема и решение» ───────────────────── */
+const briefEl = document.getElementById('brief');
+const briefToggle = document.getElementById('briefToggle');
+function setBrief(collapsed){
+  briefEl.classList.toggle('is-collapsed', collapsed);
+  briefToggle.innerHTML = collapsed
+    ? '<span class="material-icons">expand_more</span>Описание'
+    : '<span class="material-icons">expand_less</span>Описание';
+  requestAnimationFrame(fit);
+}
+briefToggle.addEventListener('click', function(){
+  setBrief(!briefEl.classList.contains('is-collapsed'));
+});
+/* по умолчанию (и при каждой загрузке) блок «Проблема/Решение» всегда развёрнут */
+setBrief(false);
+
+/* ── Масштаб планшета под окно ─────────────────────────────────────── */
+const stage = document.getElementById('stage');
+const tablet = document.getElementById('tablet');
+const wrap = document.getElementById('tabletWrap');
+const segRow = document.getElementById('segRow');
+function fit() {
+  /* тот же масштаб, что и в kds-screen.html: планшет вписывается в ОКНО по обеим сторонам
+     (1351×871 — натуральный размер устройства там же), поэтому размер экрана совпадает */
+  const vw = window.innerWidth - 48;
+  const vh = window.innerHeight - 48;
+  const s = Math.max(.2, Math.min(vw / 1351, vh / 871, 1) * 0.9);   /* −10% от размера как в kds-screen.html */
+  tablet.style.transform = 'scale(' + s + ')';
+  wrap.style.width = (1328 * s) + 'px';
+  wrap.style.height = (848 * s) + 'px';
+  segRow.style.width = (1328 * s) + 'px';   /* тумблер — у левого края планшета, кнопки ревью — у правого */
+}
+window.addEventListener('resize', fit);
+fit();
+window.addEventListener('load', fit);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+
+/* ── Ревью: решения и комментарии по карточкам ─────────────────────── */
+const REVIEW_KEY = 'kds-review-v1';
+const STATUS_LABEL = { accepted: 'Берём в работу', later: 'Отложить', rejected: 'Не берём' };
+const STATUS_ICON = { accepted: 'check_circle', later: 'schedule', rejected: 'cancel' };
+let REVIEW = {};
+try { REVIEW = JSON.parse(localStorage.getItem(REVIEW_KEY) || '{}') || {}; } catch (e) { REVIEW = {}; }
+const SEEN_KEY = 'kds-seen-v1';
+let SEEN = {};
+try { SEEN = JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; } catch (e) { SEEN = {}; }
+function seenSave(){ try { localStorage.setItem(SEEN_KEY, JSON.stringify(SEEN)); } catch (e) {} }
+let reviewPaintedId = null;
+
+function reviewEntry(id){ return REVIEW[id] || {}; }
+function reviewSave(){ try { localStorage.setItem(REVIEW_KEY, JSON.stringify(REVIEW)); } catch (e) {} }
+function reviewSet(id, st, note){
+  const cur = {};
+  if (st) cur.st = st;
+  if (note) cur.note = note;
+  if (cur.st || cur.note) REVIEW[id] = cur; else delete REVIEW[id];
+  reviewSave();
+}
+function reviewPaint(force){
+  const e = reviewEntry(current.id);
+  document.querySelectorAll('.review__btn[data-st]').forEach(b => b.classList.toggle('is-on', b.dataset.st === e.st));
+  const c = document.getElementById('reviewComment');
+  if (document.activeElement !== c || force || reviewPaintedId !== current.id){ c.value = e.note || ''; }
+  reviewPaintedId = current.id;
+  document.getElementById('reviewCmtBtn').classList.toggle('has-note', !!e.note);
+  const n = { accepted: 0, later: 0, rejected: 0 };
+  let seenCount = 0;
+  document.querySelectorAll('.item').forEach(item => {
+    const st = reviewEntry(item.dataset.id);
+    const cell = item.querySelector('.item__st');
+    const cm = item.querySelector('.item__cm');
+    const seen = !!SEEN[item.dataset.id];
+    item.classList.toggle('is-viewed', seen);
+    if (seen) seenCount++;
+    cell.innerHTML = st.st ? '<span class="material-icons">' + STATUS_ICON[st.st] + '</span>' : '';
+    cell.className = 'item__st' + (st.st ? ' is-' + st.st : '');
+    cm.style.display = st.note ? '' : 'none';
+    if (st.st) n[st.st]++;
+  });
+  const done = seenCount;
+  document.getElementById('reviewProgress').innerHTML =
+    'Просмотрено <b>' + done + '/' + SCENARIOS.length + '</b> · <span class="is-ok"><span class="material-icons">check_circle</span> ' + n.accepted +
+    '</span> · <span class="is-later"><span class="material-icons">schedule</span> ' + n.later + '</span> · <span class="is-no"><span class="material-icons">cancel</span> ' + n.rejected + '</span>';
+}
+document.querySelectorAll('.review__btn[data-st]').forEach(b => b.addEventListener('click', () => {
+  const cur = reviewEntry(current.id);
+  const st = (cur.st === b.dataset.st) ? '' : b.dataset.st;
+  reviewSet(current.id, st, cur.note || '');
+  reviewPaint(true);
+}));
+/* Комментарий сохраняется кнопкой «Добавить»; «Отменить» закрывает без сохранения */
+document.getElementById('reviewCommentSave').addEventListener('click', function(){
+  const val = document.getElementById('reviewComment').value;
+  const cur = reviewEntry(current.id);
+  reviewSet(current.id, cur.st || '', val.trim() ? val : '');
+  reviewPaint(true);
+  reviewPopClose();
+});
+document.getElementById('reviewCommentCancel').addEventListener('click', reviewPopClose);
+/* «Стереть» — удаляет комментарий карточки целиком (сохранённый тоже) */
+document.getElementById('reviewCommentClear').addEventListener('click', function(){
+  const cur = reviewEntry(current.id);
+  reviewSet(current.id, cur.st || '', '');
+  reviewPaint(true);
+  reviewPopClose();
+});
+
+/* Поп-ап комментария: открывается по иконке 💬 перед кнопками ревью */
+const reviewPop = document.getElementById('reviewPop');
+const reviewCmtBtn = document.getElementById('reviewCmtBtn');
+function reviewPopClose(){ reviewPop.hidden = true; }
+reviewCmtBtn.addEventListener('click', function(e){
+  e.stopPropagation();
+  if (!reviewPop.hidden){ reviewPopClose(); return; }
+  const r = reviewCmtBtn.getBoundingClientRect();
+  document.getElementById('reviewComment').value = reviewEntry(current.id).note || '';
+  reviewPop.hidden = false;
+  const w = reviewPop.offsetWidth, h = reviewPop.offsetHeight;
+  let left = Math.max(12, Math.min(r.right - w, window.innerWidth - w - 12));
+  let top = r.bottom + 10;
+  if (top + h > window.innerHeight - 12) top = Math.max(12, r.top - h - 10);
+  reviewPop.style.left = left + 'px';
+  reviewPop.style.top = top + 'px';
+  document.getElementById('reviewComment').focus();
+});
+document.addEventListener('click', function(e){
+  if (reviewPop.hidden) return;
+  if (reviewPop.contains(e.target) || reviewCmtBtn.contains(e.target)) return;
+  reviewPopClose();
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape' && !reviewPop.hidden) reviewPopClose();
+});
+window.addEventListener('blur', reviewPopClose);
+function revDownload(name, text, mime){
+  const blob = new Blob(['\ufeff' + text], { type: mime || 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+document.getElementById('revExportJson').addEventListener('click', () => {
+  revDownload('kds-review.json', JSON.stringify({ version: 1, savedAt: new Date().toISOString(), decisions: REVIEW }, null, 2));
+});
+document.getElementById('revExportXls').addEventListener('click', () => {
+  const esc = v => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  let xls = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">' +
+    '<head><meta charset="utf-8"><meta name="ProgId" content="Excel.Sheet">' +
+    '<style>' +
+    'table{border-collapse:collapse;font-family:Calibri,Arial,sans-serif;font-size:11pt}' +
+    'th,td{border:1px solid #c9d1dc;padding:4px 8px;vertical-align:top;text-align:left}' +
+    'th{background:#eef3f9;font-weight:bold}' +
+    '</style></head><body>' +
+    '<table><col style="width:170px"><col style="width:430px"><col style="width:140px"><col style="width:300px">' +
+    '<tr><th>Группа</th><th>Карточка</th><th>Решение</th><th>Комментарий</th></tr>';
+  GROUPS.forEach(gr => gr[1].forEach(id => {
+    const s = byId[id]; if (!s) return;
+    const e = reviewEntry(id);
+    xls += '<tr><td>' + esc(gr[0]) + '</td><td>' + esc(dispTitle(s.title)) + '</td><td>' +
+      esc(e.st ? STATUS_LABEL[e.st] : 'Не рассмотрено') + '</td><td>' + esc((e.note || '').replace(/\n/g, ' ')) + '</td></tr>';
+  }));
+  xls += '</table></body></html>';
+  revDownload('kds-review.xls', xls, 'application/vnd.ms-excel');
+});
+document.getElementById('revImport').addEventListener('click', () => document.getElementById('revFile').click());
+
+/* Выпадающее меню «JSON»: Скачать / Загрузить */
+const jsonMenu = document.getElementById('jsonMenu');
+const jsonMenuBtn = document.getElementById('jsonMenuBtn');
+const jsonMenuList = document.getElementById('jsonMenuList');
+jsonMenuBtn.addEventListener('click', function(e){
+  e.stopPropagation();
+  jsonMenuList.hidden = !jsonMenuList.hidden;
+});
+jsonMenuList.addEventListener('click', function(){ jsonMenuList.hidden = true; });
+document.addEventListener('click', function(e){
+  if (!jsonMenu.contains(e.target)) jsonMenuList.hidden = true;
+});
+
+/* Сброс всего: решения, комментарии, отметки просмотра */
+document.getElementById('revReset').addEventListener('click', () => {
+  if (!confirm('Сбросить всё: решения, комментарии и отметки просмотра?')) return;
+  REVIEW = {};
+  reviewSave();
+  SEEN = {};
+  seenSave();
+  reviewPaint(true);
+});
+document.getElementById('revFile').addEventListener('change', function(){
+  const f = this.files && this.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      const dec = (data && data.decisions) ? data.decisions : data;
+      if (dec && typeof dec === 'object'){
+        REVIEW = {};
+        Object.keys(dec).forEach(k => {
+          const v = dec[k] || {};
+          const st = (v.st === 'accepted' || v.st === 'later' || v.st === 'rejected') ? v.st : '';
+          const note = (typeof v.note === 'string' && v.note) ? v.note : '';
+          if (st || note){ const o = {}; if (st) o.st = st; if (note) o.note = note; REVIEW[k] = o; }
+        });
+        reviewSave(); reviewPaint(true);
+      }
+    } catch (e) {}
+  };
+  r.readAsText(f);
+  this.value = '';
+});
+
+/* ── Переход к предыдущей/следующей доработке (стрелки в шапке) ────── */
+const navOrder = [];
+GROUPS.forEach(gr => gr[1].forEach(id => { if (byId[id]) navOrder.push(id); }));
+function navStep(delta){
+  const i = navOrder.indexOf(current.id);
+  const j = (i + delta + navOrder.length) % navOrder.length;
+  select(navOrder[j]);
+}
+document.getElementById('prevBtn').addEventListener('click', () => navStep(-1));
+document.getElementById('nextBtn').addEventListener('click', () => navStep(1));
+
+/* ── Режим презентации: слайды, автоплей, авто-подписи ─────────────── */
+let presAuto = false, presTimer = null, presPhaseTimer = null;
+
+function presDuration(){
+  /* длительность слайда ~8–10 секунд */
+  const len = (current.problem || '').length + (current.solution || '').length;
+  return Math.min(10000, 8000 + Math.round(len * 0.8));
+}
+function presBarRestart(){
+  const bar = document.getElementById('presBar');
+  bar.style.transition = 'none';
+  bar.style.width = '0';
+  if (!presMode || !presAuto) return;
+  void bar.offsetWidth;
+  bar.style.transition = 'width ' + presDuration() + 'ms linear';
+  bar.style.width = '100%';
+}
+function presSchedule(){
+  clearTimeout(presTimer);
+  presTimer = null;
+  if (!presMode || !presAuto) return;
+  presBarRestart();
+  presTimer = setTimeout(() => navStep(1), presDuration());
+}
+function presSetAuto(on){
+  presAuto = !!on;
+  document.querySelectorAll('#presPlayBtn .material-icons, #presCtlPlay .material-icons').forEach(ic => {
+    ic.textContent = presAuto ? 'pause' : 'play_arrow';
+  });
+  if (presAuto) presSchedule();
+  else {
+    clearTimeout(presTimer);
+    presTimer = null;
+    const bar = document.getElementById('presBar');
+    bar.style.transition = 'none';
+    bar.style.width = getComputedStyle(bar).width;   /* замораживаем полоску */
+  }
+}
+/* каждый слайд в показе: сначала «как сейчас», через пару секунд — анимированный переход в «как лучше» */
+function presPhaseStart(){
+  clearTimeout(presPhaseTimer);
+  if (!presMode) return;
+  mode = 'now';
+  render(); post();
+  if (!current.demo) return;
+  presPhaseTimer = setTimeout(function(){
+    if (!presMode) return;
+    mode = 'proposal';
+    render(); post();
+  }, 3200);
+}
+function presCountUpdate(){
+  const el = document.getElementById('presCtlCount');
+  const i = navOrder.indexOf(current.id);
+  el.textContent = (i < 0 ? 1 : i + 1) + ' из ' + navOrder.length;
+}
+function presEnter(){
+  if (presMode) return;
+  presMode = true;
+  document.body.classList.add('pres-mode');
+  presHintHide();
+  presCountUpdate();
+  presPhaseStart();   /* показ начинается с «как сейчас» */
+  requestAnimationFrame(fit);
+  presSetAuto(true);
+}
+function presExit(){
+  if (!presMode) return;
+  presMode = false;
+  clearTimeout(presTimer);
+  presTimer = null;
+  clearTimeout(presPhaseTimer);
+  presPhaseTimer = null;
+  presAuto = false;
+  document.body.classList.remove('pres-mode');
+  presHintHide();
+  const bar = document.getElementById('presBar');
+  bar.style.transition = 'none';
+  bar.style.width = '0';
+  document.querySelectorAll('#presPlayBtn .material-icons, #presCtlPlay .material-icons').forEach(ic => {
+    ic.textContent = 'pause';
+  });
+  mode = current.demo ? 'proposal' : 'now';
+  render(); post();
+  requestAnimationFrame(fit);
+}
+/* Подпись-сноска в показе: приходит из экрана (iframe), рисуется рядом с элементом + пунктирная линия */
+let presHintData = null, presHintRaf = 0, presHintFix = 0;
+function presHintHide(){
+  cancelAnimationFrame(presHintRaf);
+  clearTimeout(presHintFix);
+  document.getElementById('presHint').hidden = true;
+  document.getElementById('presLine').hidden = true;
+  presHintData = null;
+}
+function presHintShow(d){
+  presHintData = d;
+  const hintEl = document.getElementById('presHint');
+  const wasVisible = !hintEl.hidden;
+  document.getElementById('presHintTitle').textContent = d.title || '';
+  document.getElementById('presHintProblem').textContent = d.problem || '';
+  document.getElementById('presHintSolution').textContent = d.solution || '';
+  document.getElementById('presHintNote').textContent = d.note || '';
+  hintEl.hidden = false;
+  /* при смене слайда подпись не мигает: плавно переезжает от прежней цели к новой */
+  presHintPlace(wasVisible && !!d.anim);
+}
+/* применить позицию подписи и пунктира (мгновенно или кадром анимации переезда) */
+function presHintApply(l, t, ax, ay, hw, hh, dotOff){
+  const hintEl = document.getElementById('presHint');
+  hintEl.style.left = l + 'px';
+  hintEl.style.top = t + 'px';
+  let x1;
+  if (ax < l) x1 = l;
+  else if (ax > l + hw) x1 = l + hw;
+  else x1 = Math.min(Math.max(ax, l + 10), l + hw - 10);
+  const y1 = Math.min(Math.max(ay, t + 2), t + hh - 2);
+  const line = document.getElementById('presLineInner');
+  line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+  line.setAttribute('x2', ax); line.setAttribute('y2', ay);
+  const dot = document.getElementById('presDot');
+  dot.setAttribute('cx', ax); dot.setAttribute('cy', ay);
+  dot.style.opacity = dotOff ? '0' : '1';
+}
+function presHintPlace(animate){
+  const d = presHintData;
+  if (!d || !d.rect) return;
+  const hintEl = document.getElementById('presHint');
+  const frameEl = document.getElementById('frame');
+  const fr = frameEl.getBoundingClientRect();
+  const kx = fr.width / (frameEl.clientWidth || 1280);
+  const ky = fr.height / (frameEl.clientHeight || 800);
+  /* сам показываемый элемент в координатах окна */
+  const ex = fr.left + d.rect.x * kx;
+  const ey = fr.top + d.rect.y * ky;
+  const ew = d.rect.w * kx;
+  const eh = d.rect.h * ky;
+  const cy = ey + eh / 2;
+  /* метка ✎ над правым верхним углом элемента — к ней ведём пунктир */
+  const badge = d.badge ? {
+    l: fr.left + d.badge.x * kx, t: fr.top + d.badge.y * ky,
+    w: d.badge.w * kx, h: d.badge.h * ky
+  } : null;
+  const ax = badge ? badge.l + badge.w / 2 : ex + ew / 2;
+  const ay = badge ? badge.t + badge.h / 2 : cy;
+  const W = window.innerWidth, H = window.innerHeight, M = 12;
+  const headerBottom = document.querySelector('.top').getBoundingClientRect().bottom + 10;
+  hintEl.style.maxHeight = Math.max(160, H - headerBottom - M) + 'px';
+  hintEl.style.overflowY = 'auto';
+  /* подпись может заезжать на экран, но не перекрывать элемент с меткой; ширина — по свободному месту сбоку */
+  const gapR = 64, gapL = 40, MINW = 240;
+  const avR = (W - M) - (ex + ew + gapR);      /* место справа от элемента */
+  const avL = (ex - gapL) - M;                 /* слева */
+  const avOut = (W - M) - (fr.right + 24);     /* снаружи планшета */
+  let side, w;
+  if (avR >= 340){ side = 'R'; w = 340; }
+  else if (avL >= 340){ side = 'L'; w = 340; }
+  else if (avR >= MINW){ side = 'R'; w = Math.floor(avR); }
+  else if (avL >= MINW){ side = 'L'; w = Math.floor(avL); }
+  else if (avOut >= 200){ side = 'O'; w = Math.min(340, Math.floor(avOut)); }
+  else { side = 'O'; w = Math.max(200, Math.min(Math.floor(avOut), W - 2 * M)); }
+  hintEl.style.width = w + 'px';
+  const hw = hintEl.offsetWidth, hh = hintEl.offsetHeight;
+  const top = Math.min(Math.max(headerBottom, cy - hh / 2), H - hh - M);
+  let left;
+  if (side === 'R') left = ex + ew + gapR;
+  else if (side === 'L') left = ex - hw - gapL;
+  else left = Math.max(M, Math.min(fr.right + 24, W - hw - M));
+  /* пунктирная линия от края подписи к метке (или к центру элемента, пока метка не пришла) */
+  const svg = document.getElementById('presLine');
+  svg.hidden = false;
+  const dotOff = !!badge;   /* линия доходит до самой метки — точка не нужна */
+  if (animate && !hintEl.hidden){
+    /* плавный переезд от текущего положения к новому — без мигания */
+    cancelAnimationFrame(presHintRaf);
+    const line0 = document.getElementById('presLineInner');
+    const l0 = parseFloat(hintEl.style.left), t0 = parseFloat(hintEl.style.top);
+    const a0 = parseFloat(line0.getAttribute('x2')), b0 = parseFloat(line0.getAttribute('y2'));
+    const from = {
+      l: isFinite(l0) ? l0 : left, t: isFinite(t0) ? t0 : top,
+      ax: isFinite(a0) ? a0 : ax, ay: isFinite(b0) ? b0 : ay
+    };
+    const begin = performance.now();
+    (function step(now){
+      let k = Math.min(1, (now - begin) / 280);
+      k = 1 - Math.pow(1 - k, 3);   /* easeOutCubic */
+      presHintApply(from.l + (left - from.l) * k, from.t + (top - from.t) * k,
+                    from.ax + (ax - from.ax) * k, from.ay + (ay - from.ay) * k,
+                    hw, hh, dotOff);
+      if (k < 1) presHintRaf = requestAnimationFrame(step);
+    })(begin);
+    /* страховка от «застрявших» кадров (троттлинг rAF в невидимой вкладке) — добиваем позицию таймером */
+    clearTimeout(presHintFix);
+    presHintFix = setTimeout(function(){ presHintApply(left, top, ax, ay, hw, hh, dotOff); }, 340);
+  } else {
+    cancelAnimationFrame(presHintRaf);
+    presHintApply(left, top, ax, ay, hw, hh, dotOff);
+  }
+}
+window.addEventListener('message', function(e){
+  const d = e.data || {};
+  if (d.type !== 'kds-hint') return;
+  if (!d.open){ presHintHide(); return; }
+  presHintShow(d);
+});
+window.addEventListener('resize', function(){ if (presHintData) presHintPlace(); });
+document.getElementById('presBtn').addEventListener('click', presEnter);
+document.getElementById('presExitBtn').addEventListener('click', presExit);
+document.getElementById('presPlayBtn').addEventListener('click', () => presSetAuto(!presAuto));
+document.getElementById('presCtlPrev').addEventListener('click', () => navStep(-1));
+document.getElementById('presCtlNext').addEventListener('click', () => navStep(1));
+document.getElementById('presCtlPlay').addEventListener('click', () => presSetAuto(!presAuto));
+document.getElementById('presCtlExit').addEventListener('click', presExit);
+document.addEventListener('keydown', function(e){
+  if (!presMode) return;
+  if (e.key === 'Escape'){ presExit(); return; }
+  if (e.key === 'ArrowRight'){ e.preventDefault(); navStep(1); }
+  if (e.key === 'ArrowLeft'){ e.preventDefault(); navStep(-1); }
+});
+
+/* ── Старт ─────────────────────────────────────────────────────────── */
+const fromHash = location.hash.replace('#', '');
+select(SCENARIOS.some(s => s.id === fromHash) ? fromHash : current.id);
+</script>
+</body>
+</html>

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frame 917 «Поставщики» — отрисовка на компонентах ДС (адаптив 1184 → 375)</title>
+<!--
+  Источник: Figma, файл «Новый список товаров, заказа - поставщики», node 7422:68570
+  (Frame 917, 1184×349) — экран «Поставщики» (первый из трёх; потом экраны сошьются
+  как вложенные — см. «Вложенности» ниже).
+  Значения — из переменных фрейма (get_variable_defs / get_design_context):
+    Label #212121 · Text/UI #333333 · Secondary #448AFF · Positive #00C853 · Error #FF5252
+    Table surfase Head #F0F6FF · Hover row #FAFAFA · Dividers #E0E0E0 · Surface #FFFFFF
+    Заголовок 24/24/500 ls 0.18 · ячейки 14/20/400 ls 0.25 · Button/Caps 14/16/500 ls 1.25
+    Тень кнопок «02 dp» · Search-круг: 36, фон #F0F6FF, иконка 24 · icon-кнопки 36, иконка 18
+  Геометрия из дерева фрейма (get_metadata / get_design_context):
+    кадр pad 32/24 · шапка-строка 1120×36 (заголовок flex, до контролов 32, поиск → группа 24,
+    в группе 8) · таблица 1124: шапка 48+1, строки 48+1 ×4 (pad ячеек 12/16)
+    колонки: 200 / flex / 176 / 158 / 110 / 92 (числа справа, дата слева), hover-строка 2-я
+  Компоненты и стили — только ДС (iiko-ds-web/components + iiko-ds-mobile). Своё — каркас
+  страницы, обвязка ревью и раскладка таблицы; ниже помечено.
+
+  ОТКУДА ЧТО ВЗЯТО:
+    • разметка/стили компонентов — из файлов ДС: ds-search (XS-круг), ds-btn (Positive Filled M),
+      ds-btn-icon (M Accent Filled; XS Neutral/Negative Text — действия строки),
+      ds-table-header-row/cell, ds-table-content-row/cell; токены — tokens.css;
+    • иконки — Google Material Icons по имени, СТИЛЬ — Outlined (аутлайновые, не Fill; семейство
+      Material Icons Outlined подключено вторым линком, класс material-icons переведён на него);
+      имена опознаны по экспортированным ассетам макета (в SVG стоит id глифа): search · sync ·
+      filter_list · add · delete; у «копировать» в ассете чужой глиф (квадрат
+      check_box_outline_blank) — в вёрстке content_copy, в Фигме тоже заменить;
+    • из макета — состав, тексты, ширины колонок, состояние строки (ховер с действиями);
+    • компоненты — СТРОГО по ДС: правок поверх компонентов нет; косяки самой ДС — в «Подсказки ДС»
+      (выше) и в журнале `review-notes.md`;
+    • hex в комментариях — из макета, в CSS ни один hex не используется.
+
+  ВЛОЖЕННОСТИ (план): экраны 1–3 сейчас отдельные страницы; дальше собираются в одно целое —
+  «Поставщики» → вложенный уровень → вложенный уровень. Даты — переход к прайс-листу
+  (figma-7431-pricelist.html, экран 2); «Coffee Supplier» — пока без действия (ждёт свой макет).
+
+  АДАПТИВ (ширина кадра; ≤ 768 — мобильная вёрстка):
+    • один кадр, ширину задаёт пользователь — ручкой у правого края или пресетами 1440 / 1184 / 768 / 375;
+    • 1184 — Frame 917 как есть; 768 — граница desktop → mobile (iiko-ds-mobile/mobile-mode-notes.md, §10);
+      375 — конечная мобильная ширина (iiko-ds-mobile/mobile-block-schemes.md, шаг P4);
+    • ≤ 768 кадр получает data-mode="mobile" (размеры из modes.css); в макете мобильной версии
+      нет — раскладка черновая: шапка переносится, таблица скроллится по горизонтали;
+    • подложка устройства: телефон ≤ 480 (375×812), планшет 481–768 (768×1024), десктоп ≥ 769
+      (1440×960) — высота экрана фиксирована, тянется только ширина; внутри прокрутка
+      (?ui=0 — чистый кадр без обвязки).
+
+  ИНТЕРАКТИВ (рабочие элементы живые — так и держать в прототипах):
+    • поиск: круг ДС (Search XS) по клику разворачивается в поле 243 (Search M) и фильтрует
+      строки по мере ввода; крестик очищает, Escape/клик вне — сворачивает пустое поле;
+    • действия строки появляются при наведении (как 2-я строка в макете): «копировать» дублирует
+      строку, корзина удаляет её; «Добавить» добавляет демо-строку (в приложении — форма создания);
+    • «Обновить» — иконка прокручивается (обратная связь); «Фильтр» — без панели в макете, клик пока без последствий;
+    • ?demo=hover — включить состояние 2-й строки (для скриншотов, как в макете).
+
+  ПОДСКАЗКИ ПО ДС (только косяки самой ДС — компоненты/токены/CSS; макет-донор ни при чём):
+    • в шапке ширины — ссылка «Подсказки ДС · 4» (или ?hints=1): номера-маркеры на местах
+      проблем (отдельный слой поверх страницы — overflow компонентов номер не режет),
+      клик по номеру — пузырь ДС-подсказки с текстом находки; полный список — под шапкой:
+      что отрисовано неправильно и что доправить (Фигма/токены/CSS);
+    • расхождения с макетом-донором не ведём (донор может быть любой — Figma/Balsamiq/текст),
+      прототип собирается строго по ДС; ?ui=0 — чистый кадр без подсказок.
+
+  ВЁРСТКА ПО ДС: компоненты рендерятся строго по ДС. Расхождения с макетом-донором не ведём —
+  донор может быть любым (Figma, Balsamiq, текстовое описание). Косяки самой ДС — в «Подсказках» выше.
+-->
+<link rel="stylesheet" href="../iiko-ds-web/font.css">
+<link rel="stylesheet" href="../iiko-ds-web/tokens.css">
+<!-- мобильный слой ДС: ось режима + структурные моб-компоненты (порядок обязателен) -->
+<link rel="stylesheet" href="../iiko-ds-mobile/modes.css">
+<link rel="stylesheet" href="../iiko-ds-mobile/components/index.css">
+<script src="ds-frame-nav.js?v=1"></script>
+<link rel="stylesheet" href="../iiko-ds-web/styles.css">
+<link rel="stylesheet" href="../iiko-ds-web/components/index.css">
+<!-- fixes.css — ручной слой правок поверх генерации ДС; обновления из Фигмы его не перезаписывают -->
+<link rel="stylesheet" href="../iiko-ds-web/fixes.css">
+<!-- touch-hover-off.css — статическая глушилка ховеров для тач-режима; генерируется заново после обновлений ДС
+     (node _audit/build-hover-off.mjs), при перегенерации поднять ?v= -->
+<link rel="stylesheet" href="touch-hover-off.css?v=1">
+<!-- app-header — сквозная шапка приложения («App bars: top»): один источник app-header/*.css+js -->
+<link rel="stylesheet" href="app-header/app-header.css?v=6">
+<!-- app-sidenav — свёрнутое боковое меню (десктоп); на планшете/мобильном уезжает в гамбургер шапки -->
+<link rel="stylesheet" href="app-sidenav/app-sidenav.css?v=4">
+<link rel="stylesheet" href="device-chrome/device-chrome.css?v=5">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+<style>
+  /* ── Каркас страницы (у каркаса нет ДС-компонента) ───────── */
+  html,body{margin:0;background:#fff;font-family:'Roboto','Helvetica Neue',Arial,sans-serif;color:var(--ds-color-text-primary)}
+  body{display:flex;flex-direction:column}
+  .frame{width:100%;min-height:349px;padding:24px 32px;box-sizing:border-box}
+
+  /* ── Ширина кадра: адаптив (обвязка ревью; ?ui=0 — чистый кадр) ──
+     Ручка у правого края или пресеты 1440 / 1184 / 768 / 375. ≤ 768 — data-mode="mobile"
+     (размеры из iiko-ds-mobile/modes.css). 1184 — Frame 917 как есть. */
+  .modes-bar{display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:1px solid var(--ds-color-stroke-default);background:#fff;font-size:var(--ds-typography-font-size-3-5x);line-height:20px}
+  .modes-bar[hidden]{display:none}
+  .modes-bar__title{color:var(--ds-color-text-secondary)}
+  .modes-bar__value{min-width:56px;font-weight:var(--ds-typography-font-weight-medium);color:var(--ds-color-text-accent);font-variant-numeric:tabular-nums}
+  .modes-bar__mode{height:20px;padding:0 6px;border:1px solid var(--ds-color-stroke-default);border-radius:var(--ds-radius-2x);color:var(--ds-color-text-secondary);font-size:12px;line-height:18px}
+  .modes-bar__hint{color:var(--ds-color-text-secondary)}
+  .modes-bar__spacer{flex:1}
+  .modes-bar__btn{height:28px;padding:0 12px;border:1px solid var(--ds-color-stroke-default);border-radius:var(--ds-radius-2x);background:transparent;font-family:inherit;font-size:var(--ds-typography-font-size-3-5x);font-weight:var(--ds-typography-font-weight-medium);color:var(--ds-color-text-primary);cursor:pointer}
+  .modes-bar__btn:hover{background:var(--ds-color-button-neutral-hover)}
+  .modes-bar__btn.is-active{border-color:var(--ds-color-brand-accent-default);background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive)}
+  /* «Подсказки ДС» — ссылка-переключатель, а не кнопка-пресет: не спорит с пресетами ширины.
+     Отступ слева больше общего гэпа — чтобы не сливалась с текстом про размеры */
+  .modes-bar__link{margin-left:16px;border:0;background:none;padding:0;font-family:inherit;font-size:inherit;line-height:20px;color:var(--ds-color-text-accent);cursor:pointer;white-space:nowrap}
+  .modes-bar__link:hover{text-decoration:underline}
+  .modes-bar__link.is-active{font-weight:var(--ds-typography-font-weight-medium);text-decoration:underline}
+
+  .view{display:flex;gap:16px;align-items:flex-start;padding:24px}
+  body.ui-clean .view{padding:0}
+  .panel{position:relative;flex:0 0 auto;width:1184px}
+  /* Реальный размер «экрана»: высота панели = высота устройства (960/1024/812), приложение живёт
+     внутри (шапка + кадр + системные полосы устройства), кадр занимает остаток (flex). Экран
+     не подстраивается под высоту шапки/рейла — у монитора он так и остаётся 960 */
+  body.device-phone .panel,body.device-tablet .panel,body.device-desktop .panel{display:flex;flex-direction:column;height:var(--device-screen-h,812px)}
+  body:not(.ui-clean) .panel .frame{outline:1px solid var(--ds-color-stroke-default)}
+  body.ui-clean .panel__handle{display:none}
+
+  /* Ручка изменения ширины — у правого края кадра */
+  .panel__handle{position:absolute;top:0;right:-8px;width:16px;height:100%;display:flex;align-items:center;justify-content:center;cursor:ew-resize;touch-action:none;z-index:2}
+  .panel__handle::before{content:"";width:4px;height:64px;border-radius:9999px;background:var(--ds-color-stroke-default);transition:background .12s ease}
+  .panel__handle:hover::before{background:var(--ds-color-brand-accent-default)}
+  body.is-dragging{cursor:ew-resize;user-select:none}
+  body.is-dragging .panel__handle::before{background:var(--ds-color-brand-accent-default)}
+
+  /* ── Подложка устройства (обвязка ревью): телефон ≤ 480 — iPhone 375×812,
+     планшет 481–768 — iPad 768×1024, десктоп ≥ 769 — монитор 1440×960; высота экрана
+     фиксирована (812 / 1024 / 960) — тянется только ширина; внутри — прокрутка.
+     В чистом кадре (?ui=0) подложки нет. ── */
+  body.device-phone .panel::before,body.device-tablet .panel::before,body.device-desktop .panel::before{content:"";position:absolute;inset:-14px;border:14px solid var(--ds-color-brand-neutral-super-dark);border-radius:38px;pointer-events:none;z-index:1}
+  body.device-tablet .panel::before{inset:-16px;border-width:16px;border-radius:30px}
+  body.device-desktop .panel::before{border-radius:30px}
+  body.device-phone .panel::after{content:"";position:absolute;top:2px;left:50%;transform:translateX(-50%);width:96px;height:18px;border-radius:9999px;background:var(--ds-color-brand-neutral-super-dark);pointer-events:none;z-index:1}
+  body.device-tablet .panel::after{content:"";position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:9999px;background:var(--ds-color-stroke-hover);pointer-events:none;z-index:1}
+  body.device-desktop .panel::after{content:"";position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:9999px;background:var(--ds-color-stroke-hover);pointer-events:none;z-index:1}
+  body.device-phone .frame,body.device-tablet .frame,body.device-desktop .frame{flex:1 1 0;min-height:0;overflow:auto}   /* высоту даёт панель-экран; 960 = шапка 64 + кадр 896 */
+
+  /* ── Шапка экрана: «Поставщики» + контролы (1120×36; гэпы 32 / 24 / 8 — из макета) ── */
+  .title-row{display:flex;align-items:center;gap:32px;height:36px}
+  .title-row__title{margin:0;flex:1;min-width:0;font:var(--ds-font-header-m-24-normal-medium);/* 24/500 */color:var(--ds-color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .title-row__controls{display:flex;align-items:center;gap:24px}
+  .title-row__actions{display:flex;align-items:center;gap:8px}
+
+  /* ── Поиск: круг ДС (Search XS, 36) по клику разворачивается в поле (Search M, 243).
+     Механика разворота — обвязка прототипа; фон/рамка/иконка/размеры — из search.css ── */
+  .js-search{transition:width .16s ease;cursor:pointer}
+  .js-search.is-open{width:243px;cursor:text}
+  .js-search__input{flex:1 1 auto;min-width:0;border:0;background:transparent;outline:none;padding:0;font:var(--ds-font-body-m-16-normal-regular);color:var(--ds-color-text-primary)}
+  .js-search__input::placeholder{color:var(--ds-color-search-default-text-color,#d6d6d6)}
+  .js-search__clear{display:none;border:0;background:none;padding:0;cursor:pointer;color:var(--ds-color-icon-primary)}
+  .js-search.is-open .js-search__clear{display:inline-flex}
+  .ds-search__icon.material-icons,.js-search__clear.material-icons{font-size:20px;line-height:20px}
+
+  /* ── Таблица: полосы — компоненты ДС (ds-table-header-row / ds-table-content-row),
+     ячейки — ds-table-header-cell / ds-table-content-cell. Компоненты — строго по ДС,
+     правок поверх нет; ниже — только обвязка: полосы ДС в CSS свёрстаны колонкой —
+     разворачиваем в строку для таблицы, ширины колонок — из макета
+     (200 / flex / 176 / 158 / 110 / 92). Паддинги ячеек — дефолт ДС (8 px). ── */
+  .table-wrap{margin-top:20px;overflow-x:auto}
+  .ds-table{width:100%;min-width:900px}
+  .ds-table .ds-table-header-row,.ds-table .ds-table-content-row{flex-direction:row;width:100%}
+  .c-w200{width:200px}
+  .c-flex{flex:1 1 auto;min-width:0}
+  .c-w176{width:176px}
+  .c-w158{width:158px}
+  .c-w110{width:110px}
+  .c-w92{width:92px}
+  .c-right{justify-content:flex-end}
+  /* Ячейки-ссылки (имя поставщика, дата «Прайс-листа»): состояние Link у Table content cell
+     в компоненте есть, в CSS ДС не реализовано (ни класса, ни токена). По решению заказчика
+     (2026-09-12) ссылки нужны уже сейчас — временный стиль до правки ДС, цвет — из токена ДС
+     Text UI/Link → Accent; косяк ДС остаётся в подсказке №3 */
+  .ds-table-content-cell--link .ds-table-content-cell__label{color:var(--ds-color-text-ui-link-text-color,var(--ds-color-text-accent));cursor:pointer}
+  .ds-table-content-cell--link:hover .ds-table-content-cell__label{text-decoration:underline}
+
+  /* Действия строки — появляются при наведении (2-я строка макета — это состояние ховера) */
+  .js-acts{visibility:hidden}
+  .ds-table-content-row:hover .js-acts,
+  .ds-table-content-row.is-hover .js-acts,
+  .ds-table-content-row:focus-within .js-acts{visibility:visible}
+  .ds-table-content-row.is-hover{background:var(--ds-color-table-row-content-hover-background)}
+  [hidden]{display:none!important}
+
+  /* Иконки — всегда аутлайновые (правило проекта): базовый класс material-icons
+     переводим на семейство Outlined (второй Google-линк) */
+  .material-icons{font-family:'Material Icons Outlined'}
+
+  /* Глифы Material Icons: размер = размеру слота ДС (20; у Button icon XS — 16 по токену) */
+  .ds-btn-icon__icon.material-icons{font-size:20px;line-height:20px}
+  .ds-btn-icon--xs .ds-btn-icon__icon.material-icons{font-size:16px;line-height:16px}
+  .ds-btn__icon.material-icons{font-size:20px;line-height:20px}
+
+  /* «Обновить» — обратная связь: глиф прокручивается */
+  @keyframes supplier-sync-spin{to{transform:rotate(360deg)}}
+  .is-spinning .ds-btn-icon__icon{animation:supplier-sync-spin .6s ease}
+
+  /* ── Подсказки по ДС (обвязка ревью; цель — дизайн в Фигме совпадает с вёрсткой):
+     кнопка в шапке или ?hints=1 — пунктирные маркеры с номерами на местах расхождений
+     + список находок под шапкой. В чистом кадре (?ui=0) подсказки недоступны. ── */
+  .hints{display:none;padding:10px 24px 12px;border-bottom:1px solid var(--ds-color-stroke-default);background:var(--ds-color-brand-accent-super-lightest,#f5f9ff);font-size:var(--ds-typography-font-size-3-5x);line-height:20px;color:var(--ds-color-text-primary)}
+  body.hints-on .hints{display:block}
+  body.ui-clean .hints{display:none!important}
+  .hints__list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;max-width:1120px}
+  .hints__item{display:flex;gap:8px}
+  .hints__num{flex:0 0 auto;width:20px;height:20px;border-radius:9999px;background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive);font-size:12px;line-height:20px;text-align:center;font-weight:var(--ds-typography-font-weight-medium)}
+  .hints__text{min-width:0}
+  body.hints-on .hint-mark{outline:2px dashed var(--ds-color-brand-accent-default);outline-offset:-2px}
+  /* Номера-маркеры — отдельный fixed-слой поверх страницы: overflow компонентов
+     (table-wrap, ячейки, кнопки) их не режет, номер видно в любом месте.
+     Слой прозрачен для кликов; кликабельны только сами номера. */
+  .hints-layer{position:fixed;inset:0;z-index:120;pointer-events:none}
+  .hint-badge{position:absolute;box-sizing:border-box;min-width:20px;height:20px;padding:0 6px;border:0;border-radius:9999px;background:var(--ds-color-brand-accent-default);color:var(--ds-color-text-inversive);font-family:'Roboto','Helvetica Neue',Arial,sans-serif;font-size:12px;line-height:20px;font-weight:var(--ds-typography-font-weight-medium);text-align:center;cursor:pointer;pointer-events:auto;box-shadow:0 0 0 2px var(--ds-color-text-inversive)}
+  .hint-badge:hover{box-shadow:0 0 0 2px var(--ds-color-text-inversive),var(--ds-shadow-shadows-08-dp-s,0 2px 8px rgba(0,0,0,.2))}
+  .hint-badge.is-open{box-shadow:0 0 0 2px var(--ds-color-text-inversive),0 0 0 4px var(--ds-color-brand-accent-default)}
+  /* Пузырь по клику на номер — композит ДС через контейнер: ds-hint-container--default +
+     ds-hint-content--single-content; ширина увеличена для читаемости, текст переносится.
+     Позиция и сторона стрелки (вверх/вниз) — обвязка прототипа */
+  .hint-pop{position:absolute;z-index:2;pointer-events:auto}
+  .hint-pop .ds-hint-container{width:auto}
+  .hint-pop .ds-hint-content{width:340px}
+  .hint-pop .ds-hint-content__label{white-space:normal}
+  .hint-pop .ds-hint-container__arrow{justify-content:center}
+  .hint-pop--above .ds-hint-container{flex-direction:column-reverse}
+
+  /* ── Мобильная вёрстка (≤ 768): паддинги кадра 16, шапка переносится,
+     таблица скроллится по горизонтали. Раскладка черновая — мобильной версии в макете нет ── */
+  .panel[data-mode="mobile"] .frame{min-height:0;padding:16px}
+  .panel[data-mode="mobile"] .title-row{height:auto;min-height:44px;flex-wrap:wrap;gap:12px}
+  .panel[data-mode="mobile"] .title-row__title{flex:1 1 100%;white-space:normal}
+  .panel[data-mode="mobile"] .title-row__controls{flex:1 1 auto;justify-content:flex-start;gap:16px}
+  .panel[data-mode="mobile"] .table-wrap{margin-top:16px}
+</style>
+<!-- Тач-режим (планшет/телефон ≤768): ховер → тап, подсказки — долгим нажатием; см. touch-mode.css/js -->
+<link rel="stylesheet" href="touch-mode.css?v=6">
+<script src="touch-mode.js?v=10" defer></script>
+<script src="ds-sizes-toggle.js?v=6" defer></script>
+<script src="app-header/app-header.js?v=3" defer></script>
+<script src="app-sidenav/app-sidenav.js?v=2" defer></script>
+<script src="device-chrome/device-chrome.js?v=1" defer></script>
+</head>
+<body>
+<!-- Шапка ревью: ширина кадра — пресеты и ручка (обвязка; ?ui=0 — скрыть, ?w=… — задать) -->
+<div class="modes-bar" id="modes-bar" role="group" aria-label="Ширина макета">
+  <span class="modes-bar__title">Ширина макета</span>
+  <span class="modes-bar__value" id="w-value">1184 px</span>
+  <span class="modes-bar__mode" id="w-mode">desktop</span>
+  <span class="modes-bar__hint">тяни за правый край · от 375 до 1440</span>
+  <button class="modes-bar__link" type="button" id="hints-btn" aria-pressed="false" title="Показать/скрыть подсказки по расхождениям с ДС (Фигма ↔ вёрстка)">Подсказки ДС · 4</button>
+  <span class="modes-bar__spacer"></span>
+  <button class="modes-bar__btn" type="button" data-w="1440">Десктоп · 1440</button>
+  <button class="modes-bar__btn is-active" type="button" data-w="1184">Десктоп · 1184</button>
+  <button class="modes-bar__btn" type="button" data-w="768">Планшет · 768</button>
+  <button class="modes-bar__btn" type="button" data-w="375">Телефон · 375</button>
+</div>
+
+<!-- Подсказки по ДС (показать — кнопкой в шапке или ?hints=1): находки для правки ДС, цель — Фигма совпадает с вёрсткой -->
+<div class="hints" id="hints" role="note" aria-label="Подсказки по ДС">
+  <ol class="hints__list">
+    <li class="hints__item"><span class="hints__num">1</span><span class="hints__text">Table_DS, шапка: рамка 1 px и фон дублируются — у ячейки (header-cell) и у полосы (header-row); скругление полосы (radius 8) перекрыто прямоугольными ячейками. Доправить: один владелец рамки/фона + clip полосе. (CSS + Фигма)</span></li>
+    <li class="hints__item"><span class="hints__num">2</span><span class="hints__text">Table_DS, ховер: строка красит фон (#F5F5F5), а ячейка под курсором рисует свою рамку (#9E9E9E) — двойной отклик. Доправить: развести состояния ячейки и строки. (CSS)</span></li>
+    <li class="hints__item"><span class="hints__num">3</span><span class="hints__text">Table_DS, ячейка-ссылка (имя поставщика, дата «Прайс-листа»): состояние Link у Table content cell в компоненте есть, в CSS ДС не реализовано — ни класса, ни токена текста ссылки; в прототипе до правки ДС стоит временный стиль (Accent; не из ДС). Доправить: модификатор --link + токен цвета, как у Text UI/Link → Accent. (CSS + токены)</span></li>
+    <li class="hints__item"><span class="hints__num">4</span><span class="hints__text">Table_DS, полосы строк: свёрстаны колонкой (flex-direction: column) — строку из ячеек не собрать. Доправить: починить развёртку. (CSS + Фигма)</span></li>
+  </ol>
+</div>
+<!-- Слой номеров-маркеров (строит скрипт подсказок; клик по номеру — пузырь с текстом находки) -->
+<div class="hints-layer" id="hints-layer"></div>
+
+<div class="view">
+
+<!-- Один кадр: ширину задаёт пользователь (ручка справа или пресеты в шапке) -->
+<div class="panel" id="panel" data-mode="desktop">
+  <div class="frame">
+
+    <!-- Шапка: заголовок + поиск + действия (1120×36) -->
+    <div class="title-row">
+      <h1 class="title-row__title">Поставщики</h1>
+      <div class="title-row__controls">
+        <!-- Поиск: круг ДС (Search XS) → по клику поле (Search M) с живым фильтром строк -->
+        <div class="ds-search ds-search--xs js-search" id="search">
+          <span class="ds-search__icon material-icons" aria-hidden="true">search</span>
+          <input class="js-search__input" type="text" placeholder="Поиск по поставщикам" aria-label="Поиск по поставщикам" hidden>
+          <button class="js-search__clear material-icons" type="button" title="Очистить" aria-label="Очистить">close</button>
+        </div>
+        <div class="title-row__actions">
+          <button class="ds-btn-icon ds-btn-icon--m ds-btn-icon--accent ds-btn-icon--filled" type="button" id="sync" title="Обновить">
+            <span class="ds-btn-icon__icon material-icons" aria-hidden="true">sync</span>
+          </button>
+          <button class="ds-btn-icon ds-btn-icon--m ds-btn-icon--accent ds-btn-icon--filled" type="button" title="Фильтр">
+            <span class="ds-btn-icon__icon material-icons" aria-hidden="true">filter_list</span>
+          </button>
+          <button class="ds-btn ds-btn--m ds-btn--positive ds-btn--filled" type="button" id="add-supplier">
+            <span class="ds-btn__icon material-icons" aria-hidden="true">add</span>
+            <span class="ds-btn__label">Добавить</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Таблица: полосы и ячейки — компоненты ДС; ширины колонок — из макета -->
+    <div class="table-wrap">
+      <div class="ds-table" id="table" role="table" aria-label="Поставщики">
+        <div class="ds-table-header-row" role="row">
+          <div class="ds-table-header-cell c-w200" role="columnheader"><span class="ds-table-header-cell__label">Поставщик</span></div>
+          <div class="ds-table-header-cell c-flex" role="columnheader"><span class="ds-table-header-cell__label">Название</span></div>
+          <div class="ds-table-header-cell c-w176 c-right" role="columnheader"><span class="ds-table-header-cell__label">Активных процессов</span></div>
+          <div class="ds-table-header-cell c-w158 c-right" role="columnheader"><span class="ds-table-header-cell__label">Активных заказов</span></div>
+          <div class="ds-table-header-cell c-w110 c-right" role="columnheader"><span class="ds-table-header-cell__label">Прайс-лист</span></div>
+          <div class="ds-table-header-cell c-w92" role="columnheader"></div>
+        </div>
+
+        <div class="ds-table-content-row js-row" role="row">
+          <div class="ds-table-content-cell c-w200" role="cell"><span class="ds-table-content-cell__label">000400</span></div>
+          <div class="ds-table-content-cell c-flex ds-table-content-cell--link" role="cell"><span class="ds-table-content-cell__label">Coffee Supplier</span></div>
+          <div class="ds-table-content-cell c-w176 c-right" role="cell"><span class="ds-table-content-cell__label">8</span></div>
+          <div class="ds-table-content-cell c-w158 c-right" role="cell"><span class="ds-table-content-cell__label">42</span></div>
+          <div class="ds-table-content-cell c-w110 ds-table-content-cell--link js-price" role="cell" title="Открыть прайс-лист"><span class="ds-table-content-cell__label">23.09.2023</span></div>
+          <div class="ds-table-content-cell c-w92 js-acts" role="cell">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--neutral ds-btn-icon--text js-copy" type="button" title="Копировать">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">content_copy</span>
+            </button>
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" title="Удалить">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span>
+            </button>
+          </div>
+        </div>
+        <div class="ds-table-content-row js-row" role="row">
+          <div class="ds-table-content-cell c-w200" role="cell"><span class="ds-table-content-cell__label">000400</span></div>
+          <div class="ds-table-content-cell c-flex ds-table-content-cell--link" role="cell"><span class="ds-table-content-cell__label">Coffee Supplier</span></div>
+          <div class="ds-table-content-cell c-w176 c-right" role="cell"><span class="ds-table-content-cell__label">8</span></div>
+          <div class="ds-table-content-cell c-w158 c-right" role="cell"><span class="ds-table-content-cell__label">42</span></div>
+          <div class="ds-table-content-cell c-w110 ds-table-content-cell--link js-price" role="cell" title="Открыть прайс-лист"><span class="ds-table-content-cell__label">23.09.2023</span></div>
+          <div class="ds-table-content-cell c-w92 js-acts" role="cell">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--neutral ds-btn-icon--text js-copy" type="button" title="Копировать">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">content_copy</span>
+            </button>
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" title="Удалить">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span>
+            </button>
+          </div>
+        </div>
+        <div class="ds-table-content-row js-row" role="row">
+          <div class="ds-table-content-cell c-w200" role="cell"><span class="ds-table-content-cell__label">000400</span></div>
+          <div class="ds-table-content-cell c-flex ds-table-content-cell--link" role="cell"><span class="ds-table-content-cell__label">Coffee Supplier</span></div>
+          <div class="ds-table-content-cell c-w176 c-right" role="cell"><span class="ds-table-content-cell__label">8</span></div>
+          <div class="ds-table-content-cell c-w158 c-right" role="cell"><span class="ds-table-content-cell__label">42</span></div>
+          <div class="ds-table-content-cell c-w110 ds-table-content-cell--link js-price" role="cell" title="Открыть прайс-лист"><span class="ds-table-content-cell__label">23.09.2023</span></div>
+          <div class="ds-table-content-cell c-w92 js-acts" role="cell">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--neutral ds-btn-icon--text js-copy" type="button" title="Копировать">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">content_copy</span>
+            </button>
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" title="Удалить">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span>
+            </button>
+          </div>
+        </div>
+        <div class="ds-table-content-row js-row" role="row">
+          <div class="ds-table-content-cell c-w200" role="cell"><span class="ds-table-content-cell__label">000400</span></div>
+          <div class="ds-table-content-cell c-flex ds-table-content-cell--link" role="cell"><span class="ds-table-content-cell__label">Coffee Supplier</span></div>
+          <div class="ds-table-content-cell c-w176 c-right" role="cell"><span class="ds-table-content-cell__label">8</span></div>
+          <div class="ds-table-content-cell c-w158 c-right" role="cell"><span class="ds-table-content-cell__label">42</span></div>
+          <div class="ds-table-content-cell c-w110 ds-table-content-cell--link js-price" role="cell" title="Открыть прайс-лист"><span class="ds-table-content-cell__label">24.10.2023</span></div>
+          <div class="ds-table-content-cell c-w92 js-acts" role="cell">
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--neutral ds-btn-icon--text js-copy" type="button" title="Копировать">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">content_copy</span>
+            </button>
+            <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" title="Удалить">
+              <span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="panel__handle" id="panel-handle" role="separator" aria-label="Тяни, чтобы менять ширину (375–1440)" title="Тяни, чтобы менять ширину (375–1440)"></div>
+</div>
+
+</div>
+
+<!-- Демо-строка для «Добавить» (в приложении — форма создания; здесь просто строка) -->
+<template id="row-template">
+  <div class="ds-table-content-row js-row" role="row">
+    <div class="ds-table-content-cell c-w200" role="cell"><span class="ds-table-content-cell__label">000401</span></div>
+    <div class="ds-table-content-cell c-flex ds-table-content-cell--link" role="cell"><span class="ds-table-content-cell__label">Новый поставщик</span></div>
+    <div class="ds-table-content-cell c-w176 c-right" role="cell"><span class="ds-table-content-cell__label">0</span></div>
+    <div class="ds-table-content-cell c-w158 c-right" role="cell"><span class="ds-table-content-cell__label">0</span></div>
+    <div class="ds-table-content-cell c-w110" role="cell"><span class="ds-table-content-cell__label">—</span></div>
+    <div class="ds-table-content-cell c-w92 js-acts" role="cell">
+      <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--neutral ds-btn-icon--text js-copy" type="button" title="Копировать">
+        <span class="ds-btn-icon__icon material-icons" aria-hidden="true">content_copy</span>
+      </button>
+      <button class="ds-btn-icon ds-btn-icon--xs ds-btn-icon--negative ds-btn-icon--text js-del" type="button" title="Удалить">
+        <span class="ds-btn-icon__icon material-icons" aria-hidden="true">delete</span>
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+  // Невидимая обвязка для скриншотов (в обычном просмотре ничего не меняет):
+  //   ?w=812 | ?view=desktop|mobile — стартовая ширина кадра (по умолчанию 1184)
+  //   ?ui=0 — скрыть обвязку ширины и получить чистый кадр
+  //   ?demo=hover — показать состояние 2-й строки (как в макете)
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var bar = document.getElementById('modes-bar');
+    var panel = document.getElementById('panel');
+    var handle = document.getElementById('panel-handle');
+    var wValue = document.getElementById('w-value');
+    var wMode = document.getElementById('w-mode');
+    var MIN = 375, MAX = 1440, MOBILE_MAX = 768, DEFAULT_W = 1184;   // 1440 — экран десктопа, 1184 — макет, 768 — граница mobile, 375 — телефон
+    var clean = q.get('ui') === '0';
+
+    function setWidth(w) {
+      w = Math.round(Math.min(MAX, Math.max(MIN, w)));
+      panel.style.width = w + 'px';
+      var mobile = w <= MOBILE_MAX;
+      panel.dataset.mode = mobile ? 'mobile' : 'desktop';
+      if (wValue) wValue.textContent = w + ' px';
+      if (wMode) wMode.textContent = mobile ? 'mobile' : 'desktop';
+      // Подложка устройства (обвязка ревью): телефон ≤ 480 — iPhone 375×812, планшет 481–768 —
+      // iPad 768×1024, десктоп ≥ 769 — монитор 1440×960: высота экрана фиксирована
+      // (812 / 1024 / 960) — тянется только ширина; ?ui=0 — без подложки
+      var deviceKind = clean ? '' : (w <= 480 ? 'phone' : (w <= MOBILE_MAX ? 'tablet' : 'desktop'));
+      document.body.classList.toggle('device-phone', deviceKind === 'phone');
+      document.body.classList.toggle('device-tablet', deviceKind === 'tablet');
+      document.body.classList.toggle('device-desktop', deviceKind === 'desktop');
+      if (deviceKind) {
+        var deviceH = deviceKind === 'phone' ? 812
+          : deviceKind === 'tablet' ? 1024
+          : 960;
+        panel.style.setProperty('--device-screen-h', Math.round(deviceH) + 'px');
+      }
+      Array.prototype.forEach.call(bar.querySelectorAll('.modes-bar__btn[data-w]'), function (b) {
+        b.classList.toggle('is-active', Number(b.dataset.w) === w);
+      });
+    }
+
+    function startWidth() {
+      var w = parseFloat(q.get('w'));            // ?w=812 — точная ширина
+      if (w) return w;
+      var view = q.get('view');                  // ?view=mobile — конечная мобильная
+      if (view === 'mobile') return MIN;
+      if (view === 'both') return MOBILE_MAX;    // наследие «Рядом» → планшетная граница
+      return DEFAULT_W;
+    }
+
+    if (clean) {
+      bar.hidden = true;
+      document.body.classList.add('ui-clean');
+    } else {
+      bar.addEventListener('click', function (e) {
+        var btn = e.target.closest ? e.target.closest('.modes-bar__btn') : null;
+        if (btn && btn.dataset.w) setWidth(Number(btn.dataset.w));   // кнопка «Подсказки» без data-w — мимо
+      });
+      // Ручка у правого края: тянем — ширина идёт за курсором
+      var drag = { on: false, x: 0, w: 0, id: null };
+      function drop() {
+        if (!drag.on) return;
+        drag.on = false;
+        document.body.classList.remove('is-dragging');
+        if (handle.releasePointerCapture && drag.id !== null) { try { handle.releasePointerCapture(drag.id); } catch (err) {} }
+        drag.id = null;
+      }
+      if (handle) {
+        handle.addEventListener('pointerdown', function (e) {
+          drag.on = true; drag.x = e.clientX; drag.w = panel.offsetWidth; drag.id = e.pointerId;
+          document.body.classList.add('is-dragging');
+          if (handle.setPointerCapture) { try { handle.setPointerCapture(e.pointerId); } catch (err) {} }
+          e.preventDefault();
+        });
+        handle.addEventListener('pointermove', function (e) {
+          if (drag.on) setWidth(drag.w + (e.clientX - drag.x));
+        });
+        handle.addEventListener('pointerup', drop);
+        handle.addEventListener('pointercancel', drop);
+      }
+    }
+
+    // ── Интерактив прототипа (рабочие элементы — живые; так и держать в прототипах) ──
+    // Поиск (разворот + фильтр строк), действия строки (выбор/удаление), «Добавить» (демо-строка),
+    // «Обновить» (обратная связь). Переходы по строкам появятся, когда экраны сошьются во вложенные.
+    (function initInteractions() {
+      var search = document.getElementById('search');
+      var input = search.querySelector('.js-search__input');
+      var clear = search.querySelector('.js-search__clear');
+      var table = document.getElementById('table');
+
+      function applyFilter() {
+        var v = (input.value || '').trim().toLowerCase();
+        Array.prototype.forEach.call(table.querySelectorAll('.js-row'), function (row) {
+          row.hidden = v !== '' && row.textContent.toLowerCase().indexOf(v) === -1;
+        });
+      }
+      function openSearch() {
+        search.classList.add('is-open');
+        input.hidden = false;
+        input.focus();
+      }
+      function closeSearch() {
+        search.classList.remove('is-open');
+        input.hidden = true;
+        input.value = '';
+        applyFilter();
+      }
+      search.addEventListener('click', function (e) {
+        if (e.target.closest && e.target.closest('.js-search__clear')) {
+          input.value = '';
+          applyFilter();
+          input.focus();
+          return;
+        }
+        if (!search.classList.contains('is-open')) openSearch();
+      });
+      input.addEventListener('input', applyFilter);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeSearch();
+      });
+      document.addEventListener('click', function (e) {
+        if (search.classList.contains('is-open') && !search.contains(e.target) && !input.value) closeSearch();
+      });
+
+      // Действия строки: дата — переход к прайс-листу (экран 2); «копировать» дублирует
+      // строку (демо); удаление — делегируем, чтобы работало и у добавленных/скопированных строк
+      table.addEventListener('click', function (e) {
+        var price = e.target.closest ? e.target.closest('.js-price') : null;
+        if (price) { location.href = dsFrameNav('figma-7431-pricelist.html'); return; }
+        var copy = e.target.closest ? e.target.closest('.js-copy') : null;
+        if (copy) {
+          var row = copy.closest('.js-row');
+          if (row && row.parentNode) row.parentNode.insertBefore(row.cloneNode(true), row.nextSibling);
+          return;
+        }
+        var del = e.target.closest ? e.target.closest('.js-del') : null;
+        if (del) {
+          var row2 = del.closest('.js-row');
+          if (row2) row2.remove();
+        }
+      });
+
+      // «Добавить» — демо-строка из шаблона (в приложении тут форма создания)
+      var addBtn = document.getElementById('add-supplier');
+      var tpl = document.getElementById('row-template');
+      addBtn.addEventListener('click', function () {
+        if (tpl) table.appendChild(tpl.content.cloneNode(true));
+      });
+
+      // «Обновить» — глиф прокручивается
+      var syncBtn = document.getElementById('sync');
+      if (syncBtn) {
+        syncBtn.addEventListener('click', function () {
+          syncBtn.classList.remove('is-spinning');
+          void syncBtn.offsetWidth;
+          syncBtn.classList.add('is-spinning');
+        });
+      }
+
+      // Скриншотный режим: состояние 2-й строки — как в макете (ховер с действиями)
+      if (q.get('demo') === 'hover') {
+        var rows = table.querySelectorAll('.js-row');
+        if (rows[1]) rows[1].classList.add('is-hover');
+      }
+    })();
+
+    // ── Подсказки по ДС (обвязка ревью; цель — дизайн в Фигме совпадает с вёрсткой) ──
+    // Кнопка в шапке или ?hints=1: номера-маркеры на местах расхождений + список под шапкой.
+    // Номера живут в отдельном fixed-слое (overflow компонентов их не режет); клик по номеру
+    // открывает пузырь ДС-подсказки с текстом находки на месте — читать текст сверху не нужно.
+    // Список находок — материал для правки ДС (Фигма/токены/CSS), а не обход в прототипе.
+    (function initHints() {
+      var btn = document.getElementById('hints-btn');
+      var strip = document.getElementById('hints');
+      var layer = document.getElementById('hints-layer');
+      if (!btn || !strip || !layer) return;
+      var marks = [
+        { n: '1', sel: '.ds-table-header-row' },
+        { n: '2', sel: '.ds-table-content-row' },
+        { n: '3', sel: '.ds-table-content-cell--link' },
+        { n: '4', sel: '.ds-table', dx: -30 }         // левее №1 — иначе оба стоят на углу таблицы
+      ];
+      // Тексты — из списка под шапкой (номер → описание): пузырь и список не расходятся
+      var texts = {};
+      Array.prototype.forEach.call(strip.querySelectorAll('.hints__item'), function (li) {
+        var num = li.querySelector('.hints__num');
+        var txt = li.querySelector('.hints__text');
+        if (num && txt) texts[num.textContent.trim()] = txt.textContent.trim();
+      });
+      var on = false, items = [], pop = null, popItem = null, raf = 0;
+      var vw = 0, vh = 0;
+
+      // Номера и пузырь позиционируются в координатах окна (fixed-слой), пересчёт — каждый кадр:
+      // так они едут за элементами при скролле/перетаскивании ширины и не режутся overflow
+      function place() {
+        vw = document.documentElement.clientWidth;
+        vh = document.documentElement.clientHeight;
+        Array.prototype.forEach.call(items, function (it) {
+          var r = it.host.getBoundingClientRect();
+          var vis = r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < vh && r.right > 0 && r.left < vw;
+          it.btn.style.display = vis ? '' : 'none';
+          if (!vis) return;
+          var x = r.left + (it.m.dx !== undefined ? it.m.dx : -9);
+          var y = r.top + (it.m.dy !== undefined ? it.m.dy : -9);
+          var bw = it.btn.offsetWidth || 20, bh = it.btn.offsetHeight || 20;
+          // номер виден, только когда виден его угол: без прижатия к краям окна —
+          // иначе у уехавших за край элементов номера слипались бы у рамки
+          if (x + bw < 0 || x > vw || y + bh < 0 || y > vh) { it.btn.style.display = 'none'; return; }
+          it.btn.style.left = Math.round(x) + 'px';
+          it.btn.style.top = Math.round(y) + 'px';
+        });
+        if (pop && popItem && popItem.btn.style.display === 'none') closePop();
+        if (pop && popItem) placePop();
+      }
+      function placePop() {
+        var r = popItem.btn.getBoundingClientRect();
+        var w = pop.offsetWidth, h = pop.offsetHeight;
+        var below = r.bottom + 6 + h <= vh - 8;      // не влезает снизу — показываем сверху
+        pop.classList.toggle('hint-pop--above', !below);
+        pop.querySelector('.ds-hint-container__arrow .material-icons').textContent = below ? 'arrow_drop_up' : 'arrow_drop_down';
+        var y = below ? r.bottom + 6 : r.top - h - 6;
+        var x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), vw - w - 8);
+        pop.style.left = Math.round(x) + 'px';
+        pop.style.top = Math.round(Math.min(Math.max(4, y), vh - h - 4)) + 'px';
+      }
+      function closePop() {
+        if (popItem) popItem.btn.classList.remove('is-open');
+        if (pop && pop.parentNode) pop.parentNode.removeChild(pop);
+        pop = null; popItem = null;
+      }
+      // Пузырь — сборка ДС по правилу «композиты — всегда через контейнер»:
+      // ds-hint-container--default + ds-hint-content--single-content; показ/позиция — обвязка
+      function openPop(it) {
+        closePop();
+        popItem = it;
+        it.btn.classList.add('is-open');
+        pop = document.createElement('div');
+        pop.className = 'hint-pop';
+        pop.innerHTML = '<span class="ds-hint-container ds-hint-container--default" role="tooltip">' +
+          '<span class="ds-hint-container__arrow" aria-hidden="true"><span class="material-icons">arrow_drop_up</span></span>' +
+          '<div class="ds-hint-content ds-hint-content--single-content">' +
+          '<span class="ds-hint-content__label"></span></div></span>';
+        pop.querySelector('.ds-hint-content__label').textContent = texts[it.m.n] || '';
+        layer.appendChild(pop);
+        place();
+      }
+      function tick() {
+        raf = requestAnimationFrame(tick);
+        place();
+      }
+      function setHints(v) {
+        on = v;
+        document.body.classList.toggle('hints-on', on);
+        btn.classList.toggle('is-active', on);
+        btn.setAttribute('aria-pressed', String(on));
+        closePop();
+        Array.prototype.forEach.call(items, function (it) { if (it.btn.parentNode) it.btn.parentNode.removeChild(it.btn); });
+        items = [];
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
+        Array.prototype.forEach.call(marks, function (m) {
+          var el = document.querySelectorAll(m.sel)[m.idx || 0];
+          if (!el) return;
+          el.classList.toggle('hint-mark', on);
+          if (on) el.setAttribute('data-hint', m.n); else el.removeAttribute('data-hint');
+          if (!on) return;
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'hint-badge';
+          b.textContent = m.n;
+          b.setAttribute('aria-label', 'Подсказка ДС ' + m.n);
+          var it = { m: m, host: el, btn: b };
+          b.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (popItem === it) closePop(); else openPop(it);
+          });
+          items.push(it);
+          layer.appendChild(b);
+        });
+        if (on) { place(); tick(); }
+      }
+      btn.addEventListener('click', function () { setHints(!on); });
+      // Номера едут за элементами: пересчёт по scroll/resize (capture ловит и внутренние
+      // скроллы кадра/таблицы) + rAF-кадр — чтобы позиции не зависли, даже если кадр замер
+      window.addEventListener('scroll', function () { if (on) place(); }, { passive: true, capture: true });
+      window.addEventListener('resize', function () { if (on) place(); });
+      document.addEventListener('click', function (e) { if (pop && !pop.contains(e.target)) closePop(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePop(); });
+      if (q.get('hints') === '1' && !clean) setHints(true);
+    })();
+
+    setWidth(startWidth());
+  })();
+</script>
+</body>
+</html>

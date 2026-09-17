@@ -10,11 +10,12 @@
 <!-- Roboto из Google Fonts -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
 <!-- Иконки Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <style>
   /* каркас страницы */
   html,body{margin:0;min-height:100%;background:#f4f5f7;font-family:'Roboto','Helvetica Neue',Arial,sans-serif}
-  body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box}
+  body{display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box}
   .layout{width:360px;max-width:calc(100vw - 32px)}
 
   /* ── KDS-карточка «Заказ: готовится» — вариант 2, компактный ───
@@ -23,7 +24,7 @@
     display:flex;flex-direction:column;gap:4px;
     width:360px;max-width:100%;
     background:#1a1a24;
-    border-radius:16px;
+    border-radius:12px;
     padding:4px;
     font-family:'Roboto','Helvetica Neue',Arial,sans-serif;
   }
@@ -31,7 +32,7 @@
   /* ── Шапка (кликабельная, фон «как у кнопки») ── */
   .kds2-card__header{
     display:flex;flex-direction:column;gap:6px;
-    background:var(--ds-palette-neutral-700);      /* #616161 — как кнопка */
+    background:#3b3b43;                            /* темнее — как кнопки этой карточки */
     color:#fff;                                    /* белый текст и иконки на фоне кнопки */
     border:none;
     border-radius:10px;
@@ -40,7 +41,7 @@
     transition:background-color .15s ease;
     -webkit-tap-highlight-color:transparent;
   }
-  .kds2-card__header:active{background:var(--ds-palette-neutral-800)} /* #424242 */
+  .kds2-card__header:active{background:#2a2a33}    /* нажатие — ещё темнее */
   .kds2-card--cooking .kds2-card__header{background:var(--ds-palette-positive-500)} /* #14b456 */
   .kds2-slot{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .kds2-slot__left{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
@@ -88,22 +89,19 @@
 
   /* комментарий заказа — короткий оранжевый пунктир слева */
   .kds2-comment{
-    display:flex;align-items:center;gap:10px;      /* отступ от линии до текста */
+    display:flex;align-items:flex-start;gap:8px;        /* отступ от линии до текста — 8 */
     margin-left:10px;                              /* отступ от края до линии */
     padding:4px 0;
     border-bottom:1px solid rgba(255,255,255,.08); /* отделяет от списка */
     color:var(--ds-palette-neutral-300);           /* #d6d6d6 */
-    font-size:var(--ds-typography-body-font-size-s);
+    font-size:var(--ds-typography-font-size-4x);   /* 16px — как у ингредиентов */
     font-weight:var(--ds-typography-font-weight-regular);
-    line-height:20px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    line-height:22px;letter-spacing:var(--ds-typography-letter-spacing-s);
   }
-  /* короткий вертикальный пунктир (высота меньше текста) */
+  /* короткая иконка комментария 16 px */
   .kds2-comment::before{
-    content:"";
-    flex-shrink:0;
-    width:2px;height:16px;
-    border-radius:1px;
-    background:repeating-linear-gradient(to bottom, var(--ds-palette-warning-500) 0 3px, transparent 3px 6px);
+    content:"mode_comment";font-family:'Material Icons Outlined';font-size:16px;line-height:1;
+    color:var(--ds-palette-neutral-500);flex-shrink:0;
   }
 
   /* ── Контент: список блюд ── */
@@ -113,38 +111,62 @@
     background:#2a2a33;
     border-right:2px solid var(--ds-palette-accent-500); /* #448aff — толще */
     border-radius:8px;
-    height:48px;
+    min-height:56px;                                    /* 16.09: кнопки блюд везде 56 — строка по кнопке */
     overflow:hidden;
   }
-  .kds2-food__name{
-    flex:1;display:flex;align-items:center;gap:8px;
-    padding:0 10px;min-width:0;
+  /* количество — отдельный элемент перед названием (правка 16.09) */
+  .kds2-food__qty{
+    flex:0 0 auto;
+    padding:0 0 0 10px;
     font-size:var(--ds-typography-font-size-5x);   /* 20px — крупнее */
     font-weight:var(--ds-typography-font-weight-medium);
     line-height:26px;letter-spacing:var(--ds-typography-letter-spacing-s);
     color:#fff;
   }
+  .kds2-food__name{
+    flex:1;min-width:0;
+    padding:0 10px 0 4px;                            /* 4px — прежний зазор до названия */
+    font-size:var(--ds-typography-font-size-5x);   /* 20px — крупнее */
+    font-weight:var(--ds-typography-font-weight-medium);
+    line-height:26px;letter-spacing:var(--ds-typography-letter-spacing-s);
+    color:#fff;
+  }
+  /* строка «количество + название»: количество — по верхней строке названия (правка 16.09) */
+  .kds2-food__line{display:flex;align-items:flex-start;min-width:0}
+  .kds2-food > .kds2-food__line, .kds2-food__header > .kds2-food__line{flex:1}
   .kds2-food__name--error{color:var(--ds-palette-negative-500)} /* #ff5252 */
+  /* у отменённой позиции количество тоже красное */
+  .kds2-food--group:has(.kds2-food__name--error) .kds2-food__qty{color:var(--ds-palette-negative-500)}
   .kds2-food__action{
-    width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    width:56px;height:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
     background:#3b3b43;border:1px solid #333;border-radius:8px;margin-right:2px;
     cursor:pointer;transition:background-color .1s ease;
     -webkit-tap-highlight-color:transparent;
   }
   .kds2-food__action:active{background:#4a4a54}
   .kds2-food__action .material-icons{font-size:24px;color:#fff}
+  /* удалённая позиция — красная иконка удаления (как в дефолте и вар. 3) */
+  .kds2-food--group:has(.kds2-food__name--error) .kds2-food__action .material-icons{color:var(--ds-palette-negative-500)}
 
-  /* группа блюд (пицца с добавками) — корзина в строке сверху */
-  .kds2-food--group{height:auto;align-items:stretch;flex-direction:column}
-  .kds2-food__header{display:flex;align-items:center;height:48px}
+  /* группа блюд (пицца с добавками) — кнопка тянется по высоте блюда (как в дефолте) */
+  .kds2-food--group{height:auto;align-items:stretch}
+  .kds2-food__main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .kds2-food--group .kds2-food__action{height:auto;align-self:stretch}
+  .kds2-food__header{display:flex;align-items:center;min-height:56px}
   .kds2-food__nested{padding:0 10px 4px 26px;display:flex;flex-direction:column}
   .kds2-food__nested-item{
-    display:flex;align-items:center;gap:8px;
+    display:flex;align-items:flex-start;gap:4px;
     font-size:var(--ds-typography-font-size-4x);   /* 16px — мельче */
     font-weight:var(--ds-typography-font-weight-regular);
     line-height:22px;letter-spacing:var(--ds-typography-letter-spacing-s);
     color:var(--ds-palette-negative-500);          /* #ff5252 */
     padding:2px 0;
+  }
+  /* примечание в составе блюда — серым, с иконкой комментария 16 px */
+  .kds2-food__nested-item--note{color:var(--ds-palette-neutral-300);gap:8px} /* #d6d6d6; зазор до текста 8 */
+  .kds2-food__nested-item--note::before{
+    content:"mode_comment";font-family:'Material Icons Outlined';font-size:16px;line-height:1;
+    color:var(--ds-palette-neutral-500);flex-shrink:0;   /* иконка комментария 16 px — как у коммента в шапке */
   }
 </style>
 </head>
@@ -190,32 +212,49 @@
       <!-- Комментарий заказа -->
       <div class="kds2-comment">Принести сразу морс</div>
 
-      <!-- Блюдо 1 -->
-      <div class="kds2-food">
-        <div class="kds2-food__name"><span>1</span><span>Морс ягодный 1 л.</span></div>
+      <!-- Блюдо 1: комбо с примечанием и составом -->
+      <div class="kds2-food kds2-food--group">
+        <div class="kds2-food__main">
+          <div class="kds2-food__header">
+            <span class="kds2-food__line"><span class="kds2-food__qty">1</span><span class="kds2-food__name">Комбо с пастой</span></span>
+          </div>
+          <div class="kds2-food__nested">
+            <div class="kds2-food__nested-item kds2-food__nested-item--note"><span>Капучино на растительном молоке</span></div>
+            <div class="kds2-food__nested-item"><span>1</span><span>Паста карбонара</span></div>
+            <div class="kds2-food__nested-item"><span>1</span><span>Капучино</span></div>
+          </div>
+        </div>
         <button class="kds2-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
       </div>
 
       <!-- Блюдо 2 -->
       <div class="kds2-food">
-        <div class="kds2-food__name"><span>1</span><span>Паста карбонара</span></div>
+        <span class="kds2-food__line"><span class="kds2-food__qty">1</span><span class="kds2-food__name">Морс ягодный 1 л.</span></span>
         <button class="kds2-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
       </div>
 
-      <!-- Блюдо 3: группа (пицца + добавки) -->
+      <!-- Блюдо 3 -->
+      <div class="kds2-food">
+        <span class="kds2-food__line"><span class="kds2-food__qty">1</span><span class="kds2-food__name">Паста карбонара</span></span>
+        <button class="kds2-food__action" type="button"><span class="material-icons">arrow_forward</span></button>
+      </div>
+
+      <!-- Блюдо 4: позиция удалена — пицца со списком ингредиентов -->
       <div class="kds2-food kds2-food--group">
-        <div class="kds2-food__header">
-          <div class="kds2-food__name kds2-food__name--error"><span>1</span><span>Пицца от шефа маленькая</span></div>
-          <button class="kds2-food__action" type="button"><span class="material-icons">delete</span></button>
+        <div class="kds2-food__main">
+          <div class="kds2-food__header">
+            <span class="kds2-food__line"><span class="kds2-food__qty">1</span><span class="kds2-food__name kds2-food__name--error">Пицца от шефа маленькая</span></span>
+          </div>
+          <div class="kds2-food__nested">
+            <div class="kds2-food__nested-item"><span>1</span><span>Двойной сыр</span></div>
+            <div class="kds2-food__nested-item"><span>1</span><span>Толстое</span></div>
+            <div class="kds2-food__nested-item"><span>1</span><span>Бекон</span></div>
+            <div class="kds2-food__nested-item"><span>1</span><span>Курица</span></div>
+            <div class="kds2-food__nested-item"><span>1</span><span>Пепперони</span></div>
+            <div class="kds2-food__nested-item"><span>1</span><span>Салями</span></div>
+          </div>
         </div>
-        <div class="kds2-food__nested">
-          <div class="kds2-food__nested-item"><span>1</span><span>Двойной сыр</span></div>
-          <div class="kds2-food__nested-item"><span>1</span><span>Толстое</span></div>
-          <div class="kds2-food__nested-item"><span>1</span><span>Бекон</span></div>
-          <div class="kds2-food__nested-item"><span>1</span><span>Курица</span></div>
-          <div class="kds2-food__nested-item"><span>1</span><span>Пепперони</span></div>
-          <div class="kds2-food__nested-item"><span>1</span><span>Салями</span></div>
-        </div>
+        <button class="kds2-food__action" type="button"><span class="material-icons">delete</span></button>
       </div>
 
     </div>
