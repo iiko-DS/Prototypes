@@ -19,7 +19,7 @@
 - Спека компонентов (описания, варианты, состояния, CSS): `iiko-ds-web/iiko-ds-spec.md` — читать ПЕРЕД сборкой блока.
 - Классы компонентов: `iiko-ds-web/components/<Name>_DS/*.css`; общий индекс: `iiko-ds-web/components/index.css`.
 - Токены: `iiko-ds-web/tokens.css`; правки поверх генерации: `iiko-ds-web/fixes.css` (подключён последним).
-- Прототипы: `iiko-ds-prototypes/*.html` (каркас страниц описан в `iiko-ds-prototypes/README.md`).
+- Прототипы: `iiko-ds-prototypes/*.html` (каркас страниц описан в `iiko-ds-prototypes/readme.md`).
 - Журнал косяков ДС для передачи агентам: `iiko-ds-prototypes/review-notes.md`.
 
 ## Проверка перед сдачей блока

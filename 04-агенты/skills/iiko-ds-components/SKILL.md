@@ -610,7 +610,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   initiative.** The user reversed exactly that call within the hour and asked for the page
   back: he reads the desktop/mobile difference off it (Figma's mode is file-global). Mobile
   demos live in `iiko-ds-mobile/prototypes/`, the rest in `iiko-ds-prototypes/`; when one is
-  added, its path belongs in `iiko-ds-mobile/README.md` and in the spec's «Живая проверка».
+  added, its path belongs in `iiko-ds-mobile/readme.md` and in the spec's «Живая проверка».
 - **Recover, don't reinvent:** a file you deleted or overwrote is still in the session store —
   `state.db` keeps every `write_file` payload plus the follow-up edits that moved it. See the
   `session-store-forensics` skill, `scripts/recover-file-from-state-db.py`.

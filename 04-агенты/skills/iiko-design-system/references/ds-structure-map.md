@@ -26,7 +26,7 @@
 | `fixes.css` | 19 | ручной слой поверх генерации: подпись Status, `box-sizing` кадров полей; подключается последним | да |
 | `generator-rules.md` | 95 | правила для того, кто ведёт конвертер «Figma → файлы ДС» | да |
 | `iiko-ds-spec.md` | 778 КБ | единый источник для людей и ИИ; читать точечно | да |
-| `README.md` | 128 Б | одна строка | да |
+| `readme.md` | 128 Б | одна строка | да |
 | `.nojekyll` | 0 | GitHub Pages | — |
 
 `components/`: **37 папок, 96 CSS**; `components/index.css` — агрегатор, **91 `@import`**. Файлов в папке
@@ -53,7 +53,7 @@ iiko-ds-mobile/components/index.css → styles.css → iiko-ds-web/components/in
 - `prototypes/recommendations/` — **39 страниц** + `rec.css` (генерируется `build.py`) + `index.html` (оболочка).
 - Документы: `desktop-to-mobile-plan.md` (25 КБ, 38 строк) + `.xlsx` + генератор `*-xlsx.ps1` (20 КБ),
   `mobile-mode-notes.md` 13 КБ, `mobile-workflow.md` 12,7 КБ, `mobile-steps.md` 4,3 КБ,
-  `mobile-block-schemes.md` 3,7 КБ, `README.md` 4,5 КБ.
+  `mobile-block-schemes.md` 3,7 КБ, `readme.md` 4,5 КБ.
 
 ## `iiko-ds-prototypes` — ручные прототипы
 
@@ -63,7 +63,7 @@ iiko-ds-mobile/components/index.css → styles.css → iiko-ds-web/components/in
 - `app-header/`, `app-sidenav/` — **каркас приложения iiko** (CSS+JS+SVG), не компоненты ДС.
 - Экраны: `figma-*` ×5 (Метро 1276/1277, Поставщики 7422, Прайс-лист 7431/7436, Создание товара 7450),
   `metro-general-settings.html`, `add-fasovka.html`, `compare-button-mob.html`, `KDS/` (экран, витрина UX, 6 версий карточки).
-- `README.md` (правила + каталог), `review-notes.md` 20 КБ (журнал дефектов ДС), `_crops/`, `_figma-1276-*.png`.
+- `readme.md` (правила + каталог), `review-notes.md` 20 КБ (журнал дефектов ДС), `_crops/`, `_figma-1276-*.png`.
 
 ## `_audit` — цех
 
