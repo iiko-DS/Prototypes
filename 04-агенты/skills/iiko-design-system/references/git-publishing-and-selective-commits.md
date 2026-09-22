@@ -24,7 +24,7 @@
 | Что | Состояние |
 |---|---|
 | `C:/Users/asukharev/GitHub/DS` (корень) | git есть (ветка `main`, 6 коммитов), **remote нет вовсе** — публиковать отсюда некуда |
-| `DS/iiko-ds-prototypes` | origin `https://github.com/Anders7Rusk/iiko-ds-prototypes`, ветка `main`, **приватный** (анонимно страница репозитория отдаёт 404); в индексе 9 файлов (`README.md`, `add-fasovka.html`, `compare-button-mob.html`, пять `kds-*`), ~27 файлов рабочих остаются незакоммиченными |
+| `DS/iiko-ds-prototypes` | origin `https://github.com/Anders7Rusk/iiko-ds-prototypes`, ветка `main`, **приватный** (анонимно страница репозитория отдаёт 404); в индексе 9 файлов (`readme.md`, `add-fasovka.html`, `compare-button-mob.html`, пять `kds-*`), ~27 файлов рабочих остаются незакоммиченными |
 | `DS/iiko-ds-web` | origin публичный, есть Pages `https://anders7rusk.github.io/iiko-ds-web/`; опубликованные `kds-*`-прототипы берут ДС **абсолютными** ссылками на Pages |
 
 Проверка состояния без токена и без печати учётных данных:
