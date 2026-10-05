@@ -57,7 +57,7 @@ metadata:
 |---|---|
 | `DS/components-web` | папка внутри репозитория `DS` (`github.com/iiko-DS/DS`) — здесь вся библиотека CSS. Отдельного репозитория у папки нет: origin один — у `DS`. |
 | `components-mobile` | своей папки-git нет, но лежит под версиями корневого репозитория `DS` (см. раздел «Git» ниже); это **мобильный слой**, структура как у `components-web`: `modes.css` (ось режима), `components/index.css` (агрегатор; `components/<Имя>_DS/` появляется, когда есть настоящий `*_mob`-компонент), `prototypes/` (страницы-демо, напр. `prototypes/button-modes.html` — десктоп и мобила рядом + таблица замеров). Плюс документы: `desktop-to-mobile-plan.md` (план перевода, группы A–D), `mobile-mode-notes.md` (архитектура режимов), `mobile-workflow.md`, `mobile-steps.md`, `mobile-block-schemes.md`. |
-| `Prototypes` | **свой git-репозиторий.** HTML-прототипы на компонентах ДС. Файлы вида `compare-*-mob.html` — **таблицы сравнения с числами, снятыми из Figma** (например `compare-button-mob.html`). |
+| `Prototypes` | **свой git-репозиторий.** HTML-прототипы на компонентах ДС и база знаний (`iiko-ds-prototyping-guide/`). Часть страниц-образцов (например `compare-button-mob.html`) со временем удалена из репозитория. |
 | `C:/Users/asukharev/GitHub/iiko-ds-kit` | Кит-витрина компонентов (приватный репозиторий, клон лежит **рядом** с `DS`, не внутри): `index.html`, страницы компонентов (`button.html`, `input.html`, `badge.html`, …), `component-template.html`, `showcase.css`, `sidebar.js`, `page-building.md`, `guides/`. Страницы берут ассеты ДС по абсолютным ссылкам на `iiko-ds.github.io/DS/components-web`; про мобилу/`data-mode` в ките пока ничего нет. Пользователь решил: мобильную разницу показываем **не в ките** (`«с китом там всё сложно»`), а страницей-демо. |
 
 Полная карта структуры с замерами (что за что отвечает по папкам и файлам, агрегаторы, `_audit/rec`,
@@ -341,7 +341,7 @@ iOS HIG) — с реальными значениями и примерами т
   **разметкой ДС** — шапка `ds-btn-icon` + `phone__title`, статус `ds-status`, табы `ds-tabs`, фильтр
   `ds-checkbox` + `ds-search--xs`, кнопки `ds-btn`/`ds-btn-group`, `ds-textarea`, карточки `ds-card`.
   «Возьми что-то из склада» = из **нашего склада прототипов** — `Prototypes/*.html`
-  (`figma-7450-create-product.html`, `figma-7436-pricelist-edit.html` и т.п.), где состав и подписи
+  (`figma-7450-create-product.html`, `figma-7436-pricelist-edit.html` и т.п.; файлов в репозитории нет), где состав и подписи
   уже на ДС; складской модуль iiko (iikoInventory/iikoWaiter) — не источник (я на этом потерял ход).
   Если владелец дал ссылку на Figma-узел — снять макет через MCP и собрать «примерно такой же»;
   пошаговый рецепт, слоты и пробы — `references/default-screen-from-figma-mock.md`.
@@ -689,7 +689,7 @@ Form field) — skill `iiko-ds-components`, `references/mobile-mode-values-sizes
 Читать CSS глазами — не проверка.
 
 1. Собрать страницу-демо: мобильные — в `components-mobile/prototypes/`, остальные — в
-   `Prototypes/` (образец — `metro-general-settings.html`). Ссылки на библиотеку
+   `Prototypes/` (образец — `metro-general-settings.html`; файла в репозитории уже нет). Ссылки на библиотеку
    относительные: из `Prototypes/` — `../components-web/*.css`; из
    `components-mobile/prototypes/` — `../../components-web/*.css` и `../modes.css`. Внутри два
    контейнера — `data-mode="desktop"` и `data-mode="mobile"` — рядом.
