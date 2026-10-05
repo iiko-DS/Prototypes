@@ -60,10 +60,12 @@ iiko-ds-mobile/components/index.css → styles.css → iiko-ds-web/components/in
 - `index.html` (214 строк) — хаб: массив `PAGES` (файл + подпись, `sub:true` для подстраницы), iframe, выбор в адресе.
 - Обвязка ревью: `ds-frame-nav.js` (перенос ширины кадра), `ds-sizes-toggle.js` (гасит `<link>` мобильного слоя),
   `touch-mode.js` 15 КБ + `touch-mode.css` + `touch-hover-off.css` (тач-режим ≤ 768), `device-chrome/`.
-- `app-header/`, `app-sidenav/` — **каркас приложения iiko** (CSS+JS+SVG), не компоненты ДС.
+- Сквозные организмы приложения (шапка, боковое меню) — в ДС: `DS/organisms/`; страницы подключают их одной строкой `../DS/connect.js`.
 - Экраны: `figma-*` ×5 (Метро 1276/1277, Поставщики 7422, Прайс-лист 7431/7436, Создание товара 7450),
-  `metro-general-settings.html`, `add-fasovka.html`, `compare-button-mob.html`, `KDS/` (экран, витрина UX, 6 версий карточки).
-- `readme.md` (правила + каталог), `review-notes.md` 20 КБ (журнал дефектов ДС), `_crops/`, `_figma-1276-*.png`.
+  `metro-general-settings.html`, `add-fasovka.html`, `compare-button-mob.html`; KDS-прототипы — в отдельном
+  репозитории `kds-ux-prototype`.
+- `readme.md` (правила + каталог), `_crops/`, `_figma-1276-*.png`; журнал дефектов ДС — в ДС: `DS/fixes.md`
+  (в прототипах остался файл-указатель).
 
 ## `_audit` — цех
 
