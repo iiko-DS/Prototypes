@@ -27,7 +27,7 @@
   семейства Table_DS: ds-input-cell / ds-select-cell / ds-input-number (+ слот __icon как «×»);
   шапка — ds-table-header-row/cell; чип — ds-status--warning--filled; тумблер — ds-slide-toggle;
   дата — ds-input-datepicker; кнопки — ds-btn / ds-btn-icon; поиск — ds-search (XS-круг).
-  Правок поверх компонентов нет: косяки самой ДС — в «Подсказки ДС» (шапка страницы) и review-notes.md.
+  Правок поверх компонентов нет: косяки самой ДС — в «Подсказки ДС» (шапка страницы) и `DS/fixes.md`.
 
   ОТКУДА ЧТО ВЗЯТО:
     • разметка/стили компонентов — из файлов ДС: ds-input-cell, ds-select-cell, ds-input-number
@@ -65,16 +65,16 @@
   ВЁРСТКА ПО ДС: компоненты рендерятся строго по ДС. Сборные компоненты (композиты) — всегда через
   контейнер: базовый контейнер + его слоты (пример: подсказка — ds-hint-container + ds-hint-content).
 -->
-<link rel="stylesheet" href="../iiko-ds-web/font.css">
-<link rel="stylesheet" href="../iiko-ds-web/tokens.css">
+<link rel="stylesheet" href="../DS/components-web/font.css">
+<link rel="stylesheet" href="../DS/components-web/tokens.css">
 <!-- мобильный слой ДС: ось режима + структурные моб-компоненты (порядок обязателен) -->
-<link rel="stylesheet" href="../iiko-ds-mobile/modes.css">
-<link rel="stylesheet" href="../iiko-ds-mobile/components/index.css">
+<link rel="stylesheet" href="../DS/components-mobile/modes.css">
+<link rel="stylesheet" href="../DS/components-mobile/components/index.css">
 <script src="ds-frame-nav.js?v=1"></script>
-<link rel="stylesheet" href="../iiko-ds-web/styles.css">
-<link rel="stylesheet" href="../iiko-ds-web/components/index.css">
+<link rel="stylesheet" href="../DS/components-web/styles.css">
+<link rel="stylesheet" href="../DS/components-web/components/index.css">
 <!-- fixes.css — ручной слой правок поверх генерации ДС; обновления из Фигмы его не перезаписывают -->
-<link rel="stylesheet" href="../iiko-ds-web/fixes.css">
+<link rel="stylesheet" href="../DS/components-web/fixes.css">
 <!-- touch-hover-off.css — статическая глушилка ховеров для тач-режима; генерируется заново после обновлений ДС
      (node _audit/build-hover-off.mjs), при перегенерации поднять ?v= -->
 <link rel="stylesheet" href="touch-hover-off.css?v=1">

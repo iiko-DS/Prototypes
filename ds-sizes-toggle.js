@@ -3,9 +3,9 @@
    кажутся крупными) и с десктопными — при том же узком кадре, лейауте и поведениях.
 
    Как работает: мобильные размеры живут ТОЛЬКО в мобильном слое ДС —
-   iiko-ds-mobile/modes.css (токены) + iiko-ds-mobile/components/index.css (значения числом).
+   components-mobile/modes.css (токены) + components-mobile/components/index.css (значения числом).
    Выключаем эти два <link> (link.disabled) — компоненты возвращаются к десктопным значениям
-   из tokens.css и iiko-ds-web/components/*; лейаут страницы (data-mode="mobile") и поведения
+   из tokens.css и components-web/components/*; лейаут страницы (data-mode="mobile") и поведения
    (фильтр-шторка и т.п.) не трогаются.
 
    Где видно: НАД ЭКРАНОМ по центру кадра — две строки (абсолютом внутри .panel, left:50%):
@@ -13,7 +13,7 @@
       текст «Вернуть мобильные размеры», подчёркнут);
    2) «Дизайнерские размеры iiko» — ЗАГЛУШКА на будущее (серая, неактивная): третий набор
       размеров, который будет браться из таблицы значений витрины
-      `iiko-ds-mobile/prototypes/recommendations/index.html` (правим значения по компонентам —
+      `components-mobile/prototypes/recommendations/index.html` (правим значения по компонентам —
       подтягиваем в макеты). Пока таблица не сохраняет значения — линия выключена.
    В тач-режиме кадр получает запас сверху (+60px, обвязка ревью); строки — только в мобильном/
    планшетном режиме (body[data-touch], как в touch-mode.js).
@@ -27,7 +27,7 @@
   function mobileLinks() {
     var out = [], links = document.querySelectorAll('link[rel="stylesheet"]');
     for (var i = 0; i < links.length; i++) {
-      if ((links[i].getAttribute('href') || '').indexOf('iiko-ds-mobile/') !== -1) out.push(links[i]);
+      if ((links[i].getAttribute('href') || '').indexOf('components-mobile/') !== -1) out.push(links[i]);
     }
     return out;
   }
