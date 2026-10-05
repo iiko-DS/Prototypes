@@ -25,7 +25,7 @@
     python patterns-tabs-audit.py button --chrome
     python patterns-tabs-audit.py button button-icon --chrome --click 5
 
-Страницы: `http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations/<slug>.html`.
+Страницы: `http://127.0.0.1:8899/components-mobile/prototypes/recommendations/<slug>.html`.
 """
 import argparse
 import glob
@@ -36,11 +36,11 @@ import re
 import subprocess
 import sys
 
-DS = os.environ.get("DS_ROOT", r"C:\Users\asukharev\GitHub\DS")
+DS = os.environ.get("DS_ROOT", r"C:\Users\asukharev\GitHub\iiko-DS\DS")
 REC = os.path.join(DS, "_audit", "rec")
 DATA = os.path.join(REC, "data")
 CHECKS = os.path.join(REC, "checks")
-URL = "http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations/%s.html"
+URL = "http://127.0.0.1:8899/components-mobile/prototypes/recommendations/%s.html"
 CHROME = [
     r"C:\Program Files\Google\Chrome\Application\chrome.exe",
     r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
@@ -48,7 +48,7 @@ CHROME = [
 
 # Название карточки — по слову «паттерны», чтобы не зависеть от точной формулировки заголовка.
 PROBE = """<!doctype html><meta charset="utf-8"><body><pre id="out"></pre>
-<iframe id="f" src="/iiko-ds-mobile/prototypes/recommendations/%(slug)s.html" width="1600" height="6000" style="border:0"></iframe>
+<iframe id="f" src="/components-mobile/prototypes/recommendations/%(slug)s.html" width="1600" height="6000" style="border:0"></iframe>
 <script>
 const f=document.getElementById('f'), out=document.getElementById('out');
 f.onload=()=>setTimeout(()=>{

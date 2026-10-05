@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Матричный аудит мобильного слоя iiko DS.
 
-Зачем: после правки мобильного слоя (или отката iiko-ds-web) часть правил перестаёт
+Зачем: после правки мобильного слоя (или отката components-web) часть правил перестаёт
 применяться молча — в мобильной панели остаются десктопные числа. Глазами это не видно,
 а по одному элементу за прогон проверять долго. Скрипт берёт список ожиданий
 (page, selector, property, expect[, pseudo]) и на каждой странице рекомендаций
@@ -10,7 +10,7 @@
 Запуск:
     python audit-mobile-values.py                     # встроенный набор (41 проверка)
     python audit-mobile-values.py --checks my.json    # свой набор
-    python audit-mobile-values.py --base-url http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations
+    python audit-mobile-values.py --base-url http://127.0.0.1:8899/components-mobile/prototypes/recommendations
     python audit-mobile-values.py --json out.json     # сложить результат
 
 Формат --checks: [{"page": "button", "selector": ".ds-btn--m", "prop": "height",
@@ -32,11 +32,11 @@ import tempfile
 import time
 
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-DEFAULT_BASE = "http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations"
+DEFAULT_BASE = "http://127.0.0.1:8899/components-mobile/prototypes/recommendations"
 # Копия страницы с драйвером должна лежать рядом с оригиналом — её URL считается
 # от base_url. Если положить её в профиль Chrome, сервер отдаст 404 и ВСЕ замеры
 # придут пустыми (весь прогон выглядит как «40 проверок сломано»).
-ROOT_DS = r"C:\Users\asukharev\GitHub\DS"
+ROOT_DS = r"C:\Users\asukharev\GitHub\iiko-DS\DS"
 
 # Встроенный набор: то, что на страницах заявлено как мобильное значение.
 DEFAULT_CHECKS = [

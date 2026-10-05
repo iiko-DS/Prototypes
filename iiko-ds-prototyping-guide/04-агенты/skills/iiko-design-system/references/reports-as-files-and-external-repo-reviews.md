@@ -32,7 +32,7 @@ CHROME="/c/Program Files/Google/Chrome/Application/chrome.exe"
 |---|---|
 | Готовый PDF (артефакт для него) | `C:\Users\asukharev\Desktop\<имя>.pdf` |
 | HTML-заготовка, PNG-страницы для проверки | `%LOCALAPPDATA%\Temp\ds-report\` |
-| Что-либо в `iiko-ds-web` / `iiko-ds-mobile` / `iiko-ds-prototypes` | ничего |
+| Что-либо в `components-web` / `components-mobile` / `Prototypes` | ничего |
 
 Путь отдавать полной строкой текстом (клик в ACP не работает), самому файл не открывать.
 

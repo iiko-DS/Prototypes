@@ -15,7 +15,7 @@ metadata:
 
 ## Overview
 
-Дневная работа владельца — **iiko Web DS**: CSS-компоненты из переменных Figma + растущий мобильный слой. Карта и token-first порядок правки компонента — ниже. Workspace: `C:\Users\asukharev\GitHub\DS`.
+Дневная работа владельца — **iiko Web DS**: CSS-компоненты из переменных Figma + растущий мобильный слой. Карта и token-first порядок правки компонента — ниже. Workspace: `C:\Users\asukharev\GitHub\iiko-DS\DS`.
 
 **Страницы рекомендаций** → `references/`: `recommendation-pages.md`, `rec-screens-block.md` («На экране»), `rec-sheet-markup.md` (шторки и правка `data/*.json`), `iiko-real-ui-screens.md` (реальные экраны iiko = дефолт), `shell-page-and-shared-notes-block.md`. `rec.css` — из `build.py`.
 **Два правила:** дефолт компонента — как правдоподобный
@@ -32,20 +32,20 @@ un-merged `out/` patches) — run it after any interruption before promising any
 
 ## When to Use
 
-- Build/refactor a component in `iiko-ds-web` (Button, Input, Banner, …).
+- Build/refactor a component in `components-web` (Button, Input, Banner, …).
 - Produce the mobile (or tablet) version of a desktop component, or touch the
   desktop/mobile split at all.
 - Answer "what does the DS say about X" / assemble a prototype on DS components.
 - Anything that touches `iiko-ds-spec.md`, `tokens.css`, `modes.css`, prototypes.
 - The **recommendation pages** — the generated «desktop → mobile» pages, one per
   component: `_audit/rec/data/*.json` → `_audit/rec/build.py` →
-  `iiko-ds-mobile/prototypes/recommendations/`. Details (pipeline, checks, content rules)
+  `components-mobile/prototypes/recommendations/`. Details (pipeline, checks, content rules)
   — `references/recommendations-pages.md`.
 
 ## Recommendation pages — the short version
 
 - Source of truth is `_audit/rec/data/<slug>.json`. Do not hand-edit the generated HTML
-  and do not touch `iiko-ds-web` — fix the generator (`build.py`, `mock.py`) or the data.
+  and do not touch `components-web` — fix the generator (`build.py`, `mock.py`) or the data.
 - Bulk content (previews, rows, platform columns) goes to subagents as **patch files** in
   `_audit/rec/out/<kind>/<slug>.json`; they must self-check with
   `python checks/check-patch.py <slug>` (0 problems) and never touch `data/`. Merge with
@@ -65,13 +65,13 @@ un-merged `out/` patches) — run it after any interruption before promising any
 
 | Path | What it is |
 |---|---|
-| `iiko-ds-web/` | The library. **Own git repo** (origin `github.com/Anders7Rusk/iiko-ds-web`, branch `main`, published as `anders7rusk.github.io/iiko-ds-web`). |
-| `iiko-ds-web/tokens.css` | **Generated** from Figma variables (~1743 vars; collections Base Size, Base Color, Space, Radius, Base Stroke, Shadows, Base Typography, Typography, Color, **Component**). Never hand-edit. |
-| `iiko-ds-web/styles.css` | Generated Figma text/shadow/colour styles. `font.css` = Roboto 400/500 inlined base64 → works offline, load it first. |
-| `iiko-ds-web/components/<Name>_DS/*.css` | One folder per component; `components/index.css` aggregates them with `@import`. |
-| `iiko-ds-web/iiko-ds-spec.md` | ~700 KB single source of truth written to be pasted into any AI: general rules, class map, token tables, full component CSS. Mostly generated. |
-| `iiko-ds-mobile/` | The **mobile layer** (not a git repo), structure mirrors `iiko-ds-web`: `modes.css` (the mode axis), `components/index.css` (aggregator; a `components/<Name>_DS/` file appears only when a real `*_mob` component exists), `prototypes/` (demo pages, e.g. `prototypes/button-modes.html` — desktop and mobile side by side + measurements). Plus the plan docs: `desktop-to-mobile-plan.md` (classification A–D + how Material/Angular solve each), `mobile-mode-notes.md`, `mobile-workflow.md`, `mobile-steps.md`, `mobile-block-schemes.md`. |
-| `iiko-ds-prototypes/` | HTML prototypes (not a git repo). Comparison pages such as `compare-button-mob.html` hold values transcribed from Figma — a legitimate source when the canvas itself is unreachable. |
+| `DS/components-web/` | The library — a folder inside the `DS` repo (`github.com/iiko-DS/DS`), branch `main`; no separate origin of its own. |
+| `components-web/tokens.css` | **Generated** from Figma variables (~1743 vars; collections Base Size, Base Color, Space, Radius, Base Stroke, Shadows, Base Typography, Typography, Color, **Component**). Never hand-edit. |
+| `components-web/styles.css` | Generated Figma text/shadow/colour styles. `font.css` = Roboto 400/500 inlined base64 → works offline, load it first. |
+| `components-web/components/<Name>_DS/*.css` | One folder per component; `components/index.css` aggregates them with `@import`. |
+| `components-web/iiko-ds-spec.md` | ~700 KB single source of truth written to be pasted into any AI: general rules, class map, token tables, full component CSS. Mostly generated. |
+| `components-mobile/` | The **mobile layer** (not a git repo), structure mirrors `components-web`: `modes.css` (the mode axis), `components/index.css` (aggregator; a `components/<Name>_DS/` file appears only when a real `*_mob` component exists), `prototypes/` (demo pages, e.g. `prototypes/button-modes.html` — desktop and mobile side by side + measurements). Plus the plan docs: `desktop-to-mobile-plan.md` (classification A–D + how Material/Angular solve each), `mobile-mode-notes.md`, `mobile-workflow.md`, `mobile-steps.md`, `mobile-block-schemes.md`. |
+| `Prototypes/` | HTML prototypes and the knowledge base — a **separate git repo** (`github.com/iiko-DS/Prototypes`) next to the `DS` folder. Comparison pages such as `compare-button-mob.html` hold values transcribed from Figma — a legitimate source when the canvas itself is unreachable. |
 
 ## Проверки (обязательные, все лежат в `_audit/rec/checks/`)
 
@@ -84,7 +84,7 @@ un-merged `out/` patches) — run it after any interruption before promising any
 - `_values.html` — мобильные значения против заявленных на странице.
 - В CSS библиотеки **нет `box-sizing: border-box`** ни у одного класса с объявленной высотой (44 класса):
   паддинги и рамка прибавляются сверху. Патчится в каркасе `_audit/rec/build.py` (`.panel <sel>`) и в
-  `iiko-ds-mobile/components/box-sizing.css` — НЕ в библиотеке. В прототипах ДС то же лечат на странице.
+  `components-mobile/components/box-sizing.css` — НЕ в библиотеке. В прототипах ДС то же лечат на странице.
 - **Десктопные детекторы (12.09.2026, живут в `_audit/rec/checks/`)**: `audit-desktop.py` (системные
   контролы `NATIVE`, content-box `CONTENTBOX`, пустые элементы) и `audit-live-desktop.py` (`CLIPPED`
   scrollHeight > clientHeight, `OVERLAP` пересечение листовых подписей, `VOID` пустота в контейнере,
@@ -128,13 +128,13 @@ un-merged `out/` patches) — run it after any interruption before promising any
   `approvals.mode manual` — гейт только на команды, правки файлов его не проходят; по-настоящему закрывает
   лишь отдельная учётка Windows с правами только на `C:\Users\asukharev\GitHub`. Цитаты и грепы —
   `hermes-desktop-backend-diagnostics`, `references/restricting-agent-access.md`.
-- **⛔⛔ НИКОГДА не править файлы в `iiko-ds-web` без прямого разрешения владельца.** Ни токенизацию,
+- **⛔⛔ НИКОГДА не править файлы в `components-web` без прямого разрешения владельца.** Ни токенизацию,
   ни формулы высот, ни «очевидные фиксы» (box-sizing, порядок состояний, импорты в агрегаторе) — даже
   когда они явно сломаны. Задача «сделай мобильные компоненты» НЕ даёт права на десктоп: у него любая
   правка библиотеки = сломанный источник истины (Figma-автоген + выверенные вручную файлы), а откат —
   один `git checkout`. Реакция на самовольные правки — ярость и требование откатить всё.
-  Как делать мобильное без библиотеки: явные значения в `iiko-ds-mobile` (`modes.css` + файлы
-  `iiko-ds-mobile/components/<Имя>_DS/*.css`, в том числе `height`/`padding` руками, если десктопный CSS
+  Как делать мобильное без библиотеки: явные значения в `components-mobile` (`modes.css` + файлы
+  `components-mobile/components/<Имя>_DS/*.css`, в том числе `height`/`padding` руками, если десктопный CSS
   держит высоту числом). О найденном дефекте библиотеки — только сообщить, не чинить.
 - **⛔ НЕ ГАДАТЬ.** Every value comes from a source: Figma export, `iiko-spec.md`, a
   plan doc, or a prototype comparison file. No source for a value → stop, ask, and
@@ -157,10 +157,10 @@ un-merged `out/` patches) — run it after any interruption before promising any
 Two independent axes: **theme** = colour (`data-theme`, `themes.css`), **mode** = size
 (`data-mode`, `modes.css`). Never mix them in one token.
 
-- `iiko-ds-mobile/modes.css` holds `[data-mode="mobile"] { … }` overrides of only the tokens
+- `components-mobile/modes.css` holds `[data-mode="mobile"] { … }` overrides of only the tokens
   that differ. No attribute = Desktop default, so old prototypes stay as they were.
-  (The file lives in the mobile folder, NOT in `iiko-ds-web` — a demo page inside
-  `iiko-ds-mobile/prototypes/` links it as `../modes.css`, the library as `../../iiko-ds-web/…`.)
+  (The file lives in the mobile folder, NOT in `components-web` — a demo page inside
+  `components-mobile/prototypes/` links it as `../modes.css`, the library as `../../components-web/…`.)
 - **Load order is mandatory**: `font.css → tokens.css → modes.css → themes.css →
   components/index.css`. `[data-mode="mobile"]` and `:root` have equal specificity, so
   document order decides — modes.css must come after tokens.css.
@@ -175,12 +175,12 @@ Two independent axes: **theme** = colour (`data-theme`, `themes.css`), **mode** 
 ### Structural variants (category 2) — separate file, not a mode
 
 When the plan row says «Структура» (layout/composition changes, not numbers), the variant does **not**
-belong in `modes.css`: it is a file in the mobile layer, `iiko-ds-mobile/components/<Name>_DS/<variant>.css`,
-registered in the mobile aggregator `iiko-ds-mobile/components/index.css` (Stepper 11.09.2026 was the first
+belong in `modes.css`: it is a file in the mobile layer, `components-mobile/components/<Name>_DS/<variant>.css`,
+registered in the mobile aggregator `components-mobile/components/index.css` (Stepper 11.09.2026 was the first
 real one). Two traps, both hit for real:
 
 - **Specificity, not order.** The documented order links the mobile layer *before*
-  `iiko-ds-web/components/index.css`, so a variant class with equal specificity loses on every property the
+  `components-web/components/index.css`, so a variant class with equal specificity loses on every property the
   base also sets (`flex-direction` applied from `.ds-stepper--vertical`, but `align-items` stayed from
   `.ds-stepper` and the vertical line drifted to the centre). Write `.ds-stepper.ds-stepper--vertical` (0,2,0)
   instead of reordering; and measure `align-items`/`gap`/divider orientation, not just the direction.
@@ -194,19 +194,19 @@ Stepper case study: `references/mobile-structural-components.md`.
 
 ### Мобильный слой, когда библиотека «заморожена» (12.09.2026)
 
-Владелец однажды потребовал откатить **все** правки в `iiko-ds-web` («Какого хера ты полез в iiko-ds-web???»)
+Владелец однажды потребовал откатить **все** правки в `components-web` («Какого хера ты полез в components-web???»)
 — и был прав: откат делается одной командой `git checkout -- .` в репозитории и проверяется `git status`
 (пусто) + `git diff --quiet HEAD` (код 0). После отката десктопный CSS снова держит размеры **числами**
 (`.ds-btn--m { height: 36px }`, `.ds-input--m .ds-input__frame { height: 48px }`, трек тумблера 34 × 20),
 поэтому режимные токены его не двигают, и мобильные значения надо задавать **явными правилами**
-в `iiko-ds-mobile/components/<Имя>_DS/*.css`.
+в `components-mobile/components/<Имя>_DS/*.css`.
 
 Разделение труда внутри мобильного слоя:
 
 | Что | Где живёт |
 |---|---|
 | Токены, которые компонентный CSS **читает** (паддинги полей, gap, типографика) | `modes.css`, блок `[data-mode="mobile"]` |
-| Всё, что десктопный CSS задаёт числом (высоты, ширины, трек тумблера, ход ручки) | файл компонента в `iiko-ds-mobile/components/<Имя>_DS/…` |
+| Всё, что десктопный CSS задаёт числом (высоты, ширины, трек тумблера, ход ручки) | файл компонента в `components-mobile/components/<Имя>_DS/…` |
 
 Порядок работы после любого отката библиотеки: (1) **сначала аудит** — прогнать матрицу ожидаемых мобильных
 значений (`scripts/audit-mobile-values.py`, 41 проверка по 24 страницам; после отката 12.09.2026 из них было
@@ -499,7 +499,7 @@ Mobile); `preview_card()` — `.editrow` = grid `minmax(0,1fr) 380px`: слев�
    toggle) do not add one: it is HUG by default and its content decides. У переключателя содержимое —
    **инстансы Button** (он надслойка над ними, см. Pitfalls), поэтому его высота = отступы трека +
    высота кнопки внутри, и на мобиле растёт вместе с Button; `height` фризил бы её против режима.
-3. **Start from the component's row in the plan, not from the CSS.** `iiko-ds-mobile/desktop-to-mobile-plan.xlsx`
+3. **Start from the component's row in the plan, not from the CSS.** `components-mobile/desktop-to-mobile-plan.xlsx`
    (source: `.md`, generator `build-desktop-to-mobile-plan-xlsx.ps1`) is the per-component brief:
    group «Размеры / Размеры + поведение / Структура», what changes on mobile, how MD3 and Angular
    Material solve it, `_mob` status (Собран → Проверен → Готов), token binding. Read
@@ -545,7 +545,7 @@ verification run or append `?v=<epoch>` to the URL (`python -m http.server` igno
 refetched).
 
 **С 11.09.2026 генератор штампует версию сам.** `build.py` считает `VER` = максимум `mtime` по всем CSS
-`iiko-ds-web` + `iiko-ds-mobile` + `_audit/rec` и подставляет `?v=%(ver)s` в **каждую** ссылку на CSS
+`components-web` + `components-mobile` + `_audit/rec` и подставляет `?v=%(ver)s` в **каждую** ссылку на CSS
 страницы компонента и в `src` iframe оболочки (`index.html`). Поэтому обычный F5 показывает текущий CSS,
 а правка любого компонентного файла ломает кэш автоматически. Если увидишь ссылку без `?v=` — сборка
 старая, перезапусти `python build.py`. Before reporting "the override does not work", read the variable itself:
@@ -602,21 +602,21 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
 - **Don't resolve design questions yourself.** Touch target for S/XS, hover policy on
   touch, radius (8 px vs MD3 pill), 44 vs 48 dp are the owner's calls — report them as
   open questions with a recommendation.
-- **Repo boundaries:** `iiko-ds-web` and `iiko-ds-prototypes` are each their own git repo
-  (origin `Anders7Rusk/*`, branch `main`); `iiko-ds-mobile` and the `DS/` root are not repos.
-  Check `git -C <repo> status` and **ask before committing or pushing** — publishing updates
-  the live Pages spec.
+- **Repo boundaries:** two repos, both private: `DS` (with `components-web/` and
+  `components-mobile/` inside; origin `github.com/iiko-DS/DS`) and `Prototypes` (next to the
+  `DS` folder; origin `github.com/iiko-DS/Prototypes`), branch `main`. Check `git -C <repo> status`
+  and **ask before committing or pushing**.
 - **Never delete a prototype/demo page — or the README/spec pointers to it — on your own
   initiative.** The user reversed exactly that call within the hour and asked for the page
   back: he reads the desktop/mobile difference off it (Figma's mode is file-global). Mobile
-  demos live in `iiko-ds-mobile/prototypes/`, the rest in `iiko-ds-prototypes/`; when one is
-  added, its path belongs in `iiko-ds-mobile/readme.md` and in the spec's «Живая проверка».
+  demos live in `components-mobile/prototypes/`, the rest in `Prototypes/`; when one is
+  added, its path belongs in `components-mobile/readme.md` and in the spec's «Живая проверка».
 - **Recover, don't reinvent:** a file you deleted or overwrote is still in the session store —
   `state.db` keeps every `write_file` payload plus the follow-up edits that moved it. See the
   `session-store-forensics` skill, `scripts/recover-file-from-state-db.py`.
 - **По мобиле источник — только уже собранные рекомендации платформ.** `DS/_audit/platform/<slug>.json`
   (+ `_raw`, `_src`) и пайплайн `_audit/rec` (`data/<slug>.json` + `data-tech/<slug>.json` → `build.py` →
-  `iiko-ds-mobile/prototypes/recommendations/`). В Figma по мобильным **не ходить** и `_mob` оттуда не
+  `components-mobile/prototypes/recommendations/`). В Figma по мобильным **не ходить** и `_mob` оттуда не
   читать — прямая формулировка владельца: «Не надо лезть вообще в фигму и что-то там смотреть. По мобильным
   компонентам мы пользуемся только теми рекомендациями что есть тут». Figma-MCP применим только когда он сам
   об этом просит и нужный файл открыт в приложении (MCP читает активный документ, а не любой nodeId).
@@ -631,7 +631,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   of at least 44x44 pt» + план «минимум для веба — 44 px»; плотности Angular 40/36/32/28 — не мобильные размеры), иконка-кнопка — 40 у всех
   (дефолт MD3, Angular density 0), тач-зона 48 — невидимым слоем `::after` (`position:absolute; left/top:50%;
   width/height:100%; min-width/min-height:48px; transform:translate(-50%,-50%); background:none`) в
-  `iiko-ds-mobile/components/Button_DS/button-touch.css`. Строка (а не сам элемент) дорастает до 48 у чекбокса/радио
+  `components-mobile/components/Button_DS/button-touch.css`. Строка (а не сам элемент) дорастает до 48 у чекбокса/радио
   (`Checkbox_DS/checkbox-touch.css`), тумблера (`Slide-Toggle_DS/slide-toggle-touch.css`) и шага вертикального степпера
   (`Stepper_DS/stepper-vertical.css`, `min-height:48px` — у Angular хедер шага 72 px, минимум 42).
   Формулы HUG делают это бесплатно: Button S 12+12+20 = 44, XS 14+14+16 = 44; Button icon S 10+10+20 = 40, XS 12+12+16 = 40.
@@ -691,7 +691,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   Токены, которые расходятся с выверенным CSS, **не подставлять**: `Card/Pad left/right` = 24 против 16,
   `Card/Content/Pad top/bottom` = 8 против 16, `Card/Header/Pad top` = 24 против 16 (в самом файле помечен
   как устаревший `Space/6x`), `Card/Footer/Pad top/bottom` = 16 против 4/16. Это находки для дизайнера.
-- **Checkbox и Radio после отката библиотеки снова системные.** Агрегатор `iiko-ds-web/components/index.css`
+- **Checkbox и Radio после отката библиотеки снова системные.** Агрегатор `components-web/components/index.css`
   подключает у них только `*-label.css`; `checkbox.css`, `checkbox-icons.css`, `radio.css`, `radio-icons.css`
   не подключает никто. Признак в замере: `.ds-checkbox` = `display:inline`, высота 0, а `input[type=checkbox]`
   нарисован браузером 13 × 13 (12.09.2026: 21 такой контрол на страницах Checkbox, Radio, List). Лечение в
@@ -721,13 +721,13 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   откатывает правку.
 - **Мобильное правило может «не применяться», потому что CSS компонента вообще не подключён.** 12.09.2026:
   `min-height: 48px` из `Checkbox_DS/checkbox-touch.css` давал 48 px в одной разметке и 19 px в другой.
-  Причина — агрегатор `iiko-ds-web/components/index.css` подключал у Checkbox и Radio **только `*-label.css`**
+  Причина — агрегатор `components-web/components/index.css` подключал у Checkbox и Radio **только `*-label.css`**
   (описание строки), а сами контролы `checkbox.css`, `checkbox-icons.css`, `radio.css`, `radio-icons.css`
   не подключал никто: ни агрегатор, ни одна страница в DS. Без них `.ds-checkbox` остаётся `display: inline`,
   а **у non-replaced инлайн-элемента `min-height` не действует**; в `display:flex`-строке тот же элемент
   становится flex-элементом — и высота применяется. Отсюда «в одном примере работает, в другом нет»
   при формально верных токенах. Порядок разбора: (1) есть ли файл в агрегаторе
-  (`grep -n "<Имя>_DS/" iiko-ds-web/components/index.css`), (2) какой `display` у элемента в реальной
+  (`grep -n "<Имя>_DS/" components-web/components/index.css`), (2) какой `display` у элемента в реальной
   разметке (inline → `min-height`/`height` молча игнорируются), (3) только потом кэш и специфичность.
   Готовый прогон — `scripts/verify-mobile-values.py`. Исправлено добавлением 4 импортов в агрегатор;
   замер до/после: `display:inline` без маркера → `display:flex`, маркер 20 × 20, цвета состояний.
@@ -750,7 +750,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   им content-box безвреден, не трогать. Кадры полей лечить формулой (как выше), блоки действий — одним
   `box-sizing: border-box`.
 - **Тестовая страница обязана подключать оба мобильных файла, и разметка между прогонами не меняется.**
-  Харнесс, который линкует только `modes.css` (токены) и забыл `iiko-ds-mobile/components/index.css`
+  Харнесс, который линкует только `modes.css` (токены) и забыл `components-mobile/components/index.css`
   (агрегатор), молча теряет все `*-mobile.css` / `*-touch.css` и печатает десктопные числа — читается
   как «правило не применяется» (список 68 вместо 72, шапка 44 вместо 48, тач-слой 0 вместо 48). Порядок:
   font → tokens → modes.css → mobile components/index.css → styles → web components/index.css. И не менять
@@ -772,7 +772,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   `[data-mode="mobile"] .ds-sidenav-item--l1.ds-sidenav-item--expanded.ds-sidenav-item--expanded` (0,3,0).
   Признак такой же, как у Stepper: часть свойств применилась, часть нет.
 - **Глобальный селектор в мобильном файле одного компонента перебивает другие компоненты.** Мобильный слой
-  грузится как **один плоский CSS** (`iiko-ds-mobile/components/index.css`), поэтому правило без привязки
+  грузится как **один плоский CSS** (`components-mobile/components/index.css`), поэтому правило без привязки
   к своим классам живёт для всей страницы: строка `[data-mode="mobile"] .ds-list-item { min-height: 48px }`,
   написанная в `Autocomplete_DS/autocomplete-mobile.css` «для строк подсказок», молча перебивала List
   (нужно 72) и Menu (72) — просто потому, что autocomplete-файл подключён позже. Признак: на странице
@@ -839,7 +839,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   act on the obvious reading, state the assumptions, say what to change if the format is off.
   Recipe: `iiko-design-system`, `references/platform-recommendations-pages.md`.
 
-- **Владелец правит `iiko-ds-web` параллельно, прямо во время сессии.** 11.09.2026 в 20:34–20:37 у него сами
+- **Владелец правит `components-web` параллельно, прямо во время сессии.** 11.09.2026 в 20:34–20:37 у него сами
   поменялись `font.css` (вшитый base64 Roboto → онлайн-`@import` Google Fonts) и `iiko-ds-spec.md` (пункт
   «Иконки» переписан на Material Icons по имени). Перед фразой «в библиотеке чисто / это не моё» перечитать
   `git status` и `git diff --stat` в репозитории и посмотреть первые строки каждого дифа. Файл изменён не
@@ -847,7 +847,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   приписывать правку себе.
 - **Временные страницы-проверки не оставлять в папке рекомендаций.** Детекторы и пробники (`_plates.html`,
   `_overflow.html`, `_contrast.html`, `_fonttest.html`, `_probe*.html`, листы скринов) живут в
-  `_audit/rec/checks/`; в `iiko-ds-mobile/prototypes/recommendations/` — только страницы компонентов,
+  `_audit/rec/checks/`; в `components-mobile/prototypes/recommendations/` — только страницы компонентов,
   `index.html` и `rec.css`. Лишние артефакты в папках ДС его раздражают.
 - **Уборка — только по слову, и всегда с отчётом списком.** Развязка 12.09.2026 (скрины/уведомление) прошла
   цепочку: «Мне не нужно показывать что что-то сохранилось» → «Убери уведомление» → «Убери вообще нахран» →
@@ -960,7 +960,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   CSS-файлы, замеры «desktop → mobile» таблицей и находки. Для компонентов группы D («без изменений»)
   результат — **сама страница**: CSS не трогать, но «не меняется» доказать источником (числа ДС → что даёт
   каждая платформа → почему мобильного значения нет и где 404), иначе владелец читает это как недоделку.
-  Бриф брать из строки плана (`iiko-ds-mobile/desktop-to-mobile-plan.md`), он совпадает с источниками
+  Бриф брать из строки плана (`components-mobile/desktop-to-mobile-plan.md`), он совпадает с источниками
   почти всегда — проверять расхождения и писать о них.
 - **Страницы в браузере не открывать самому.** Пользователь прямо попросил: «Не нужно мне постоянно
   открывать автоматом страницы с компонентами». Рабочий приём — дать полный `http://127.0.0.1:8899/…`
@@ -969,7 +969,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
 - **Когда владелец приносит число («инпут в мобильной версии 48, а должен быть 56») — сначала локализовать, а не спорить.**
   Порядок: (1) инвентарь всех страниц, где элемент вообще рендерится (grep по классу + `<input`),
   (2) замер каждой по `http://127.0.0.1:8899` **со свежим профилем и без cache-buster** — обе панели,
-  (3) назвать места, где значение правда десктопное: у `iiko-ds-prototypes/*.html` режима **нет вообще**
+  (3) назвать места, где значение правда десктопное: у `Prototypes/*.html` режима **нет вообще**
   (`metro-general-settings.html`, `add-fasovka.html`, десктопный блок `figma-1276-metro-desktop.html`) — 48 там
   ожидаемы, (4) если собранная страница верна — сказать это и спросить, какую страницу он смотрел.
   Ловушка: `[data-mode="mobile"]` встречается в inline-`<style>` этих страниц как селектор, поэтому grep по
@@ -977,7 +977,7 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   `scripts/find-element-inventory.py` (файлы + режим + замер высоты).
 - **A link to a local page must actually open.** In the VS Code ACP panel `file:///…` — and a
   markdown link to it — only looks like a link; the click does nothing. Serve the DS root over
-  HTTP (`python -m http.server 8899 --bind 127.0.0.1 --directory C:/Users/asukharev/GitHub/DS`)
+  HTTP (`python -m http.server 8899 --bind 127.0.0.1 --directory C:/Users/asukharev/GitHub/iiko-DS/DS`)
   and give the full `http://127.0.0.1:8899/…` URL as plain text (opening it for him — only when he asks,
   see the bullet above). Always write full paths from
   the DS root, never relative ones — he asked for that explicitly.
@@ -1029,10 +1029,10 @@ happened after the Button icon disabled-state fix until the copy was refreshed (
   отличает «правило не применилось» от «значение верное» — этим найдено 17 сломанных проверок после отката
   библиотеки. Встроенный набор из 41 проверки запускается без аргументов, свой набор — `--checks file.json`.
   Код возврата 1, если что-то сломано.
-- `references/mobile-layer-frozen-library.md` — эпизод отката `iiko-ds-web`: как откат проверяется,
+- `references/mobile-layer-frozen-library.md` — эпизод отката `components-web`: как откат проверяется,
   что именно ломается (17 из 41), какие значения переехали в мобильные файлы, пересечения правил между
   компонентами, исправленные числа Button toggle (рамка внутри трека) и как об этом докладывать владельцу.
-- `references/library-autogen-artifacts.md` — каталог следов автогена в CSS `iiko-ds-web`: 23 класса, где
+- `references/library-autogen-artifacts.md` — каталог следов автогена в CSS `components-web`: 23 класса, где
   `background` равен `color` (текст рисуется плашкой), nowrap у подписей, залитая акцентным цветом обёртка
   кнопки диалога, фиксированная высота блока действий, белая подпись светлого снекбара, тёмные подписи
   сайденава, контейнер без класса варианта, два вопроса палитры (бейдж warning ≈ 1.9, плейсхолдер поиска

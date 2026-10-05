@@ -1,7 +1,7 @@
 # Recommendation pages (`_audit/rec`) — pipeline, verification, pitfalls
 
-Repo: `C:\Users\asukharev\GitHub\DS`. Server: `python serve.py 8899` at repo root;
-pages at `http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations/<slug>.html`.
+Repo: `C:\Users\asukharev\GitHub\iiko-DS\DS`. Server: `python serve.py 8899` at repo root;
+pages at `http://127.0.0.1:8899/components-mobile/prototypes/recommendations/<slug>.html`.
 
 ## Files
 
@@ -46,7 +46,7 @@ labels really do not fit). Column only when they cannot fit.
 ## The audits (run them yourself, they are the proof)
 
 ```
-cd C:\Users\asukharev\GitHub\DS\_audit\rec
+cd C:\Users\asukharev\GitHub\iiko-DS\DS\_audit\rec
 python checks\check-patch.py <slug>       # validates subagent patch files: 2 screens,
                                           # balance, classes, component per screen,
                                           # selectors exist, «то же» replaced, interface equal

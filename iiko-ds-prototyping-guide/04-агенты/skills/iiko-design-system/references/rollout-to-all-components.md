@@ -1,7 +1,7 @@
 # Раскатка нового вида блока «На экране» на все 38 компонентов (14.09.2026)
 
 Владелец: «Видимо раскатываем». Раскатка = пересборка всех страниц
-`iiko-ds-mobile/prototypes/recommendations/` генератором `_audit/rec/build.py`
+`components-mobile/prototypes/recommendations/` генератором `_audit/rec/build.py`
 (`python _audit/rec/build.py` — печатает `page: <slug>.html` ×38 + `index.html`).
 До этого правился только Button точечной сборкой через `importlib`.
 

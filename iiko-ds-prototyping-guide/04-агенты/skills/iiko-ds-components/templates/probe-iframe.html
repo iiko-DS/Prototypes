@@ -2,7 +2,7 @@
   Проба для проверки страниц рекомендаций (и любых страниц ДС) без глаз владельца.
   Копировать в _audit/rec/checks/_имя.html, подставить путь к странице, запустить:
 
-    cd /c/Users/asukharev/GitHub/DS
+    cd /c/Users/asukharev/GitHub/iiko-DS/DS
     "/c/Program Files/Google/Chrome/Application/chrome.exe" --headless=new --disable-gpu \
       --no-sandbox --user-data-dir="$(cygpath -w "$LOCALAPPDATA/Temp/probe1")" \
       --virtual-time-budget=25000 --window-size=1920,1400 --dump-dom \
@@ -28,7 +28,7 @@
 </style></head>
 <body>
 <pre id="o">…</pre>
-<iframe id="a" src="../../../iiko-ds-mobile/prototypes/recommendations/button.html"></iframe>
+<iframe id="a" src="../../../components-mobile/prototypes/recommendations/button.html"></iframe>
 <script>
 var A = document.getElementById('a'), o = document.getElementById('o'), L = [];
 function log(s) { L.push(s); o.textContent = L.join('\n'); }

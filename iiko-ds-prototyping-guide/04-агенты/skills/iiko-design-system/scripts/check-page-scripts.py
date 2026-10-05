@@ -22,7 +22,7 @@ import subprocess
 import sys
 import tempfile
 
-DEFAULT_DIR = "C:/Users/asukharev/GitHub/DS/iiko-ds-mobile/prototypes/recommendations"
+DEFAULT_DIR = "C:/Users/asukharev/GitHub/iiko-DS/DS/components-mobile/prototypes/recommendations"
 SCRIPT_RE = re.compile(r"<script[^>]*>(.*?)</script>", re.S)
 
 

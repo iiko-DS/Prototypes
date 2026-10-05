@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Разбор полей «Правка», которые ничего не меняют (NOCHANGE).
 
-Копия рабочего скрипта: C:\\Users\\asukharev\\GitHub\\DS\\_audit\\rec\\checks\\why-nochange.py
+Копия рабочего скрипта: C:\\Users\\asukharev\\GitHub\\iiko-DS\\DS\\_audit\\rec\\checks\\why-nochange.py
 (менять оба места, если правишь). Требует serve.py на 127.0.0.1:8899.
 
 Для каждой пары slug/поле печатает: найденный элемент (outerHTML, классы, inline-стиль),
@@ -22,7 +22,7 @@ import shutil
 import html as _html
 
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-BASE = "http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations/"
+BASE = "http://127.0.0.1:8899/components-mobile/prototypes/recommendations/"
 
 # slug, data-id поля, значение, которое подставляем (крупное — чтобы эффект был виден)
 CASES = [
@@ -40,7 +40,7 @@ function next(){
   const [slug, id, val] = CASES[i++];
   const f = document.createElement('iframe');
   f.style.cssText = 'width:1600px;height:1200px;border:0';
-  f.src = '/iiko-ds-mobile/prototypes/recommendations/' + slug + '.html';
+  f.src = '/components-mobile/prototypes/recommendations/' + slug + '.html';
   f.onload = () => setTimeout(() => {
     try {
       const doc = f.contentDocument, win = f.contentWindow;
@@ -75,7 +75,7 @@ next();
 
 
 def main():
-    wrapper = r"C:\Users\asukharev\GitHub\DS\iiko-ds-mobile\prototypes\recommendations\_why_nochange.html"
+    wrapper = r"C:\Users\asukharev\GitHub\iiko-DS\DS\components-mobile\prototypes\recommendations\_why_nochange.html"
     prof = os.path.join(tempfile.gettempdir(), "udd_why")
     shutil.rmtree(prof, ignore_errors=True)
     with open(wrapper, "w", encoding="utf-8", newline="\n") as f:

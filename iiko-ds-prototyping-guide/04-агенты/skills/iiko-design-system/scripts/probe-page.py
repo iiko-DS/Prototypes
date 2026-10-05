@@ -20,7 +20,7 @@ git-bash, сервер `serve.py`/`python -m http.server 8899` на 127.0.0.1:88
     # js-файл содержит тело пробы: она получает A (iframe) и w (его window)
     python probe-page.py --slug button --js-file probe.js
     python probe-page.py --slug button --js-file probe.js --shot result.png
-    python probe-page.py --url iiko-ds-mobile/prototypes/button-modes.html --js-file m.js
+    python probe-page.py --url components-mobile/prototypes/button-modes.html --js-file m.js
 
 --js-file — необязателен: без него проба просто печатает базовые числа
 (сколько экранов/слотов, ширины кнопок в слотах).
@@ -37,7 +37,7 @@ import tempfile
 import time
 import uuid
 
-ROOT = "C:/Users/asukharev/GitHub/DS"
+ROOT = "C:/Users/asukharev/GitHub/iiko-DS/DS"
 CHECKS = os.path.join(ROOT, "_audit/rec/checks")
 CHROME = os.environ.get("CHROME", "C:/Program Files/Google/Chrome/Application/chrome.exe")
 BASE = "http://127.0.0.1:8899"
@@ -81,7 +81,7 @@ def main():
     ap.add_argument("--slug", help="страница компонента в recommendations/<slug>.html")
     ap.add_argument("--url", help="свой путь от корня DS (вместо --slug)")
     ap.add_argument("--js-file", help="файл с телом пробы (получает A и w)")
-    ap.add_argument("--mobile", action="store_true", help="страница в iiko-ds-mobile/")
+    ap.add_argument("--mobile", action="store_true", help="страница в components-mobile/")
     ap.add_argument("--shot", nargs="?", const="", help="сделать скриншот отдельным прогоном")
     ap.add_argument("--iframe-height", type=int, default=2200)
     args = ap.parse_args()
@@ -89,7 +89,7 @@ def main():
     if args.url:
         target = "/" + args.url.lstrip("/")
     else:
-        root = "iiko-ds-mobile/prototypes/recommendations" if (args.slug or args.mobile) else "iiko-ds-prototypes"
+        root = "components-mobile/prototypes/recommendations" if (args.slug or args.mobile) else "Prototypes"
         target = "/%s/%s.html" % (root, args.slug)
     os.makedirs(CHECKS, exist_ok=True)
     src = "../../../" + target.lstrip("/")

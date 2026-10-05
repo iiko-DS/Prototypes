@@ -6,8 +6,8 @@
 
 ## Правило и где оно живёт
 
-`iiko-ds-mobile/components/Button_DS/button-group-mob.css` + строка
-`@import "Button_DS/button-group-mob.css";` в агрегаторе `iiko-ds-mobile/components/index.css`:
+`components-mobile/components/Button_DS/button-group-mob.css` + строка
+`@import "Button_DS/button-group-mob.css";` в агрегаторе `components-mobile/components/index.css`:
 
 ```css
 [data-mode="mobile"] .ds-btn--full-width { width: 100%; }
@@ -17,13 +17,13 @@
 - Ширина кнопок числами не задаётся: строку делит flex, ширина — производная (одна кнопка 100 %,
   две и больше — поровну).
 - `.ds-btn--full-width` в десктопной библиотеке **не существует** — класс жил только в
-  `iiko-ds-mobile/prototypes/button-modes.html` и ничего не делал (демо «На всю ширину
+  `components-mobile/prototypes/button-modes.html` и ничего не делал (демо «На всю ширину
   (Bottom action bar)» показывало кнопку по содержимому). Реализован он именно мобильным слоем.
 - Десктоп остаётся HUG (`.ds-btn` — inline-flex без ширины), в ряду кнопки своей ширины.
 
 ## Источники (не выдумано)
 
-- `iiko-ds-mobile/desktop-to-mobile-plan.md`, строка **Button**: «опция «на всю ширину» в футерах форм».
+- `components-mobile/desktop-to-mobile-plan.md`, строка **Button**: «опция «на всю ширину» в футерах форм».
 - Макет «Склад_Заказ-товаров» (узел `5581:31479`): `Button group_mob` = 2 × 175,5 + 8 (gap) = 359,
   то есть вся строка; `Bottom action bar_mob` — кнопка на всю ширину.
 - Десктопная проверка — замером (ниже), а не на глаз: «на десктопе ничего не поменялось» —
@@ -48,7 +48,7 @@ flex-элементом по содержимому: правило ДС вну�
 
 ## Капкан №2 — демо/страница без мобильного агрегатора
 
-`iiko-ds-mobile/prototypes/button-modes.html` не подключала `../components/index.css`, и её «мобильная»
+`components-mobile/prototypes/button-modes.html` не подключала `../components/index.css`, и её «мобильная»
 панель молча не грузила ни одного мобильного файла. Если демо противоречит правилу мобильного слоя —
 СНАЧАЛА проверить эту строку подключения, и только потом искать ошибку в CSS.
 

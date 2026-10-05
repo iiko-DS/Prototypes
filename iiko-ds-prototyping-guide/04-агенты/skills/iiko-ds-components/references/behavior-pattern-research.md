@@ -84,11 +84,11 @@
 после того, как я один раз заменил содержимое массовым вливанием.
 
 Git в корне DS уже есть (ветка `main`, `core.autocrlf=false` — чтобы `data/*.json`
-хранились байт в байт); вложенные `iiko-ds-web` и `iiko-ds-prototypes` — отдельные репы
+хранились байт в байт); вложенные `components-web` и `Prototypes` — отдельные репы
 и стоят в `.gitignore` корня. Как доказать, что старое не потеряно:
 
 ```bash
-cd /c/Users/asukharev/GitHub/DS && git add -A && git commit -m "снимок перед дописыванием"
+cd /c/Users/asukharev/GitHub/iiko-DS/DS && git add -A && git commit -m "снимок перед дописыванием"
 # после правки: первые len(old) объектов должны совпасть байт в байт
 python - <<'PY'
 import json, glob, os, subprocess
@@ -97,7 +97,7 @@ for p in sorted(glob.glob('out/patterns/*.json')):
     new = json.load(open(p, encoding='utf-8'))['patterns_ru']
     old = json.loads(subprocess.run(['git','show','<commit>:_audit/rec/out/patterns/%s.json'%slug],
                                     capture_output=True, text=True,
-                                    cwd=r'C:\Users\asukharev\GitHub\DS').stdout or '{}').get('patterns_ru') or []
+                                    cwd=r'C:\Users\asukharev\GitHub\iiko-DS\DS').stdout or '{}').get('patterns_ru') or []
     assert new[:len(old)] == old, slug
 PY
 ```
@@ -130,7 +130,7 @@ PY
 Дальше я «починил» тем, что скопировал левый экран в правый: интерфейсы стали
 одинаковыми, но вариант «компонент в шторке» исчез, а в шторке остались текстовые строки.
 Реакция: «Ты сделал одно и сломал другое», «Зачем ты переписывал и заменял экраны», «Я не
-просил ничего менять в экран». Откатить было нечем — `iiko-ds-mobile` своего git не имел.
+просил ничего менять в экран». Откатить было нечем — `components-mobile` своего git не имел.
 
 Правила, которые из этого следуют:
 

@@ -5,14 +5,14 @@ Why this exists
 ---------------
 On 12.09.2026 a mobile rule (min-height: 48px for .ds-checkbox) measured 48 px in
 one example and 19 px in another. The rule was fine, the cache was fine: the
-aggregator iiko-ds-web/components/index.css never imported the component's own CSS,
+aggregator components-web/components/index.css never imported the component's own CSS,
 so .ds-checkbox stayed display:inline - and min-height does not apply to
 non-replaced inline elements (it does apply once the element is a flex item).
 
 What it does
 ------------
 1. --component <Folder_DS>: lists the CSS files of that folder, which of them
-   iiko-ds-web/components/index.css imports, and which are missing.
+   components-web/components/index.css imports, and which are missing.
 2. --url <page>: renders the page in headless Chrome with a FRESH profile (no
    cache) and reports, per [data-mode] panel, for every match of --selector: the
    measured size, the computed display, the marker size (--marker) and a resolved
@@ -24,7 +24,7 @@ links and silently measures an unstyled page.
 
 --harness <markup.html> is the other half: it renders a markup fragment TWICE
 (desktop block + mobile block) on a page in the DS root that links BOTH mobile
-layers - iiko-ds-mobile/modes.css AND iiko-ds-mobile/components/index.css. Use it
+layers - components-mobile/modes.css AND components-mobile/components/index.css. Use it
 instead of hand-rolling a test page: a harness that links only modes.css loses
 every *-mobile.css / *-touch.css silently and prints desktop numbers, and swapping
 the markup between the before/after runs fakes a regression.
@@ -41,10 +41,10 @@ panel shows the same sizes - so this can be used as a gate.
 Examples (run from the DS root)
 -------------------------------
   python verify-mobile-values.py --component Checkbox_DS \
-      --url iiko-ds-mobile/prototypes/recommendations/checkbox.html \
+      --url components-mobile/prototypes/recommendations/checkbox.html \
       --selector .ds-checkbox --marker .ds-checkbox__box
 
-  python verify-mobile-values.py --url http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations/button.html \
+  python verify-mobile-values.py --url http://127.0.0.1:8899/components-mobile/prototypes/recommendations/button.html \
       --selector .ds-btn --token --ds-button-m-size-pad-top
 """
 
@@ -58,7 +58,7 @@ import sys
 import tempfile
 import time
 
-DEFAULT_DS_ROOT = r"C:\Users\asukharev\GitHub\DS"
+DEFAULT_DS_ROOT = r"C:\Users\asukharev\GitHub\iiko-DS\DS"
 
 
 def find_chrome():
@@ -84,8 +84,8 @@ def find_chrome():
 
 
 def check_component(ds_root, component):
-    folder = os.path.join(ds_root, "iiko-ds-web", "components", component)
-    agg = os.path.join(ds_root, "iiko-ds-web", "components", "index.css")
+    folder = os.path.join(ds_root, "components-web", "components", component)
+    agg = os.path.join(ds_root, "components-web", "components", "index.css")
     if not os.path.isdir(folder):
         return None
     files = sorted(f for f in os.listdir(folder) if f.endswith(".css"))
@@ -194,18 +194,18 @@ def harness_page(ds_root, body, selector, marker=None, token=None):
 
     Two traps this exists to avoid, both hit for real on 12.09.2026:
       * a harness that links only modes.css (tokens) and forgets
-        iiko-ds-mobile/components/index.css silently loses every *-mobile.css /
+        components-mobile/components/index.css silently loses every *-mobile.css /
         *-touch.css file and measures desktop numbers;
       * changing the markup between the before/after runs fakes a regression.
     The page is written in the DS ROOT so the relative CSS links resolve.
     """
     layers = (
-        '<link rel="stylesheet" href="iiko-ds-web/font.css">'
-        '<link rel="stylesheet" href="iiko-ds-web/tokens.css">'
-        '<link rel="stylesheet" href="iiko-ds-mobile/modes.css">'
-        '<link rel="stylesheet" href="iiko-ds-mobile/components/index.css">'
-        '<link rel="stylesheet" href="iiko-ds-web/styles.css">'
-        '<link rel="stylesheet" href="iiko-ds-web/components/index.css">'
+        '<link rel="stylesheet" href="components-web/font.css">'
+        '<link rel="stylesheet" href="components-web/tokens.css">'
+        '<link rel="stylesheet" href="components-mobile/modes.css">'
+        '<link rel="stylesheet" href="components-mobile/components/index.css">'
+        '<link rel="stylesheet" href="components-web/styles.css">'
+        '<link rel="stylesheet" href="components-web/components/index.css">'
     )
     html = (
         '<!doctype html><html lang="ru"><head><meta charset="utf-8">' + layers +
@@ -237,7 +237,7 @@ def main():
     if args.component:
         res = check_component(args.ds_root, args.component)
         if res is None:
-            print("! folder not found: iiko-ds-web/components/%s" % args.component)
+            print("! folder not found: components-web/components/%s" % args.component)
             rc = 1
         else:
             files, imported, missing = res
@@ -246,7 +246,7 @@ def main():
             print("  imported : %s" % (", ".join(imported) or "NONE"))
             if missing:
                 print("  MISSING  : %s" % ", ".join(missing))
-                print("  -> add to iiko-ds-web/components/index.css, otherwise the")
+                print("  -> add to components-web/components/index.css, otherwise the")
                 print("     control renders unstyled and min-height/height are ignored")
                 rc = 1
 

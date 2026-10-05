@@ -7,8 +7,8 @@
 
 Запуск:
   python verify-copy-styles.py \
-      --orig iiko-ds-prototypes/KDS/kds-screen.html \
-      --copy iiko-ds-prototypes/KDS/multi-shop.html \
+      --orig Prototypes/KDS/kds-screen.html \
+      --copy Prototypes/KDS/multi-shop.html \
       --orig-prefix .kds- --copy-prefix '#scrStage .kdsx-'
 
 Печатает расхождения «узел.свойство | оригинал | копия» и итог.

@@ -25,7 +25,7 @@
 ### б) Дубли по содержимому
 
 `hashlib.md5` по файлам >1 КБ → группы одинаковых. В нашем дереве так нашлись 32 группы: одни и те же
-PNG лежат в трёх местах (корень `_crops/`, `iiko-ds-prototypes/_crops/`, `_audit/`), плюс совпадающие
+PNG лежат в трёх местах (корень `_crops/`, `Prototypes/_crops/`, `_audit/`), плюс совпадающие
 markdown-выгрузки в `platform/_raw` ↔ `platform/_src`.
 
 ### в) Вес в git
@@ -36,7 +36,7 @@ markdown-выгрузки в `platform/_raw` ↔ `platform/_src`.
 (+ `git count-objects -vH` для размера самого пака).
 
 Готовый прогон всех трёх замеров — `scripts/audit-repo-files.py`
-(`python scripts/audit-repo-files.py --root C:/Users/asukharev/GitHub/DS`).
+(`python scripts/audit-repo-files.py --root C:/Users/asukharev/GitHub/iiko-DS/DS`).
 
 ## 2. Находки 15.09.2026 (числа — из этого прогона)
 
@@ -60,11 +60,11 @@ markdown-выгрузки в `platform/_raw` ↔ `platform/_src`.
 - Мусор: `_probe.txt` (5 Б, содержимое — `probe`), `_cmp-subs.png` (907 Б); **27 файлов < 20 Б**, часть —
   неудачные загрузки первоисточников в `_audit/platform/_raw`, дословно `404: Not Found` (14 Б);
   `_audit/figma_session.txt` — GUID сессии.
-- Дубли (крупнейшие): `_crops/compare-side.png` = `iiko-ds-prototypes/_figma-1276-compare.png` (76 КБ),
+- Дубли (крупнейшие): `_crops/compare-side.png` = `Prototypes/_figma-1276-compare.png` (76 КБ),
   `_crops/modes-both.png` (62 КБ), `_crops/input-states.png` (60 КБ), `_crops/input-behavior.png` (38 КБ),
   `_crops/frame1276.png` (33 КБ), `_crops/render.png` (30 КБ); `platform/_raw/md3_menu.md` =
   `platform/_src/mw_docs_menu.md` (28 КБ).
-- Вес в гите: `_audit/rec` 12,04 МБ / 422 файла, `_audit/platform` 11,89 МБ / 459, `iiko-ds-mobile/prototypes`
+- Вес в гите: `_audit/rec` 12,04 МБ / 422 файла, `_audit/platform` 11,89 МБ / 459, `components-mobile/prototypes`
   5,47 МБ / 41, `_crops/desk` 5,04 МБ / 32, `_crops/sheets` 4,86 МБ / 10. То есть ~34 МБ из 45,6 —
   контрольные снимки и сырьё, а не поставка.
 - Чего в дереве нет: корневого `readme.md` (1369 файлов и ни одного описания верхнего уровня); ни одного
@@ -81,12 +81,12 @@ markdown-выгрузки в `platform/_raw` ↔ `platform/_src`.
 3. **B. От чего можно отказаться** — таблица: что · вес · **доказательство** (нулевой grep, совпавший MD5,
    `14 Б = 404: Not Found`) · риск отказа. Каждая строка опровержима, без «кажется, не нужно».
 4. Отдельной плашкой — «не отказ, а наоборот» (у нас: четыре CSS Checkbox/Radio мимо агрегатора;
-   правка в `iiko-ds-web` — только с его слова).
+   правка в `components-web` — только с его слова).
 5. **C. Что стоит добавить** — таблица: что · **доказательство отсутствия** (файла нет, ни одного workflow,
    `data-theme` 0 вхождений), а не «было бы неплохо».
 6. «Что предлагается первым делом» — 1–3 пункта.
 7. Плашка: «Ничего не удалялось и не менялось — это отчёт. Удаление и правки — после отдельного
    подтверждения».
 
-Границы наших правок держать в голове прямо в отчёте: `iiko-ds-web` — не трогать без прямого разрешения,
+Границы наших правок держать в голове прямо в отчёте: `components-web` — не трогать без прямого разрешения,
 снятие файлов с версионирования — тоже отдельное решение, а не следствие аудита.

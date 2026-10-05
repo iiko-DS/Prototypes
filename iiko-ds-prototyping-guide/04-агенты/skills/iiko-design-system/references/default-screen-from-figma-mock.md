@@ -67,14 +67,14 @@ divider/search/input_field/lst/btn/iconbtn/checkbox/radio/toggle/tabs/sheet/card
 генерируется и правки в нём исчезают. Цвета/размеры — токенами `--ds-*`, не хардкодом.
 
 Если мобильный слой мешает: в `data-mode="mobile"` `ds-search` растягивается на 100 %
-(`iiko-ds-mobile/components/Search_DS`), поэтому круглый XS-поиск закрепляется правилом каркаса
+(`components-mobile/components/Search_DS`), поэтому круглый XS-поиск закрепляется правилом каркаса
 `.phone__filter .ds-search--xs{width:var(--ds-size-9x);min-width:var(--ds-size-9x);flex:0 0 auto}`.
-Сам `iiko-ds-web` не править.
+Сам `components-web` не править.
 
 ## 4. Проверка (проба-iframe + headless)
 
 Собрать: `python _audit/rec/build.py <slug>` (или через importlib — `page(data)` + `CSS`), затем проба в
-`_audit/rec/checks/_pN.html`: iframe на `../../../iiko-ds-mobile/prototypes/recommendations/<slug>.html`
+`_audit/rec/checks/_pN.html`: iframe на `../../../components-mobile/prototypes/recommendations/<slug>.html`
 (тот же origin через `http://127.0.0.1:8899`), в скрипте — печатать в `<pre id="out">`: число экранов и штор,
 состав каждого `[data-buttons]`, число пунктов текста паттерна, число элементов, вылезших за границы
 экрана, и высоты первых кнопок левого/правого экрана после правки `height`.

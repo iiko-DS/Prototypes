@@ -8,15 +8,15 @@
 
 | Часть | Git | Что это | Объём |
 |---|---|---|---|
-| `iiko-ds-web/` | **свой** репозиторий (публикуется как сайт ДС) | библиотека: токены + компоненты | 104 файла, 4,5 МБ (100 CSS, 3 MD, `.nojekyll`) |
-| `iiko-ds-mobile/` | под версиями **корневого** `DS` | мобильный слой: режим, мобильные компоненты, страницы рекомендаций | 74 файла, 2,9 МБ |
-| `iiko-ds-prototypes/` | **свой** репозиторий | ручные прототипы экранов на компонентах ДС | 93 файла, 5,2 МБ |
+| `components-web/` | **свой** репозиторий (публикуется как сайт ДС) | библиотека: токены + компоненты | 104 файла, 4,5 МБ (100 CSS, 3 MD, `.nojekyll`) |
+| `components-mobile/` | под версиями **корневого** `DS` | мобильный слой: режим, мобильные компоненты, страницы рекомендаций | 74 файла, 2,9 МБ |
+| `Prototypes/` | **свой** репозиторий | ручные прототипы экранов на компонентах ДС | 93 файла, 5,2 МБ |
 | `_audit/` | под версиями **корневого** `DS` | цех: данные, генератор, проверки, черновики (не публикуется) | 29 МБ |
 
-Зависимость в одну сторону: `iiko-ds-web` (база) → `iiko-ds-mobile` (мобильные отличия) →
-`iiko-ds-prototypes` и страницы рекомендаций. `_audit` читает всё, частью библиотеки не является.
+Зависимость в одну сторону: `components-web` (база) → `components-mobile` (мобильные отличия) →
+`Prototypes` и страницы рекомендаций. `_audit` читает всё, частью библиотеки не является.
 
-## `iiko-ds-web` — корень (все восемь файлов)
+## `components-web` — корень (все восемь файлов)
 
 | Файл | Строк | За что отвечает | Руками |
 |---|---|---|---|
@@ -39,10 +39,10 @@
 Без них `.ds-checkbox` = `display:inline` и на экран выходит системный контрол 13 × 13 вместо маркера 20 × 20;
 страницы рекомендаций подключают их явно (`build.py`, строки 774–780).
 
-Порядок подключения: `font.css → tokens.css → iiko-ds-mobile/modes.css →
-iiko-ds-mobile/components/index.css → styles.css → iiko-ds-web/components/index.css → fixes.css`.
+Порядок подключения: `font.css → tokens.css → components-mobile/modes.css →
+components-mobile/components/index.css → styles.css → components-web/components/index.css → fixes.css`.
 
-## `iiko-ds-mobile` — мобильный слой
+## `components-mobile` — мобильный слой
 
 - `modes.css` (17,7 КБ, 6 блоков `[data-mode]`) — ось размера; отдельным файлом, потому что `tokens.css`
   генерируется. Размеры, которые десктопный CSS держит числом (`height:36px`), режимные токены не меняют —
@@ -55,7 +55,7 @@ iiko-ds-mobile/components/index.css → styles.css → iiko-ds-web/components/in
   `mobile-mode-notes.md` 13 КБ, `mobile-workflow.md` 12,7 КБ, `mobile-steps.md` 4,3 КБ,
   `mobile-block-schemes.md` 3,7 КБ, `readme.md` 4,5 КБ.
 
-## `iiko-ds-prototypes` — ручные прототипы
+## `Prototypes` — ручные прототипы
 
 - `index.html` (214 строк) — хаб: массив `PAGES` (файл + подпись, `sub:true` для подстраницы), iframe, выбор в адресе.
 - Обвязка ревью: `ds-frame-nav.js` (перенос ширины кадра), `ds-sizes-toggle.js` (гасит `<link>` мобильного слоя),
@@ -116,18 +116,18 @@ Figma → плагин → tokens.css, styles.css            [генерируе
 ## Как снимать эту карту (и что докладывать)
 
 ```bash
-find iiko-ds-web -type f -not -path '*/.git/*' | sed 's/.*\.//' | sort | uniq -c   # состав по расширениям
-ls -d iiko-ds-web/components/*/ | wc -l && grep -c '@import' iiko-ds-web/components/index.css
-grep -o '── [A-Za-z].* ──' iiko-ds-web/tokens.css                                     # коллекции токенов
-wc -l _audit/rec/build.py _audit/rec/mock.py iiko-ds-web/*.css
+find components-web -type f -not -path '*/.git/*' | sed 's/.*\.//' | sort | uniq -c   # состав по расширениям
+ls -d components-web/components/*/ | wc -l && grep -c '@import' components-web/components/index.css
+grep -o '── [A-Za-z].* ──' components-web/tokens.css                                     # коллекции токенов
+wc -l _audit/rec/build.py _audit/rec/mock.py components-web/*.css
 grep -n '^def ' _audit/rec/build.py                                                   # карта функций сборщика
 python -c "import json;d=json.load(open('_audit/rec/data/button.json',encoding='utf-8'));print(list(d))"
 for f in _audit/rec/checks/*.py; do python - "$f" <<'EOF'   # назначение пробы из её docstring
 import ast,sys;print(sys.argv[1], (ast.get_docstring(ast.parse(open(sys.argv[1],encoding='utf-8').read())) or '').splitlines()[:1])
 EOF
 done
-for f in $(find iiko-ds-mobile/components -name '*.css' -not -name index.css | sed 's|.*components/||'); do
-  grep -q "$f" iiko-ds-mobile/components/index.css || echo "НЕ подключён: $f"; done   # ловит и веб-агрегатор, и мобильный
+for f in $(find components-mobile/components -name '*.css' -not -name index.css | sed 's|.*components/||'); do
+  grep -q "$f" components-mobile/components/index.css || echo "НЕ подключён: $f"; done   # ловит и веб-агрегатор, и мобильный
 ```
 
 - Цифры докладывать в таблицах («папка → файлов → что это»), а не словами: он сверяет.

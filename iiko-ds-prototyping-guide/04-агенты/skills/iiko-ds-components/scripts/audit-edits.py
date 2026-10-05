@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Проверка колонки «Правка» на живых страницах рекомендаций iiko DS.
 
-Копия рабочего скрипта: C:\\Users\\asukharev\\GitHub\\DS\\_audit\\rec\\checks\\audit-edits.py
+Копия рабочего скрипта: C:\\Users\\asukharev\\GitHub\\iiko-DS\\DS\\_audit\\rec\\checks\\audit-edits.py
 (менять оба места, если правишь). Требует serve.py на 127.0.0.1:8899.
 
 Для каждого поля .edit__input страницы:
@@ -39,10 +39,10 @@ import subprocess
 import sys
 import tempfile
 
-DS = r"C:\Users\asukharev\GitHub\DS"
-REC = os.path.join(DS, "iiko-ds-mobile", "prototypes", "recommendations")
+DS = r"C:\Users\asukharev\GitHub\iiko-DS\DS"
+REC = os.path.join(DS, "components-mobile", "prototypes", "recommendations")
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-BASE = "http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations/"
+BASE = "http://127.0.0.1:8899/components-mobile/prototypes/recommendations/"
 
 JS = r"""<!doctype html><meta charset="utf-8"><body><pre id="out"></pre><script>
 const PAGES = %(pages)s, OUT = []; let i = 0;
@@ -95,7 +95,7 @@ function next(){
   if (i >= PAGES.length){ flush(); return; }
   const page = PAGES[i++]; const f = document.createElement('iframe');
   f.style.cssText = 'width:1600px;height:1200px;border:0';
-  f.src = '/iiko-ds-mobile/prototypes/recommendations/' + page + '.html';
+  f.src = '/components-mobile/prototypes/recommendations/' + page + '.html';
   f.onload = () => setTimeout(()=>{
     try { scan(f.contentDocument, f.contentWindow, page, ()=>{ f.remove(); flush(); next(); }); }
     catch(e){ OUT.push('ERR | ' + page + ' | ' + e.message); f.remove(); flush(); next(); }

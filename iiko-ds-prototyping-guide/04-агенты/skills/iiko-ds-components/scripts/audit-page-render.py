@@ -30,10 +30,10 @@ import subprocess
 import sys
 import tempfile
 
-DS = r"C:\Users\asukharev\GitHub\DS"
-OUT = os.path.join(DS, "iiko-ds-mobile", "prototypes", "recommendations")
+DS = r"C:\Users\asukharev\GitHub\iiko-DS\DS"
+OUT = os.path.join(DS, "components-mobile", "prototypes", "recommendations")
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-BASE = "http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations/"
+BASE = "http://127.0.0.1:8899/components-mobile/prototypes/recommendations/"
 
 JS_TMPL = r"""<!doctype html><meta charset="utf-8"><body><pre id="out"></pre><script>
 const PAGES = %(pages)s, THRESH = %(thresh)s, OUT = []; let i = 0;
@@ -76,7 +76,7 @@ function scan(doc, win, page){
 function next(){ if(i>=PAGES.length){document.getElementById('out').textContent=OUT.join('\n'); return;}
   const page=PAGES[i++]; const f=document.createElement('iframe');
   f.style.cssText='width:1600px;height:1400px;border:0';
-  f.src='/iiko-ds-mobile/prototypes/recommendations/'+page+'.html';
+  f.src='/components-mobile/prototypes/recommendations/'+page+'.html';
   f.onload=()=>setTimeout(()=>{scan(f.contentDocument, f.contentWindow, page); f.remove(); next();},320);
   document.body.appendChild(f);}
 next();

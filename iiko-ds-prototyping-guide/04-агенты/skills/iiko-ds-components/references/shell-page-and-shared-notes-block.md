@@ -1,6 +1,6 @@
 # Оболочка `recommendations/index.html` и блок «Общее для всех компонентов»
 
-Страница: `iiko-ds-mobile/prototypes/recommendations/index.html` (плюс `rec.css` рядом).
+Страница: `components-mobile/prototypes/recommendations/index.html` (плюс `rec.css` рядом).
 Обе генерируются: `_audit/rec/build.py`, функции `page()` (страница компонента) и
 `index_page()` (оболочка). Править только генератор, потом `python build.py` —
 иначе следующая пересборка затрёт правку. `rec.css` тоже пишет `build.py`.
@@ -53,7 +53,7 @@
 рисуется как 74, строка списка 68 — как 84; в каркасе это повторено для 44 классов
 библиотеки и 53 правил мобильного слоя); иконки — только лигатуры Material Icons;
 `checkbox.css`/`checkbox-icons.css`/`radio.css`/`radio-icons.css` не подключены агрегатором
-`iiko-ds-web/components/index.css`; `min-height` взят по фрейму Figma (меню 418, селект 406,
+`components-web/components/index.css`; `min-height` взят по фрейму Figma (меню 418, селект 406,
 список 257), у Button icon блок состояний стоит выше «Стиль × Тип» и проигрывает ему.
 
 ## Эталонные числа (замер 13.09.2026, окно 1920×1080, сервер на 8899)
@@ -68,7 +68,7 @@
 - `getComputedStyle` блока: `position: static`, `top/bottom: auto`; при `scrollTo(0,400)` карточка
   уезжает ровно на 400 px, то есть она в обычном потоке;
 - единственный `position:sticky` среди всех загружаемых оболочкой файлов (`rec.css`, `build.py`,
-  `modes.css`, `tokens.css`, `iiko-ds-web/components/index.css`) — меню `.nav{top:24px}`.
+  `modes.css`, `tokens.css`, `components-web/components/index.css`) — меню `.nav{top:24px}`.
 - Края и ширина блока совпадают с карточками страницы компонента на **любой** ширине окна
   (autocomplete, 13.09.2026): 1920 — блок и карточки `L328 R1857 W1529`; 1600 — `L328 R1537 W1209`;
   1440 — `L328 R1377 W1049`; 1280 — `L328 R1217 W889`. Прежде чем говорить «ширина та же»,
@@ -258,7 +258,7 @@
 ## Корень «двух полос» и «блок чуть шире»: владелец открывает оболочку как файл (`file://`) — 13.09.2026
 
 Нашлось только после того, как я посмотрел его окно (приёмы — в разделе ниже): в адресной строке
-стоит `file:///C:/Users/asukharev/GitHub/DS/iiko-ds-mobile/prototypes/recommendations/index.html#button`.
+стоит `file:///C:/Users/asukharev/GitHub/iiko-DS/DS/components-mobile/prototypes/recommendations/index.html#button`.
 Под `file://` Chrome считает каждый локальный файл отдельным origin, поэтому скрипт оболочки
 **не может заглянуть внутрь кадра**: `frame.contentDocument` → null, `fit()` молча падает в `catch`,
 инъекция `html,body{overflow:hidden}` не доезжает. Следствия ровно те, что он называл:

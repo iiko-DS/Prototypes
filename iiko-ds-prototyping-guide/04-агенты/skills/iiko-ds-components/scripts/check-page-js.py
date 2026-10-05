@@ -13,7 +13,7 @@
 
 Запуск:
     python check-page-js.py [папка-страниц]
-    (по умолчанию iiko-ds-mobile/prototypes/recommendations в рабочей копии DS)
+    (по умолчанию components-mobile/prototypes/recommendations в рабочей копии DS)
 
 Код возврата: 0 — все скрипты валидны, 1 — есть сломанные, 2 — нет node.
 """
@@ -26,7 +26,7 @@ import tempfile
 
 DEFAULT_DIR = os.path.join(
     "C:", "Users", "asukharev", "GitHub", "DS",
-    "iiko-ds-mobile", "prototypes", "recommendations",
+    "components-mobile", "prototypes", "recommendations",
 )
 
 

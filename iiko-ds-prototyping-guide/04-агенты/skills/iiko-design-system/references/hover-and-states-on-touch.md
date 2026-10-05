@@ -22,7 +22,7 @@ cd DS/_audit/platform && grep -rn -i "hover" --include=*.md --include=*.scss --i
 
 ### Наша библиотека
 
-`grep -rn "hover: hover\|hover: none\|@media" iiko-ds-web/components/ iiko-ds-mobile/modes.css`
+`grep -rn "hover: hover\|hover: none\|@media" components-web/components/ components-mobile/modes.css`
 → **ни одного `@media (hover: …)`**. При этом `:hover` и `:active` описаны (например
 `.ds-btn--accent.ds-btn--filled:hover` #3969D5 / `:active` #2651B5). Значит в режиме
 `data-mode="mobile"` меняются только размеры, а hover остаётся и на тач «залипает»

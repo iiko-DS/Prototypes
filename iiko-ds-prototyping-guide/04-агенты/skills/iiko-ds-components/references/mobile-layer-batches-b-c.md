@@ -6,8 +6,8 @@ List, Expansion panel, Icon size, Badge, Divider, Logo, Backdrop, Status, Scroll
 
 ## Итог по плану
 
-Страниц в оболочке `iiko-ds-mobile/prototypes/recommendations/index.html`: **38**, ровно по числу компонентов
-сводной таблицы плана. Мобильных файлов в `iiko-ds-mobile/components/*_DS/`: **26** (`modes.css` остаётся осью
+Страниц в оболочке `components-mobile/prototypes/recommendations/index.html`: **38**, ровно по числу компонентов
+сводной таблицы плана. Мобильных файлов в `components-mobile/components/*_DS/`: **26** (`modes.css` остаётся осью
 токенов, структурные файлы — рядом с компонентами, агрегатор `components/index.css`).
 
 ## Группа B — «размеры + поведение»

@@ -7,7 +7,7 @@ Button icon получил мобильные 40 px, Button toggle оказал�
 Итог в двух строках: у Button icon мобильное значение выведено из рекомендаций платформ;
 у Button toggle собственных размеров нет вообще — их несут кнопки внутри него.
 
-## Button icon — `iiko-ds-web/components/Button-Icon_DS/button-icon.css`
+## Button icon — `components-web/components/Button-Icon_DS/button-icon.css`
 
 Все размерные значения переведены на компонентные токены и на квадратный HUG:
 
@@ -30,7 +30,7 @@ height: calc(var(--ds-button-icon-m-size-pad-top) + var(--ds-button-icon-m-size-
 
 ### Мобильные значения (сделано — только из рекомендаций, без Figma)
 
-В `iiko-ds-mobile/modes.css`, блок `[data-mode="mobile"]`:
+В `components-mobile/modes.css`, блок `[data-mode="mobile"]`:
 
 ```css
 --ds-button-icon-m-size-pad-top/bottom/left/right: var(--ds-space-2-5x);   /* 10px → 10+10+20 = 40 */
@@ -58,7 +58,7 @@ S и XS на мобиле не берём: меньше 40 dp платформы
 как это сделано у Button. После правки: disabled `bg #EBEBEB` (`--ds-color-button-neutral-disable` =
 `--ds-palette-neutral-100`), иконка `#9E9E9E`, активная без изменений (`bg #448AFF`, текст `#FFFFFF`).
 
-## Button toggle — `iiko-ds-web/components/Button-Toggle_DS/button-toggle.css`
+## Button toggle — `components-web/components/Button-Toggle_DS/button-toggle.css`
 
 ### Структура (главное; я ошибался именно здесь)
 
@@ -131,7 +131,7 @@ Button (`.ds-btn`). В Figma слот так и назван — «Button contai
   Колонка `_mob` в плане (`Button toggle_mob` — «Собран») здесь **не используется**: владелец запретил ходить
   в Figma за мобильными числами. Колонка остаётся полезной только как признак «есть/нет отдельный мобильный
   компонент» — и то, если он сам попросит сравниться с Figma.
-- Страницы: `iiko-ds-mobile/prototypes/recommendations/{button-icon,button-toggle}.html`, данные —
+- Страницы: `components-mobile/prototypes/recommendations/{button-icon,button-toggle}.html`, данные —
   `_audit/rec/data{,-tech}/<slug>.json`, генератор — `_audit/rec/build.py`.
 
 ## Открытые вопросы (у владельца)

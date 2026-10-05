@@ -9,16 +9,16 @@ Stepper → отдельный файл в мобильном слое.
 
 | Что | Куда |
 |---|---|
-| Свой файл варианта | `iiko-ds-mobile/components/<Имя>_DS/<вариант>.css` (пример: `Stepper_DS/stepper-vertical.css`) |
-| Регистрация | `@import "Stepper_DS/stepper-vertical.css";` в агрегаторе `iiko-ds-mobile/components/index.css` |
-| Общие части (шаги, сегменты, поля) | остаются в `iiko-ds-web/components/<Имя>_DS/` — вариант меняет только компоновку |
+| Свой файл варианта | `components-mobile/components/<Имя>_DS/<вариант>.css` (пример: `Stepper_DS/stepper-vertical.css`) |
+| Регистрация | `@import "Stepper_DS/stepper-vertical.css";` в агрегаторе `components-mobile/components/index.css` |
+| Общие части (шаги, сегменты, поля) | остаются в `components-web/components/<Имя>_DS/` — вариант меняет только компоновку |
 
 Первый реальный `*_mob`-файл появился 11.09.2026 (Stepper); до него агрегатор был пустым.
 
 ## Капкан №1 — специфичность (проверено на Stepper)
 
 Регламентный порядок подключения: `font.css → tokens.css → modes.css →`
-**`iiko-ds-mobile/components/index.css`** `→ iiko-ds-web/components/index.css`.
+**`components-mobile/components/index.css`** `→ components-web/components/index.css`.
 Мобильный слой идёт **раньше** библиотеки, поэтому при равной специфичности базовые правила
 выигрывают по порядку. Так и вышло: `.ds-stepper--vertical { align-items: flex-start }` (0,1,0)
 проиграл `.ds-stepper { align-items: center }` (0,1,0) — `flex-direction: column` применился
@@ -37,7 +37,7 @@ Stepper → отдельный файл в мобильном слое.
 ## Капкан №2 — страница рекомендаций должна подключать мобильный агрегатор
 
 В шаблоне `page()` в `_audit/rec/build.py` обязательна строка
-`<link rel="stylesheet" href="../../components/index.css">` (до `iiko-ds-web/components/index.css`).
+`<link rel="stylesheet" href="../../components/index.css">` (до `components-web/components/index.css`).
 Без неё структурные `*_mob`-файлы на страницу не попадают, и мобильная панель показывает
 десктопную раскладку: замер честно отдавал `row` / разделитель `8×1` в панели Mobile, хотя класс
 `ds-stepper--vertical` в разметке был. Добавлено 11.09.2026.

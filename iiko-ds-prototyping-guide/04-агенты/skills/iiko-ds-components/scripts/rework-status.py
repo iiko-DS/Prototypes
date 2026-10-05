@@ -1,7 +1,7 @@
 """Where did the _audit/rec rework stop? Reads files only, prints a table.
 
 Usage:
-    python rework-status.py [repo_root]        # default: C:\\Users\\asukharev\\GitHub\\DS
+    python rework-status.py [repo_root]        # default: C:\\Users\\asukharev\\GitHub\\iiko-DS\\DS
 
 Answers the question asked after every interruption: which components still have no
 patterns_ru, which out/<kind>/ patches exist but were never merged into data/, and how
@@ -14,7 +14,7 @@ import json
 import os
 import sys
 
-ROOT = sys.argv[1] if len(sys.argv) > 1 else r"C:\Users\asukharev\GitHub\DS"
+ROOT = sys.argv[1] if len(sys.argv) > 1 else r"C:\Users\asukharev\GitHub\iiko-DS\DS"
 REC = os.path.join(ROOT, "_audit", "rec")
 DATA = os.path.join(REC, "data")
 OUT = os.path.join(REC, "out")
