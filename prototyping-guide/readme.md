@@ -31,10 +31,10 @@
 
 | Репозиторий | Что это |
 |---|---|
-| [`DS`](https://github.com/iiko-DS/DS) | ДС целиком: генератор страниц, данные компонентов, `serve.py` и обе папки слоёв — `components-web/`, `components-mobile/`; с него начинается работа |
+| [`DS`](https://github.com/iiko-DS/DS) | ДС целиком: обе папки слоёв — `components-web/`, `components-mobile/`, общие сборки и `connect.js`; с него начинается работа |
 | [`components-web`](https://github.com/iiko-DS/DS/tree/main/components-web) | десктопный слой: компоненты, токены, стили, спецификация `iiko-ds-spec.md` |
 | [`components-mobile`](https://github.com/iiko-DS/DS/tree/main/components-mobile) | мобильный слой ДС |
-| [`Prototypes`](https://github.com/iiko-DS/Prototypes) | прототипы экранов (в том числе KDS) и **эта база знаний** — папка `prototyping-guide/` внутри |
+| [`Prototypes`](https://github.com/iiko-DS/Prototypes) | прототипы экранов и **эта база знаний** — папка `prototyping-guide/` внутри |
 
 Этот репозиторий — база знаний: он ничего не собирает и ни от чего не зависит, читается прямо на GitHub, клонировать рядом с ДС не обязательно.
 

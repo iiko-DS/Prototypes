@@ -34,9 +34,9 @@ Stepper → отдельный файл в мобильном слое.
 Проверка: замерять не только `flex-direction`, но и `align-items`, `gap`, `position` разделителя —
 иначе «раскладка поменялась» маскирует непобеждённое базовое свойство.
 
-## Капкан №2 — страница рекомендаций должна подключать мобильный агрегатор
+## Капкан №2 — пример должен подключать мобильный агрегатор
 
-В шаблоне `page()` в `_audit/rec/build.py` обязательна строка
+В шаблоне примера обязательна строка
 `<link rel="stylesheet" href="../../components/index.css">` (до `components-web/components/index.css`).
 Без неё структурные `*_mob`-файлы на страницу не попадают, и мобильная панель показывает
 десктопную раскладку: замер честно отдавал `row` / разделитель `8×1` в панели Mobile, хотя класс
@@ -56,14 +56,14 @@ Stepper → отдельный файл в мобильном слое.
  "stack": true}
 ```
 
-`build.py` берёт `html_mobile` для мобильной панели, если он есть; `stack: true` укладывает
+`html_mobile` в данных примера — отдельная разметка для мобильной панели; `stack: true` укладывает
 пример в колонку. Для «только размерных» компонентов эти поля не нужны — там работает один markup
 и `data-mode`.
 
 ## Кейс Stepper (11.09.2026)
 
 Источник решения: план, группа C («горизонтальный ряд шагов не помещается») +
-`_audit/platform/stepper.json` — мастер-степпер как нормированный компонент есть **только**
+Мастер-степпер как нормированный компонент есть **только**
 у Angular Material («Prefer vertical steppers when building for small screen sizes, as horizontal
 steppers typically take up significantly more horizontal space thus introduce horizontal scrolling»);
 в MD3 степпера нет вообще (ни токенов, ни компонентов), у Apple HIG «Steppers» — это «+ / −»
@@ -71,7 +71,7 @@ steppers typically take up significantly more horizontal space thus introduce ho
 
 Что сделано: `stepper-vertical.css` (шаги в столбик, разделитель 1 × 8 со сдвигом 11,5 px — центр
 линии совпадает с центром маркера при x = 12), регистрация в агрегаторе, страница
-`recommendations/stepper.html`. В `stepper.css` токенизированы три жёстких значения
+В `stepper.css` токенизированы три жёстких значения
 (gap 8 → `--ds-stepper-gap`, ширина линии → `--ds-stepper-divider-width`, gap панели кнопок →
 `--ds-stepper-gap-button`) — регрессия git HEAD → текущий: 0 отличий.
 

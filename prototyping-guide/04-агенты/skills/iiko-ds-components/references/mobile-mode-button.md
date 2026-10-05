@@ -7,7 +7,7 @@ browser or read from a file; nothing was invented.
 
 | Source | What it gave |
 |---|---|
-| `Prototypes/compare-button-mob.html` | Figma `Button_mob` values, transcribed by hand earlier: 138×44 px, HUG/HUG, radius 8, padding 16 h / 12 v, text 16 px / 500, icon 20 px (vector 12×12), accent `#448AFF` |
+| A former comparison page (removed from the repo) | Figma `Button_mob` values, transcribed by hand earlier: 138×44 px, HUG/HUG, radius 8, padding 16 h / 12 v, text 16 px / 500, icon 20 px (vector 12×12), accent `#448AFF` |
 | `components-mobile/desktop-to-mobile-plan.md` | Button = category A («только размерные значения»), «Частично общая» token binding |
 | `components-mobile/mobile-mode-notes.md` §12 | `modes.css` + load order; `tokens.css` is generated |
 | `components-web/tokens.css` (collection `Component`) | Existing size tokens — pad/gap/icon-size/text-size/text-weight per `xs|s|m`, `--ds-button-border-radius`, `--ds-button-border-size` |

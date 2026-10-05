@@ -12,9 +12,7 @@
    1) «Посмотреть с десктопными размерами» — рабочий переключатель (в десктопном состоянии
       текст «Вернуть мобильные размеры», подчёркнут);
    2) «Дизайнерские размеры iiko» — ЗАГЛУШКА на будущее (серая, неактивная): третий набор
-      размеров, который будет браться из таблицы значений витрины
-      `components-mobile/prototypes/recommendations/index.html` (правим значения по компонентам —
-      подтягиваем в макеты). Пока таблица не сохраняет значения — линия выключена.
+      размеров (в разработке).
    В тач-режиме кадр получает запас сверху (+60px, обвязка ревью); строки — только в мобильном/
    планшетном режиме (body[data-touch], как в touch-mode.js).
    ?sizes=desktop — стартовое состояние (невидимый параметр для скриншотов).
@@ -65,8 +63,7 @@
       '#ds-sizes-btn{cursor:pointer;color:var(--ds-color-text-accent,#448aff)}' +
       '#ds-sizes-btn:hover,#ds-sizes-btn.is-active{text-decoration:underline}' +
       '#ds-sizes-btn:focus-visible{outline:2px solid var(--ds-color-brand-accent-default,#448aff);outline-offset:2px;border-radius:4px}' +
-      /* ЗАГЛУШКА на будущее: третий набор (iiko-дизайнерские) — значения из таблицы
-         витрины рекомендаций; включим, когда таблица начнёт сохраняться */
+      /* ЗАГЛУШКА на будущее: третий набор (iiko-дизайнерские размеры) — включим, когда он появится */
       '#ds-sizes-iiko-btn{color:#9e9e9e;cursor:default}';
     document.head.appendChild(st);
     lines = document.createElement('div');

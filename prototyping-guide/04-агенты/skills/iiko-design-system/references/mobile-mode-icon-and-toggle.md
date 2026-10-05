@@ -37,7 +37,7 @@ height: calc(var(--ds-button-icon-m-size-pad-top) + var(--ds-button-icon-m-size-
 ```
 
 Откуда 10: **40 dp — единственный размер контейнера, который называют обе платформы**
-(`_audit/platform/button-icon.json`): M3/Material Web — `'state-layer-height': 40px`,
+: M3/Material Web — `'state-layer-height': 40px`,
 `'state-layer-width': 40px`, `'icon-size': 24px` (`tokens/versions/v0_192/_md-comp-icon-button.scss`),
 в доке `--md-filled-icon-button-container-width/height | 40px`; Angular Material —
 `icon-button-state-layer-size: list.nth((40px, 36px, 32px, 28px, 24px, 24px), $index)`, т.е. 40 на
@@ -45,7 +45,7 @@ height: calc(var(--ds-button-icon-m-size-pad-top) + var(--ds-button-icon-m-size-
 не даёт вовсе — только хит-регион «at least 44x44 pt». Иконка 20 px — наша (у M3 внутри его 40 dp иконка 24).
 S и XS на мобиле не берём: меньше 40 dp платформы описывают только с отключённым тач-таргетом.
 
-Проверено замером на странице рекомендаций: desktop 36×36 (pad 8, иконка 20) → mobile 40×40 (pad 10,
+Проверено замером: desktop 36×36 (pad 8, иконка 20) → mobile 40×40 (pad 10,
 иконка 20); у S и XS мобильных отличий нет. Остаётся решением владельца: тач-слой 48×48 отдельным
 элементом и выравнивание 40 против 44 у Button (правка одного токена — `--ds-space-3x` вместо `--ds-space-2-5x`).
 
@@ -119,20 +119,18 @@ Button (`.ds-btn`). В Figma слот так и назван — «Button contai
   temp-папку** — иначе diff считается против старого снимка и молча даёт `changed fields: 0`.
 - Скрытые дефекты видны только на матрице: рендерить компонент и `<div>`-ом (разметка из спеки), и `<button>`-ом
   (UA-рамка). Так нашлись и no-op `--s`, и `36/28/24` вместо `32`.
-- Замеры на **сгенерированной** странице рекомендаций: у неё нет `data-measure`, поэтому копия страницы
+- Замеры на сгенерированной странице: у неё нет `data-measure`, поэтому копия страницы
   кладётся в ту же папку как `_probe_*.html` с внедрённым скриптом, который пишет JSON в `document.title`,
   читается `--dump-dom`, после чего probe-файл удаляется.
 
 ## Что с источниками мобильных значений
 
 - **Button icon** — Figma-компонента `_mob` нет (в плане колонка «нет»); числа выведены из
-  `_audit/platform/button-icon.json` (40 dp + тач-таргет 48 dp) и собраны из примитивов ДС.
+  (40 dp + тач-таргет 48 dp) и собраны из примитивов ДС.
 - **Button toggle** — своих мобильных значений не нужно: сегменты — Button и растут по его режиму.
   Колонка `_mob` в плане (`Button toggle_mob` — «Собран») здесь **не используется**: владелец запретил ходить
   в Figma за мобильными числами. Колонка остаётся полезной только как признак «есть/нет отдельный мобильный
   компонент» — и то, если он сам попросит сравниться с Figma.
-- Страницы: `components-mobile/prototypes/recommendations/{button-icon,button-toggle}.html`, данные —
-  `_audit/rec/data{,-tech}/<slug>.json`, генератор — `_audit/rec/build.py`.
 
 ## Открытые вопросы (у владельца)
 

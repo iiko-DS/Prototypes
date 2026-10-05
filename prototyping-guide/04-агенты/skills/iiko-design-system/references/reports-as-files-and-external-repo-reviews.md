@@ -115,7 +115,7 @@ curl -s "https://api.github.com/repos/<owner>/<repo>/git/trees/<branch>?recursiv
 - **Есть ли там файл-сборщик вообще.** В `ux-ui-agent-skills` «сборка прототипов» = правила
   (`workflows/prototyping.md`) + 30 гейтов-проверок; сами прототипы пишутся руками
   (`examples/component-states/*.html`), генератора нет. Единственный настоящий билд —
-  `scripts/build_tokens.mjs` (токены JSON → CSS). У нас, наоборот, генератор есть (`_audit/rec/build.py`).
+  `scripts/build_tokens.mjs` (токены JSON → CSS). У нас, наоборот, генератор есть (сборка страниц из данных).
 
 ## 3. Форма ответа «нужно ли нам так же» (зашла, владелец сказал «ок»)
 
