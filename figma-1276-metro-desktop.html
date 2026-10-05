@@ -76,23 +76,23 @@
     • записи живут в localStorage (переживают перезагрузку) и выгружаются в .md —
       «Скопировать / Скачать», чтобы перенести в план или страницы рекомендаций.
 -->
-<link rel="stylesheet" href="../iiko-ds-web/font.css">
-<link rel="stylesheet" href="../iiko-ds-web/tokens.css">
+<link rel="stylesheet" href="../DS/components-web/font.css">
+<link rel="stylesheet" href="../DS/components-web/tokens.css">
 <!-- мобильный слой ДС: ось режима + структурные моб-компоненты (порядок обязателен) -->
-<link rel="stylesheet" href="../iiko-ds-mobile/modes.css">
-<link rel="stylesheet" href="../iiko-ds-mobile/components/index.css">
+<link rel="stylesheet" href="../DS/components-mobile/modes.css">
+<link rel="stylesheet" href="../DS/components-mobile/components/index.css">
 <script src="ds-frame-nav.js?v=1"></script>
-<link rel="stylesheet" href="../iiko-ds-web/styles.css">
-<link rel="stylesheet" href="../iiko-ds-web/components/index.css">
+<link rel="stylesheet" href="../DS/components-web/styles.css">
+<link rel="stylesheet" href="../DS/components-web/components/index.css">
 <!-- fixes.css — ручной слой правок поверх генерации ДС; обновления из Фигмы его не перезаписывают -->
-<link rel="stylesheet" href="../iiko-ds-web/fixes.css">
+<link rel="stylesheet" href="../DS/components-web/fixes.css">
 <!-- touch-hover-off.css — статическая глушилка ховеров для тач-режима; генерируется заново после обновлений ДС
      (node _audit/build-hover-off.mjs), при перегенерации поднять ?v= -->
 <link rel="stylesheet" href="touch-hover-off.css?v=1">
-<!-- app-header — сквозная шапка приложения («App bars: top»): один источник app-header/*.css+js -->
-<link rel="stylesheet" href="app-header/app-header.css?v=6">
-<!-- app-sidenav — свёрнутое боковое меню (десктоп); на планшете/мобильном уезжает в гамбургер шапки -->
-<link rel="stylesheet" href="app-sidenav/app-sidenav.css?v=4">
+<!-- app-header — организм дизайн-системы (DS/organisms/app-header): шапка приложения, один источник на все страницы -->
+<link rel="stylesheet" href="../DS/organisms/app-header/app-header.css?v=19">
+<!-- app-sidenav — организм дизайн-системы (DS/organisms/app-sidenav): боковое меню L1 + L2; правила — app-sidenav/readme.md -->
+<link rel="stylesheet" href="../DS/organisms/app-sidenav/app-sidenav.css?v=13">
 <link rel="stylesheet" href="device-chrome/device-chrome.css?v=5">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
@@ -303,8 +303,8 @@
 <link rel="stylesheet" href="touch-mode.css?v=6">
 <script src="touch-mode.js?v=10" defer></script>
 <script src="ds-sizes-toggle.js?v=6" defer></script>
-<script src="app-header/app-header.js?v=3" defer></script>
-<script src="app-sidenav/app-sidenav.js?v=2" defer></script>
+<script src="../DS/organisms/app-header/app-header.js?v=20" defer></script>
+<script src="../DS/organisms/app-sidenav/app-sidenav.js?v=12" defer></script>
 <script src="device-chrome/device-chrome.js?v=1" defer></script>
 </head>
 <body>

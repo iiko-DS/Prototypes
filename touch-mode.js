@@ -46,7 +46,7 @@
   // CSS-правила со словом :hover временно становятся несовпадающими (селектор в таблицах стилей
   // меняем :hover → :not(*)); при выходе — возвращаем исходные. Хром ревью не трогаем: там мышь
   // уместна. Это эмуляция того же поведения, что даёт правило ДС «ховеры — только под
-  // @media (hover: hover)» (iiko-ds-web/generator-rules.md, п. 5; журнал review-notes п. 26).
+  // @media (hover: hover)» (components-web/generator-rules.md, п. 5; журнал DS/fixes.md, п. 26).
   var CHROME_HOVER_KEEP = ['modes-bar', 'hint', 'panel__handle'];
   var hoverRules = null, hoversDead = false;
   function collectHoverRules() {
@@ -183,7 +183,7 @@
   });
 
   // ── Свайп-прокрутка и видимость активного таба (мобильные паттерны ДС) ──
-  // Полоса табов на мобиле прокручивается, скроллбар скрыт (iiko-ds-mobile/Tabs_DS/tabs-mobile.css),
+  // Полоса табов на мобиле прокручивается, скроллбар скрыт (components-mobile/Tabs_DS/tabs-mobile.css),
   // а активный таб должен быть в видимой зоне (M3 scrollable tabs) — подскролливаем его.
   function showActiveTab() {
     Array.prototype.forEach.call(document.querySelectorAll('.ds-tabs'), function (tabs) {

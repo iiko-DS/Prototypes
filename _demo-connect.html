@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>connect.js — пример минимальной страницы</title>
+<!--
+  ПРИМЕР-ЗАГОТОВКА: страница подключается ОДНОЙ строкой.
+  Всё остальное (стили ДС, иконки, шапка и боковое меню) подтянет connect.js из соседней папки DS.
+  Такую страницу можно держать где угодно (черновики — в любой папке, сколько угодно);
+  в этом репозитории собираем финальные и общие версии.
+-->
+<script src="../DS/connect.js" defer></script>
+<style>
+  /* собственные стили страницы — всё, что вне ДС, здесь и остаётся */
+  .demo { padding: 24px 32px; max-width: 760px; }
+  .demo h1 { font: 500 20px/28px Roboto, 'Helvetica Neue', Arial, sans-serif; margin: 0 0 8px; color: #212121; }
+  .demo p  { font: 400 14px/20px Roboto, 'Helvetica Neue', Arial, sans-serif; margin: 0 0 20px; color: #4b626d; }
+  .demo__row { display: flex; align-items: center; gap: 16px; }
+</style>
+</head>
+<body>
+  <div class="demo">
+    <h1>Минимальная страница — одна строка подключения</h1>
+    <p>
+      Единственное подключение этой страницы — <b>connect.js</b>.<br>
+      Стили дизайн-системы, иконки, шапка и боковое меню пришли сами; обёртка
+      <b>.panel&nbsp;&gt;&nbsp;.frame</b> создана автоматически, содержимое перенесено внутрь.
+    </p>
+    <div class="demo__row">
+      <button class="ds-btn ds-btn--m ds-btn--accent ds-btn--filled" type="button">
+        <span class="ds-btn__icon material-icons" aria-hidden="true">add</span>
+        <span class="ds-btn__label">Кнопка ДС</span>
+      </button>
+      <span class="ds-badge ds-badge--counter ds-badge--accent">7</span>
+      <span style="font: 400 14px/20px Roboto, sans-serif; color: #4b626d;">← компоненты ДС, подключены тоже сами</span>
+    </div>
+  </div>
+</body>
+</html>

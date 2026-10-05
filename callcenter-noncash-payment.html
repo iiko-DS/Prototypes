@@ -27,29 +27,30 @@
       подложка-панель справа + слой затемнения, внутри только компоненты ДС;
     • модальное окно «Контрагент» — Select (Container) + строки Select item со слотом Element select,
       поиск — Search; тот же приём, что в меню селекта 7450 (макет 4551:20512);
-    • шапка и боковое меню приложения — один источник app-header/, app-sidenav/
+    • шапка и боковое меню приложения — организмы дизайн-системы (DS/organisms/app-header, DS/organisms/app-sidenav)
       (тот же экран iikoWeb, что в figma-7422/7431/7436/7450);
     • состав экрана заказа (содержимое счёта, суммы, контрагенты) — правдоподобные данные прототипа:
       макет-источник и спека доработки в задаче не приложены (ссылка на спеку не пришла).
       Тексты-подписи состояний — дословно из описания задачи.
 
   ПРАВКИ ПОВЕРХ ДС — только там, где у ДС реальный пробел; помечены в CSS `/* косяк ДС: … */`
-  и вынесены в журнал (см. «Подсказки ДС» в шапке и iiko-ds-prototypes/review-notes.md).
+  и вынесены в журнал (см. «Подсказки ДС» в шапке и DS/fixes.md).
 -->
-<link rel="stylesheet" href="../iiko-ds-web/font.css">
-<link rel="stylesheet" href="../iiko-ds-web/tokens.css">
-<link rel="stylesheet" href="../iiko-ds-web/styles.css">
-<link rel="stylesheet" href="../iiko-ds-web/components/index.css">
+<link rel="stylesheet" href="../DS/components-web/font.css">
+<link rel="stylesheet" href="../DS/components-web/tokens.css">
+<link rel="stylesheet" href="../DS/components-web/styles.css">
+<link rel="stylesheet" href="../DS/components-web/components/index.css">
 <!-- Radio button: ни сам контрол, ни его иконки в агрегатор не подключены (как и у Checkbox) —
      догружаем файлы ДС вручную, иначе .ds-radio не имеет ни flex, ни иконок выбора -->
-<link rel="stylesheet" href="../iiko-ds-web/components/Radio-Button_DS/radio.css">
-<link rel="stylesheet" href="../iiko-ds-web/components/Radio-Button_DS/radio-icons.css">
-<link rel="stylesheet" href="../iiko-ds-web/fixes.css">
-<!-- шапка приложения («App bars: top») — один источник на все страницы-кадры -->
-<link rel="stylesheet" href="app-header/app-header.css?v=6">
-<!-- боковое меню приложения (свёрнутое, десктоп) -->
-<link rel="stylesheet" href="app-sidenav/app-sidenav.css?v=4">
+<link rel="stylesheet" href="../DS/components-web/components/Radio-Button_DS/radio.css">
+<link rel="stylesheet" href="../DS/components-web/components/Radio-Button_DS/radio-icons.css">
+<link rel="stylesheet" href="../DS/components-web/fixes.css">
+<!-- шапка приложения — организм дизайн-системы (DS/organisms/app-header) -->
+<link rel="stylesheet" href="../DS/organisms/app-header/app-header.css?v=19">
+<!-- боковое меню приложения — организм дизайн-системы (DS/organisms/app-sidenav); правила — app-sidenav/readme.md -->
+<link rel="stylesheet" href="../DS/organisms/app-sidenav/app-sidenav.css?v=13">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
 <style>
   /* ============================================================
      КАРКАС СТРАНИЦЫ (обвязка ревью) — своих компонентов не рисуем
@@ -200,7 +201,7 @@
   <button class="modes-bar__btn" type="button" id="next-btn" title="Следующее состояние (→)">→</button>
 </div>
 
-<!-- Пробелы ДС, найденные в этой сборке (журнал — review-notes.md) -->
+<!-- Пробелы ДС, найденные в этой сборке (журнал — DS/fixes.md) -->
 <div class="hints" id="hints" role="note" aria-label="Подсказки по ДС">
   <p class="hints__title">Пробелы ДС, найденные при сборке (правки в каркасе помечены «косяк ДС»)</p>
   <div class="hints__item"><span class="hints__num">1</span><span class="hints__text">Select (Container): жёстко 240 px ширины и min-height 406 px — для модального окна (список контрагентов, поиск, две кнопки) не годится: нужны филл по месту и высота по контенту.</span></div>
@@ -216,14 +217,14 @@
 <div class="note" id="note" role="note"></div>
 
 <div class="view">
-  <!-- Кадр приложения Веб-КЦ: шапка и боковое меню подключаются app-header.js / app-sidenav.js -->
+  <!-- Кадр приложения Веб-КЦ: шапка и боковое меню подключаются из дизайн-системы (DS/organisms/app-header.js / app-sidenav.js) -->
   <div class="panel" id="panel" data-mode="desktop">
     <div class="frame" id="frame"></div>
   </div>
 </div>
 
-<script src="app-header/app-header.js?v=3" defer></script>
-<script src="app-sidenav/app-sidenav.js?v=2" defer></script>
+<script src="../DS/organisms/app-header/app-header.js?v=20" defer></script>
+<script src="../DS/organisms/app-sidenav/app-sidenav.js?v=12" defer></script>
 <script>
 (function () {
   'use strict';
@@ -379,7 +380,7 @@
     var pays = payments.map(function (p, i) {
       var second = p.cp ? '<span class="ds-list-item__label-down">' + p.cp + '</span>' : '';
       /* разделитель строк — компонент Divider: у .ds-list-container__divider фон #ffffff,
-         на белой подложке линии не видно (пробел ДС, review-notes п. 38) */
+         на белой подложке линии не видно (пробел ДС №38 — журнал DS/fixes.md) */
       var divider = (i < payments.length - 1) ? '<hr class="ds-divider ds-divider--lite">' : '';
       return '<div class="ds-list-container__item">' +
         '<div class="ds-list-container__content"><span class="ds-list-item__text">' + p.name + '</span>' + second + '</div>' +
