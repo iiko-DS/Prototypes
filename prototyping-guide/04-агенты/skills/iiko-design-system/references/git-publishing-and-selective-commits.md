@@ -24,7 +24,7 @@
 | Что | Состояние |
 |---|---|
 | `C:/Users/asukharev/GitHub/iiko-DS/DS` | origin `https://github.com/iiko-DS/DS`, ветка `main`, приватный; папки `components-web/` и `components-mobile/` — **внутри него** (отдельных репозиториев у них нет) |
-| `C:/Users/asukharev/GitHub/iiko-DS/Prototypes` | origin `https://github.com/iiko-DS/Prototypes`, ветка `main`, приватный; лежит рядом с папкой `DS`; база знаний — `iiko-ds-prototyping-guide/` внутри |
+| `C:/Users/asukharev/GitHub/iiko-DS/Prototypes` | origin `https://github.com/iiko-DS/Prototypes`, ветка `main`, приватный; лежит рядом с папкой `DS`; база знаний — `prototyping-guide/` внутри |
 | Публичный сайт | пока **нет**: Pages у приватных репозиториев не включается; когда включат — ДС будет отдаваться по `https://iiko-ds.github.io/DS/…` |
 
 Проверка состояния без токена и без печати учётных данных:
