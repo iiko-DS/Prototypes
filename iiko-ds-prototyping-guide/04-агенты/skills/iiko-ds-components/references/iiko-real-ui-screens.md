@@ -14,7 +14,7 @@ iikoInventory дефолт (зелёная brand-шапка, чипсы, зел�
 сторонне мобильное приложение не на нашей дизайн системе.» Значит: из реального экрана берём
 **только состав и содержание**, а разметку и вид — классами и токенами нашей ДС (`ds-btn`,
 `ds-btn-icon`, `ds-input`, accent-заливка), материал — из **своих** прототипов
-(`iiko-ds-prototypes/figma-7450-create-product.html`, `iiko-ds-mobile/prototypes/button-modes.html`).
+(`Prototypes/figma-7450-create-product.html`, `components-mobile/prototypes/button-modes.html`).
 Его «Возьми как вариант что-то из склада» читается двояко (складское приложение iikoInventory или
 наш «склад» прототипов); первый вариант забракован именно за чужой вид — начинать со своих
 прототипов. Разметка итога — `references/rec-screens-block.md`, раздел «Пятый заход».
@@ -45,10 +45,10 @@ iikoInventory дефолт (зелёная brand-шапка, чипсы, зел�
     блюда, где **нижняя панель — сумма слева («$22.50») + главная кнопка справа («Done»)**, тайлы
     опций и степперы количества.
   - другие приложения вендора — `appshunter.io` (developer 740400984) и `web_search`.
-- **Репозиторий** (подписи и приёмы, без картинок): `iiko-ds-mobile/prototypes/button-modes.html`
+- **Репозиторий** (подписи и приёмы, без картинок): `components-mobile/prototypes/button-modes.html`
   (реальные подписи кнопок iiko: «Создать», «Далее», «Отмена», «Добавить», «Сохранить», «Удалить»;
-  «Футер формы — на всю ширину (bottom action bar)»), `iiko-ds-prototypes/compare-button-mob.html`,
-  `iiko-ds-prototypes/figma-7450-create-product.html`.
+  «Футер формы — на всю ширину (bottom action bar)»), `Prototypes/compare-button-mob.html`,
+  `Prototypes/figma-7450-create-product.html`.
 
 ## Приложения iiko и их домены (что из чего собирать)
 

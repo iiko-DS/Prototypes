@@ -1,6 +1,6 @@
 # Оболочка страниц рекомендаций: геометрия, замер, пробники
 
-Всё ниже — с прогонов 12.09.2026 (`_audit/rec/build.py` → `iiko-ds-mobile/prototypes/recommendations/`).
+Всё ниже — с прогонов 12.09.2026 (`_audit/rec/build.py` → `components-mobile/prototypes/recommendations/`).
 Цель файла: следующий сеанс меряет «как у остальных» и не повторяет путь из пяти итераций.
 
 ## 1. Как устроена оболочка (index.html)
@@ -64,7 +64,7 @@ def white_span(px, w, y):           # края белой карточки в с
 "/c/Program Files/Google/Chrome/Application/chrome.exe" --headless=new --disable-gpu --no-first-run \
   --no-default-browser-check --user-data-dir="$LOCALAPPDATA/Temp/udd_x" --virtual-time-budget=12000 \
   --window-size=1920,3700 --screenshot="$LOCALAPPDATA/Temp/p.png" \
-  "http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations/index.html#<slug>"
+  "http://127.0.0.1:8899/components-mobile/prototypes/recommendations/index.html#<slug>"
 ```
 
 38 страниц — примерно две минуты (3–5 с на страницу), разбивать на партии по 19 в одном вызове.
@@ -120,7 +120,7 @@ frame.addEventListener('load', function () { fit(); watch(); });
   поэтому асинхронный пробник печатает `<pre id="out">` пустым. Рабочий приём — **мерить синхронно в `onload`
   самого `iframe`**: его `load` наступает раньше `load` родителя, результат успевает попасть в дамп.
   Пробник живёт рядом со страницами (`_audit/rec/checks/_probe*.html`), `src` iframe — относительный путь
-  `../../../iiko-ds-mobile/prototypes/recommendations/<slug>.html`, всё через `serve.py 8899` (same-origin).
+  `../../../components-mobile/prototypes/recommendations/<slug>.html`, всё через `serve.py 8899` (same-origin).
 - **Нужны значения «после загрузки шрифтов» — рисуй их текстом на странице и снимай скрин.** Асинхронный
   сценарий (`await fonts.ready` → `await wait(600)` → запись в `<pre>`) в `--dump-dom` не виден, а в скриншоте
   виден: `--screenshot` + `--virtual-time-budget=60000`, `<pre>` покрупнее — числа читаются (проверено: frameH /
@@ -134,8 +134,8 @@ frame.addEventListener('load', function () { fit(); watch(); });
 
 ```bash
 # что CSS вообще читает
-rg -o --no-filename 'var\(\s*(--ds-hint[a-z0-9-]*)' iiko-ds-web/components/Hint-Tooltip_DS \
-  iiko-ds-mobile/components/Hint-Tooltip_DS | sed 's/var(\s*//' | sort -u
+rg -o --no-filename 'var\(\s*(--ds-hint[a-z0-9-]*)' components-web/components/Hint-Tooltip_DS \
+  components-mobile/components/Hint-Tooltip_DS | sed 's/var(\s*//' | sort -u
 # где ещё встречается имя токена (кроме tokens.css)
 rg -l -- '--ds-hint-arrow-width' --glob '!tokens.css'
 ```

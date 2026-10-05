@@ -1,6 +1,6 @@
 # Пайплайн `out/` и блоки страниц рекомендаций
 
-Класс задачи: правки страниц `iiko-ds-mobile/prototypes/recommendations/` приходят
+Класс задачи: правки страниц `components-mobile/prototypes/recommendations/` приходят
 заготовками от исполнителей, сводятся в данные и собираются генератором. Здесь — как это
 устроено, какие правила владельца закреплены и как проверять результат.
 
@@ -14,14 +14,14 @@ _audit/rec/out/patterns/<slug>.json   → patterns_ru    (блок «Приме�
                 ↓  python apply_out.py [--build]
 _audit/rec/data/<slug>.json           → единственный источник страниц
                 ↓  python build.py
-iiko-ds-mobile/prototypes/recommendations/{index.html,<slug>.html} + rec.css
+components-mobile/prototypes/recommendations/{index.html,<slug>.html} + rec.css
 ```
 
 - `apply_out.py` **заменяет** поля целиком: `previews` перезаписывает `preview_html`,
   `patterns` — массив `patterns_ru` вместе с примерами. Это не «дополнение», а замена.
 - `rec.css` **пишет `build.py`** из своей константы `CSS = """…"""` — правка этого файла
   выглядит удавшейся и исчезает при следующей сборке. Стили добавлять в `build.py`.
-- Компоненты (`iiko-ds-web`) и `modes.css` генератор не трогает — все демонстрационные
+- Компоненты (`components-web`) и `modes.css` генератор не трогает — все демонстрационные
   правила живут на странице.
 
 ## Правила владельца (сформулированы по ходу работы, нарушать нельзя)

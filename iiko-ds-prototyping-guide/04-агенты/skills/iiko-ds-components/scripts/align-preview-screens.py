@@ -95,7 +95,7 @@ def save(path, obj, crlf):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--root", default=os.environ.get("IIKO_DS_ROOT", r"C:\Users\asukharev\GitHub\DS"))
+    ap.add_argument("--root", default=os.environ.get("IIKO_DS_ROOT", r"C:\Users\asukharev\GitHub\iiko-DS\DS"))
     ap.add_argument("--check", action="store_true", help="только отчёт, ничего не писать")
     ap.add_argument("--data", action="store_true", help="править data/*.json, а не out/previews")
     ap.add_argument("--build", action="store_true", help="после правки data запустить apply_out.py --build")

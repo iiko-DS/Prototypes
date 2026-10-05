@@ -7,7 +7,7 @@ Expansion panel, Icon size, Badge и пять «без изменений» — 
 
 Источник чисел по мобиле — **только** `DS/_audit/platform/<slug>.json` (рекомендации платформ,
 собранные субагентами; поля `sizes[]` с `height_dp`/`width_dp`, `quote`, `source`). Figma по мобильным
-не смотрим. Десктопные числа — из `iiko-ds-web/components/<Имя>_DS/*.css`, токенов и спеки.
+не смотрим. Десктопные числа — из `components-web/components/<Имя>_DS/*.css`, токенов и спеки.
 
 ## Правило: мобильные значения — ВСЕМ размерам, не только базовому
 
@@ -28,9 +28,9 @@ Expansion panel, Icon size, Badge и пять «без изменений» — 
 
 Тач-зона 48 у кнопок — невидимый слой (`::after` с `position:absolute; left/top:50%; width/height:100%;
 min-width/min-height:48px; transform:translate(-50%,-50%); background:none`), файл
-`iiko-ds-mobile/components/Button_DS/button-touch.css`; строки — `Checkbox_DS/checkbox-touch.css`,
+`components-mobile/components/Button_DS/button-touch.css`; строки — `Checkbox_DS/checkbox-touch.css`,
 `Slide-Toggle_DS/slide-toggle-touch.css`, `Stepper_DS/stepper-vertical.css` (min-height 48). Все они
-подключены в `iiko-ds-mobile/components/index.css`. Формулы HUG дают нужную высоту без новых токенов:
+подключены в `components-mobile/components/index.css`. Формулы HUG дают нужную высоту без новых токенов:
 Button S 12+12+20 = 44, XS 14+14+16 = 44; Button icon S 10+10+20 = 40, XS 12+12+16 = 40.
 
 Замерено на одной разметке: desktop 36 / 28 / 24 → mobile 44 / 44 / 44 (Button), 40 / 40 / 40 (иконка),
@@ -121,7 +121,7 @@ S, XS, с иконкой, с поддержкой/подсказкой, error, d
 - iOS HIG: ни страницы Checkboxes, ни Radio buttons нет (404); и то и другое описано только для macOS
   внутри Toggles, без чисел. HIG же советует >5 радио-опций выносить в pop-up button, а «вкл/выкл» — на switch.
 
-**Дефект, найденный 12.09.2026 (исправлен):** агрегатор `iiko-ds-web/components/index.css` импортировал у
+**Дефект, найденный 12.09.2026 (исправлен):** агрегатор `components-web/components/index.css` импортировал у
 Checkbox и Radio **только `*-label.css`**, а `checkbox.css`, `checkbox-icons.css`, `radio.css`,
 `radio-icons.css` не подключал никто и ни одна страница в DS. Поэтому `.ds-checkbox` / `.ds-radio`
 рендерились без стилей: `display: inline`, без маркера 20 × 20 и без цветов состояний — а `min-height`
@@ -159,7 +159,7 @@ gap шапки 8, типографика заголовка/подписей) �
 - **`display` важнее правила.** Прежде чем искать специфичность или кэш, посмотреть `getComputedStyle(el).display`:
   у `inline`-элемента `min-height`/`height` **молча не применяются**, а внутри flex-строки тот же элемент
   становится flex-элементом и высота работает («в одном примере работает, в другом нет»). И до этого —
-  проверить, что файл компонента вообще есть в `iiko-ds-web/components/index.css`. Один прогон:
+  проверить, что файл компонента вообще есть в `components-web/components/index.css`. Один прогон:
   `scripts/verify-mobile-values.py --component Checkbox_DS --url <страница> --selector .ds-checkbox`.
 - **Пробник писать рядом со страницей, а не в `%TEMP%`.** Копия страницы в темп-каталоге ломает
   относительные ссылки на CSS, и замер показывает нестилизованный документ (высоты 21/49, padding 0 при
@@ -238,7 +238,7 @@ gap шапки 8, типографика заголовка/подписей) �
 ## Харнесс проверки мобильных значений — три капкана
 
 1. **Подключать ОБА мобильных файла.** Тестовая страница, которая линкует только `modes.css` (токены), но
-   забыла `iiko-ds-mobile/components/index.css` (агрегатор), молча теряет все `*-mobile.css` и `*-touch.css`:
+   забыла `components-mobile/components/index.css` (агрегатор), молча теряет все `*-mobile.css` и `*-touch.css`:
    замер печатает десктопные числа, и это читается как «правило не применяется» (стоило прогона: список 68
    вместо 72, шапка 44 вместо 48, тач-слой 0 вместо 48). Порядок ссылок: font → tokens → **modes.css** →
    **mobile components/index.css** → styles → web components/index.css.

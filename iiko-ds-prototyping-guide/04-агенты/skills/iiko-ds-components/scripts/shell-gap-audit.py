@@ -33,12 +33,12 @@ import sys
 import tempfile
 import urllib.request
 
-DS = r"C:\Users\asukharev\GitHub\DS"
+DS = r"C:\Users\asukharev\GitHub\iiko-DS\DS"
 PROBE_NAME = "_shell-gap-probe.html"
 PROBE_PATH = os.path.join(DS, "_audit", "rec", "checks", PROBE_NAME)
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 BASE = "http://127.0.0.1:8899/"
-PAGE = "iiko-ds-mobile/prototypes/recommendations/index.html"
+PAGE = "components-mobile/prototypes/recommendations/index.html"
 PROBE_URL = BASE + "_audit/rec/checks/" + PROBE_NAME
 
 # r""" — сырая строка: иначе \n в JS-литерале join('\n') превратится в реальный перевод
@@ -58,7 +58,7 @@ pre{font:15px/20px monospace;margin:10px;white-space:pre-wrap}
 <pre id="out">...</pre>
 <iframe id="shell"></iframe>
 <script>
-var BASE = '../../../iiko-ds-mobile/prototypes/recommendations/';
+var BASE = '../../../components-mobile/prototypes/recommendations/';
 var shell = document.getElementById('shell');
 var out = document.getElementById('out');
 var lines = [];

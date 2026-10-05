@@ -13,13 +13,13 @@
 |---|---|
 | Генератор | `DS/_audit/rec/build.py` — читает `data/*.json`, пишет страницы |
 | Данные по компоненту | `DS/_audit/rec/data/<slug>.json` (один файл = один компонент) |
-| Страницы (то, что смотрит пользователь) | `DS/iiko-ds-mobile/prototypes/recommendations/{index.html,<slug>.html}` + `rec.css`, `rec.js` |
+| Страницы (то, что смотрит пользователь) | `DS/components-mobile/prototypes/recommendations/{index.html,<slug>.html}` + `rec.css`, `rec.js` |
 | Кэш исследований платформ | `DS/_audit/platform/<slug>.json` (по одному на компонент) |
 | Реальные значения ДС из CSS | `DS/_audit/ds-css-values.json` |
 | Каталог компонентов из спеки | `DS/_audit/spec-catalog.json` |
 
 Относительные ссылки со страницы `prototypes/recommendations/x.html`: библиотека —
-`../../../iiko-ds-web/{font,tokens,styles}.css` + `components/index.css`, режим — `../../modes.css`.
+`../../../components-web/{font,tokens,styles}.css` + `components/index.css`, режим — `../../modes.css`.
 Порядок подключения тот же обязательный (font → tokens → modes → components).
 
 ## Структура страницы — ПРОСТАЯ (сложную владелец отклонил)
@@ -76,14 +76,14 @@ Chrome (`iiko-ds-components/scripts/headless-measure.py`). Так провере
   `button/button.scss`, `button/_button-base.scss` — отдельный `.mat-mdc-button-touch-target`, density его не сжимает).
 - **iOS HIG** (`developer.apple.com/design/human-interface-guidelines/…`) — страницы
   тоже клиентские: curl возвращает ~17 КБ без текста (только SVG-пути). Числа HIG брать из
-  уже снятого в проекте `iiko-ds-prototypes/compare-button-mob.html` (там таблица
+  уже снятого в проекте `Prototypes/compare-button-mob.html` (там таблица
   `Button_mob / MD3 / iOS` со ссылками) или из другого проверяемого источника; не выдумывать.
 - Если `web_extract` отдаёт `403 Keyless Exa …` — не блокер: те же ссылки берутся
   через `curl -sL` в терминале.
 
 ## Как достать реальные значения ДС (без Figma)
 
-- **Из компонентного CSS** (`iiko-ds-web/components/<Имя>_DS/*.css`): перед регекспом
+- **Из компонентного CSS** (`components-web/components/<Имя>_DS/*.css`): перед регекспом
   **вырезать комментарии** — иначе комментарий приклеивается к селектору и ломает разбор;
   значения `var(...)` разворачивать по `tokens.css` (цепочки алиасов, до 12 уровней).
   Собирать `height / min-height / padding* / gap / font-size / line-height / border-radius`.
@@ -97,7 +97,7 @@ Chrome (`iiko-ds-components/scripts/headless-measure.py`). Так провере
   `chips-input`, `form-field`, `search`) — для остальных числа берутся из CSS/спеки/замеров.
 - Реальная разметка для примеров уже существует: страницы кита
   (`C:/Users/asukharev/GitHub/iiko-ds-kit/{button,checkbox,radio,input,chips,badge}.html`)
-  и `iiko-ds-prototypes/metro-general-settings.html` (input, slide-toggle, dialog, banner,
+  и `Prototypes/metro-general-settings.html` (input, slide-toggle, dialog, banner,
   card, stepper) — копировать структуру оттуда, а не сочинять DOM.
 
 ## Объём работы: 37 компонентных папок
@@ -158,6 +158,6 @@ Chrome (`iiko-ds-components/scripts/headless-measure.py`). Так провере
 - Формат подачи: что сделано (путь), что проверено (числа с браузера), что дальше —
   и ни слова про процесс.
 - **Ссылки.** `file://` в ACP-панели не открывается (и markdown-ссылка на него тоже):
-  поднимать `python -m http.server 8899 --bind 127.0.0.1 --directory C:/Users/asukharev/GitHub/DS`
+  поднимать `python -m http.server 8899 --bind 127.0.0.1 --directory C:/Users/asukharev/GitHub/iiko-DS/DS`
   и либо давать полный http-адрес текстом, либо сразу открывать браузер самому
   (`cmd.exe /c start "" "http://127.0.0.1:8899/<путь>"`). См. SKILL.md, «Как отдавать ссылку».

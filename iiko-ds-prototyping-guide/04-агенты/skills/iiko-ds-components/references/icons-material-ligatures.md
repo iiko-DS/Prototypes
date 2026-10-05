@@ -2,7 +2,7 @@
 
 ## Конвенция (переписана владельцем в спеке)
 
-Владелец заменил пункт «Иконки» в `iiko-ds-web/iiko-ds-spec.md` на:
+Владелец заменил пункт «Иконки» в `components-web/iiko-ds-spec.md` на:
 
 > **Иконки** — Google Material Icons, вставляются по имени (`<span class="material-icons">имя</span>`),
 > цвет наследуется `currentColor`. Обязательного списка нет — берём из каталога Google; исключение —

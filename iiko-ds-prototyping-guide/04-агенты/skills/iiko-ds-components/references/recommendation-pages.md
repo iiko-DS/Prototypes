@@ -1,7 +1,7 @@
 # Recommendation pages (iiko DS) — pipeline, layout rules, checks
 
 Generated «desktop → mobile» pages, one per component, plus the shell with the
-component menu. Everything lives in the repo; the DS itself (`iiko-ds-web`) is
+component menu. Everything lives in the repo; the DS itself (`components-web`) is
 never edited for these pages.
 
 ## Pipeline
@@ -19,7 +19,7 @@ _audit/rec/apply_out.py          merges patches from out/ into data/, --build re
 out/
 └── {edits,previews,platforms,changes}/<slug>.json   patches (see below)
 
-iiko-ds-mobile/prototypes/recommendations/<slug>.html + index.html + rec.css   output
+components-mobile/prototypes/recommendations/<slug>.html + index.html + rec.css   output
 served by `python serve.py 8899` from the repo root
 ```
 
@@ -294,7 +294,7 @@ runs `apply_out.py --build`. Run it before merging a new round of preview patche
   remote-debugging approval — use the headless-Chrome scripts above instead.
 - `--screenshot` grabs the viewport: set a tall `--window-size` and crop with PIL.
 - Keep the DS folder clean: wrapper HTML, contact sheets and screenshots go to
-  `_audit/rec/out/`, never into `iiko-ds-mobile/prototypes/recommendations/`.
+  `_audit/rec/out/`, never into `components-mobile/prototypes/recommendations/`.
 - **A patch kind nobody merges is invisible work.** `apply_out.py` merged edits,
   previews and platforms only — a whole round of `out/patterns/*.json` sat on disk while
   the pages kept rendering the `platform_notes_ru` fallback. Add the branch for a new kind
@@ -312,7 +312,7 @@ runs `apply_out.py --build`. Run it before merging a new round of preview patche
   `--window-size` screenshot with PIL using those numbers — 1600 px wide pages put the
   patterns card at e.g. y≈1894, h≈867.
 - **`rec.css` is generated as well — this one is a silent trap.** `build.py` writes
-  `iiko-ds-mobile/prototypes/recommendations/rec.css` from its own `CSS = """…"""` constant
+  `components-mobile/prototypes/recommendations/rec.css` from its own `CSS = """…"""` constant
   near the top of the file. A `patch` on that CSS file **reports success and then vanishes
   on the next `python build.py`** (it cost a whole styling round: the tab panel rules looked
   applied, the long-label example kept rendering on one line). Put block styles
@@ -474,10 +474,10 @@ do not decide it silently.
   ## Git — nothing can be lost (2026-09-13, at his request)
 
   «Делай гит чтобы ничего не удалялось.» The repo now exists at the workspace root
-  (`C:\Users\asukharev\GitHub\DS`, branch `main`, `core.autocrlf=false` so the CRLF
+  (`C:\Users\asukharev\GitHub\iiko-DS\DS`, branch `main`, `core.autocrlf=false` so the CRLF
   `data/*.json` stay byte-identical on checkout). Covers `_audit/` (data, out, checks,
-  platform), `iiko-ds-mobile/` (pages + components), `serve.py`, `.github`, `.gitignore` —
-  1086 files in the first snapshot. `iiko-ds-web` and `iiko-ds-prototypes` are **their own**
+  platform), `components-mobile/` (pages + components), `serve.py`, `.github`, `.gitignore` —
+  1086 files in the first snapshot. `components-web` and `Prototypes` are **their own**
   repos with GitHub remotes and sit in the root `.gitignore`; never `git add` inside them.
 
   - Commit every accepted change, then anything can be put back:

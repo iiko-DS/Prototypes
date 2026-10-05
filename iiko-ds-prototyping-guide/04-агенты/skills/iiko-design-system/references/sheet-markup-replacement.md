@@ -1,6 +1,6 @@
 # Шторки страниц рекомендаций: заглушки → разметка компонента
 
-Класс работы (15.09.2026): в блоке «На экране» страниц `iiko-ds-mobile/prototypes/recommendations/`
+Класс работы (15.09.2026): в блоке «На экране» страниц `components-mobile/prototypes/recommendations/`
 шторка (`.phone__sheet`) была нарисована строками-заглушками — `phone__row`/`phone__list` или строками
 списка с посторонней иконкой (`restaurant`) вместо самого компонента. Задача владельца: «в каждой —
 заменить строки-заглушки на разметку компонента, как в Checkbox и Radio». Это инвариант блока
@@ -13,7 +13,7 @@
 оставляет mtime.
 
 ```bash
-cd /c/Users/asukharev/GitHub/DS
+cd /c/Users/asukharev/GitHub/iiko-DS/DS
 git status --short | head -80          # что уже тронуто
 ls -lt --time-style=+%m-%d_%H:%M _audit/rec/data/*.json | head -50
 ```
@@ -107,13 +107,13 @@ def style_of(raw):
 
 ## 5. Факты библиотеки, которые всплыли
 
-- `.ds-list-container` и `.ds-list-item` держат **ширину числом 258 px** (`iiko-ds-web/components/List_DS/`),
+- `.ds-list-container` и `.ds-list-item` держат **ширину числом 258 px** (`components-web/components/List_DS/`),
   мобильного правила ширины у списка нет; ширина листа шторки — 327 px (телефон 375 − 2×8 корпус − 2×16 паддинг),
   внутренняя — 327. Поэтому значения/знаки в строках List, Badge, Search заканчиваются за 69 px до правого края
   листа, а длинная подпись переносится на вторую строку. **В теле экрана ровно так же** — это значение библиотеки,
   а не следствие правки. Растянуть строки = правка каркаса (`rec.css` из `build.py`), затронет все страницы;
   сам не делать — докладывать числами и ждать решения.
-- У Select и Menu мобильный слой сам даёт `width:100%` (`iiko-ds-mobile/components/Select_DS`, `Menu_DS`),
+- У Select и Menu мобильный слой сам даёт `width:100%` (`components-mobile/components/Select_DS`, `Menu_DS`),
   поэтому их блоки в шторке на всю ширину — расхождение с List не наше.
 - `rec.css` содержит `.phone .ds-list-container, .phone .ds-menu-container, .phone .ds-select-container { min-height: 0 }` —
   замороженные `min-height` библиотеки внутри макета гасить не нужно.

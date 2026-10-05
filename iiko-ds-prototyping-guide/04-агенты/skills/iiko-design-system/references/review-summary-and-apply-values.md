@@ -12,8 +12,8 @@
 | `_audit/rec/review/<компонент>.final.json` | решение встречи (`person: "final"`, `kind: "rec-review-final"`) | кнопка «Сохранить решения» на странице свода |
 | `_audit/rec/summary.py` → `_audit/rec/summary.html` | свод: матрица «паттерн × человек» | запуск вручную |
 | `_audit/rec/apply-values.py` | принятые значения → мобильный CSS | запуск вручную |
-| `iiko-ds-mobile/components/<Папка>_DS/mobile-values.css` | сгенерированный файл значений | `apply-values.py --apply` |
-| `iiko-ds-mobile/components/index.css` | `@import "<Папка>_DS/mobile-values.css";` последней строкой | `apply-values.py --apply` |
+| `components-mobile/components/<Папка>_DS/mobile-values.css` | сгенерированный файл значений | `apply-values.py --apply` |
+| `components-mobile/components/index.css` | `@import "<Папка>_DS/mobile-values.css";` последней строкой | `apply-values.py --apply` |
 
 Разделение намеренное: **один человек — один файл**, поэтому слияние в git без конфликтов; мнения
 людей и решение встречи лежат рядом, но в разных файлах, и в код уходят только значения из `.final.json`.
@@ -58,12 +58,12 @@ python _audit/rec/apply-values.py button.final.json --apply     # записат
 `sync {field, a, b}`; подставляет значения из файла решений; собирает правила
 `[data-mode="mobile"] <sel> { … }` (несколько правок с одним селектором сливаются в одно правило);
 кладёт их в `mobile-values.css` с шапкой «что утверждено» (источник, автор, дата) и добавляет
-`@import` **последней строкой** агрегатора. Ничего другого не трогает — библиотеку `iiko-ds-web` тем более.
+`@import` **последней строкой** агрегатора. Ничего другого не трогает — библиотеку `components-web` тем более.
 
 Сквозная проверка (обязательна после первой подстановки): после `--apply` открыть страницу компонента и
 замерить, что кнопка в теле мобильного экрана стала ожидаемой (было 44 → 48 px при `min-height:48px`
 и `padding-top:14px`) — то есть значения из файла решений реально доехали до CSS компонента и до экранов.
-После проверки тестовые значения убрать: `rm <Папка>_DS/mobile-values.css` + `git checkout -- iiko-ds-mobile/components/index.css`.
+После проверки тестовые значения убрать: `rm <Папка>_DS/mobile-values.css` + `git checkout -- components-mobile/components/index.css`.
 
 ## Капканы
 
@@ -78,8 +78,8 @@ python _audit/rec/apply-values.py button.final.json --apply     # записат
   в полях; пустое не пишется — «пусто» значит «ещё не решили». Иначе в файл попадают непроверенные подсказки.
 - **Проверки на входе:** нечисловое значение — пропустить с замечанием (в CSS текст уходить не должен);
   правка, которой нет в `data/<slug>.json` — замечание; селектор, которого нет в CSS компонента —
-  предупреждение «проверь глазами» (искать и в мобильном слое, и в `iiko-ds-web/components/*_DS`, и в `modes.css`).
-- **Команду отката печатать всегда:** `git checkout -- iiko-ds-mobile/components/index.css && rm -f <мобильный файл>`.
+  предупреждение «проверь глазами» (искать и в мобильном слое, и в `components-web/components/*_DS`, и в `modes.css`).
+- **Команду отката печатать всегда:** `git checkout -- components-mobile/components/index.css && rm -f <мобильный файл>`.
 - **Внешнюю запись проверять чтением с диска** (файл `_audit/rec/review/*.json` после POST, `mobile-values.css`
   после `--apply`) — успешный ответ сервера не равен «файл правильный».
 - **Тестовые данные не оставлять в репозитории:** демо-файлы решений удалять, `summary.html` собирается заново

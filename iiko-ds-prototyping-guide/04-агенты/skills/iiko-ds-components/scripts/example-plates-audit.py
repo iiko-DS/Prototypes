@@ -38,9 +38,9 @@ import subprocess
 import sys
 import tempfile
 
-DEFAULT_ROOT = r"C:\Users\asukharev\GitHub\DS"
+DEFAULT_ROOT = r"C:\Users\asukharev\GitHub\iiko-DS\DS"
 PORT = 8899
-PAGES = "iiko-ds-mobile/prototypes/recommendations"
+PAGES = "components-mobile/prototypes/recommendations"
 CHROME = [
     r"C:\Program Files\Google\Chrome\Application\chrome.exe",
     r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",

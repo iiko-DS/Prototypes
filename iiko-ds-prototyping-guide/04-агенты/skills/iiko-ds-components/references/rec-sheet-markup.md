@@ -1,6 +1,6 @@
 # Шторки на страницах рекомендаций: заглушки → разметка компонента (15.09.2026)
 
-На страницах `iiko-ds-mobile/prototypes/recommendations/<slug>.html` шторка (`.phone__sheet`
+На страницах `components-mobile/prototypes/recommendations/<slug>.html` шторка (`.phone__sheet`
 внутри `preview_html`) у части компонентов была нарисована не собой: либо строками списка с
 Material-иконкой в слоте слева, либо простыми строками `.phone__row`. Задача владельца —
 перерисовать шторки разметкой самого компонента. Сперва Checkbox и Radio (14.09), затем
@@ -12,8 +12,8 @@ Material-иконкой в слоте слева, либо простыми ст
 - `patterns_ru[].example_html` — у menu / select / scroll в примерах паттернов уже есть шторка
   (`phone__sheet`) с корректной разметкой: `ds-menu-container`, `ds-select-container` с
   `ds-select-item--true/--false`, `ds-list-container` внутри шторки;
-- библиотека: `iiko-ds-web/components/<Имя>_DS/*.css` (классы, токены), мобильный слой —
-  `iiko-ds-mobile/components/*` (`select-mobile.css` и `menu-mobile.css` сами растягивают свой
+- библиотека: `components-web/components/<Имя>_DS/*.css` (классы, токены), мобильный слой —
+  `components-mobile/components/*` (`select-mobile.css` и `menu-mobile.css` сами растягивают свой
   контейнер на 100 % в `data-mode="mobile"`, у списка такого правила нет).
 
 Что получилось: **List** — `ds-list-container` + `__item` (иконка, `label-up`, `text`,
@@ -47,10 +47,10 @@ Material-иконкой в слоте слева, либо простыми ст
 ## Проверка картинкой и замерами
 
 - Проверочная страница `_audit/rec/checks/_sheets.html` (удалять после): те же CSS, что в шаблоне
-  страницы — `../../../iiko-ds-web/{font,tokens,styles}.css`,
-  `../../../iiko-ds-web/components/index.css`, четыре файла checkbox/radio,
-  `../../../iiko-ds-mobile/modes.css`, `../../../iiko-ds-mobile/components/index.css`,
-  `../../iiko-ds-mobile/prototypes/recommendations/rec.css`, Material Icons с Google — плюс
+  страницы — `../../../components-web/{font,tokens,styles}.css`,
+  `../../../components-web/components/index.css`, четыре файла checkbox/radio,
+  `../../../components-mobile/modes.css`, `../../../components-mobile/components/index.css`,
+  `../../components-mobile/prototypes/recommendations/rec.css`, Material Icons с Google — плюс
   `preview_html` компонентов в гриде с `zoom:.52…0.62`. Снять `chrome --headless=new --screenshot`
   и смотреть своим зрением; так же готовится файл-отчёт владельцу (Рабочий стол).
 - Замеры без CDP: страница пишет цифры в `<pre id="out">`, запуск `chrome --headless=new

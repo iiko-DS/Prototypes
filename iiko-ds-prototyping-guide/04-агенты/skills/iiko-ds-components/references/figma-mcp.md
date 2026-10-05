@@ -57,7 +57,7 @@ python scripts/figma-mcp.py call get_design_context --node 7408:44703 --json-out
 
 ## Рабочий порядок для `_mob`-значений
 
-1. Строка компонента в `iiko-ds-mobile/desktop-to-mobile-plan.md` → колонка `_mob`: «Собран»
+1. Строка компонента в `components-mobile/desktop-to-mobile-plan.md` → колонка `_mob`: «Собран»
    значит, что компонент в Figma есть (`Button toggle_mob`) — числа снимаемы; «нет» значит,
    что источника нет и значение — решение владельца, а не вывод из Material.
 2. Попросить пользователя переключить приложение на файл ДС и выделить нужный компонент

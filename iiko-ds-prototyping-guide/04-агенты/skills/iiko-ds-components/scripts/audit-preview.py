@@ -32,18 +32,18 @@ import subprocess
 import sys
 import tempfile
 
-DS = r"C:\Users\asukharev\GitHub\DS"
-REC = os.path.join(DS, "iiko-ds-mobile", "prototypes", "recommendations")
+DS = r"C:\Users\asukharev\GitHub\iiko-DS\DS"
+REC = os.path.join(DS, "components-mobile", "prototypes", "recommendations")
 DATA = os.path.join(DS, "_audit", "rec", "data")
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-BASE = "http://127.0.0.1:8899/iiko-ds-mobile/prototypes/recommendations/"
+BASE = "http://127.0.0.1:8899/components-mobile/prototypes/recommendations/"
 
 
 def component_classes(ds_page):
     """Классы, объявленные в CSS самого компонента (и в его мобильном слое)."""
     out = set()
-    for root in (os.path.join(DS, "iiko-ds-web", "components", ds_page),
-                 os.path.join(DS, "iiko-ds-mobile", "components", ds_page)):
+    for root in (os.path.join(DS, "components-web", "components", ds_page),
+                 os.path.join(DS, "components-mobile", "components", ds_page)):
         for p in glob.glob(os.path.join(root, "*.css")):
             s = open(p, encoding="utf-8", errors="replace").read()
             out |= set(re.findall(r"\.(ds-[a-z0-9_-]+)", s))
@@ -103,7 +103,7 @@ function next(){
   const c = CASES[i++]; const page = c[0], cls = c[1];
   const f = document.createElement('iframe');
   f.style.cssText = 'width:1600px;height:1400px;border:0';
-  f.src = '/iiko-ds-mobile/prototypes/recommendations/' + page + '.html';
+  f.src = '/components-mobile/prototypes/recommendations/' + page + '.html';
   f.onload = () => setTimeout(()=>{
     try {
       const doc = f.contentDocument, win = f.contentWindow;

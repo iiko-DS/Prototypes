@@ -10,15 +10,15 @@
 
 | Часть | Где лежит |
 |---|---|
-| Спецификация: какие бывают варианты, состояния, классы | `iiko-ds-web/iiko-ds-spec.md` |
-| Токены: цвета, размеры, отступы, типографика | `iiko-ds-web/tokens.css` |
-| Компоненты десктопа: разметка и стили | `iiko-ds-web/components/<Имя>_DS/*.css`, общий индекс — `components/index.css` |
-| Правки поверх генерации библиотеки | `iiko-ds-web/fixes.css` |
-| Мобильный слой: компоненты и режимы | `iiko-ds-mobile/components/…`, `iiko-ds-mobile/modes.css` |
+| Спецификация: какие бывают варианты, состояния, классы | `components-web/iiko-ds-spec.md` |
+| Токены: цвета, размеры, отступы, типографика | `components-web/tokens.css` |
+| Компоненты десктопа: разметка и стили | `components-web/components/<Имя>_DS/*.css`, общий индекс — `components/index.css` |
+| Правки поверх генерации библиотеки | `components-web/fixes.css` |
+| Мобильный слой: компоненты и режимы | `components-mobile/components/…`, `components-mobile/modes.css` |
 | Данные страниц компонентов | `_audit/rec/data/<компонент>.json` |
 | Технические заметки: источники, платформа, замеры | `_audit/rec/data-tech/<компонент>.json` |
 | Мобильные значения компонента | `_audit/platform/<компонент>.json` |
-| Страницы компонентов для просмотра | генерируются в `iiko-ds-mobile/prototypes/recommendations/` — руками не правятся |
+| Страницы компонентов для просмотра | генерируются в `components-mobile/prototypes/recommendations/` — руками не правятся |
 
 ## Как этим пользоваться
 
