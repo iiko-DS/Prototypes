@@ -18,7 +18,7 @@ Angular Material?». Отвечать по первоисточникам, а н
 - **Тач-таргет 48 dp** как норма доступности: `https://support.google.com/accessibility/android/answer/7101858`
   — «elements have a width and height of at least 48dp, as described in the Material Design
   Accessibility guidelines».
-- **Внутри проекта**: `Prototypes/compare-button-mob.html` — таблица
+- **Внутри проекта**: `Prototypes/compare-button-mob.html` (файла в репозитории нет) — таблица
   `Button_mob / MD3 / iOS` с числами и ссылкой на раздел спеки M3. Читать распаковкой
   JSON-объекта `const data = {…}` (html парсится через `json.JSONDecoder().raw_decode`).
 

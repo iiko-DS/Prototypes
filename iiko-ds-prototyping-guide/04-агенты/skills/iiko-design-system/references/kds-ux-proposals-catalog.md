@@ -45,7 +45,7 @@ print(len(items))
 4. Ссылки на файлы КДС живут в `Prototypes/readme.md` (раздел «KDS») — при новом файле
    дописать строку туда.
 5. Публикация: `Prototypes` — приватный репозиторий с origin; файлы `KDS/`, `_crops/`,
-   `_figma-*.png` владелец в публикацию не берёт (см. `references/git-publishing-and-selective-commits.md`).
+   `_figma-*.png` (файлов в репозитории нет) владелец в публикацию не берёт (см. `references/git-publishing-and-selective-commits.md`).
 
 Источник «что ещё полезного можно добавить» — вики PDM (Web KDS) и Jira: как достать —
 `references/internal-wiki-and-jira-sources.md`.

@@ -76,7 +76,7 @@ Chrome (`iiko-ds-components/scripts/headless-measure.py`). Так провере
   `button/button.scss`, `button/_button-base.scss` — отдельный `.mat-mdc-button-touch-target`, density его не сжимает).
 - **iOS HIG** (`developer.apple.com/design/human-interface-guidelines/…`) — страницы
   тоже клиентские: curl возвращает ~17 КБ без текста (только SVG-пути). Числа HIG брать из
-  уже снятого в проекте `Prototypes/compare-button-mob.html` (там таблица
+  уже снятого в проекте `Prototypes/compare-button-mob.html` (файла в репозитории нет; там таблица
   `Button_mob / MD3 / iOS` со ссылками) или из другого проверяемого источника; не выдумывать.
 - Если `web_extract` отдаёт `403 Keyless Exa …` — не блокер: те же ссылки берутся
   через `curl -sL` в терминале.
@@ -97,7 +97,7 @@ Chrome (`iiko-ds-components/scripts/headless-measure.py`). Так провере
   `chips-input`, `form-field`, `search`) — для остальных числа берутся из CSS/спеки/замеров.
 - Реальная разметка для примеров уже существует: страницы кита
   (`C:/Users/asukharev/GitHub/iiko-ds-kit/{button,checkbox,radio,input,chips,badge}.html`)
-  и `Prototypes/metro-general-settings.html` (input, slide-toggle, dialog, banner,
+  и `Prototypes/metro-general-settings.html` (файла в репозитории нет; input, slide-toggle, dialog, banner,
   card, stepper) — копировать структуру оттуда, а не сочинять DOM.
 
 ## Объём работы: 37 компонентных папок

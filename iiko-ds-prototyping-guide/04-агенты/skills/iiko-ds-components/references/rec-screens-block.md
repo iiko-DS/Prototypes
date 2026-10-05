@@ -224,13 +224,13 @@ CSS узла: `.sheetbar{display:flex;align-items:center;justify-content:space-b
 системе.» Вывод: реальный экран iiko задаёт **состав и содержание** (какие элементы, подписи,
 числа, где стоят кнопки), а **внешний вид** рисуем только классами и токенами ДС — ни brand-зелёной
 шапки, ни Material-чипсов, ни чужих полей и клавиатур. Материал брать из **своих** прототипов
-(`Prototypes/figma-7450-create-product.html`, `components-mobile/prototypes/button-modes.html`),
+(`Prototypes/figma-7450-create-product.html` — файла в репозитории нет; `components-mobile/prototypes/button-modes.html`),
 а не из скриншотов приложений.
 
 Собранный дефолт Button (один и тот же экран на двух телефонах, всё — классы ДС):
 
 - шапка: `←` + «Создание продукта» + иконки-кнопки `delete` (negative filled) и `save_alt`
-  (accent filled) — как в `figma-7450`;
+  (accent filled) — как в `figma-7450` (страницы в репозитории уже нет);
 - тело: три поля `ds-input--m` (лейбл + значение) — «Название» Fair Trade Ground Coffee,
   «Артикул» 00001, «Цена» 120 ₽ (содержимое из того же прототипа);
 - `.btnbox[data-buttons="screen"]`: «Отмена» (neutral outlined) + «Сохранить» (accent filled);

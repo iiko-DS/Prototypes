@@ -25,7 +25,7 @@ approval-гейтом ACP-клиента (разбор и починка — в
 | Источник | Что берём |
 |---|---|
 | `components-mobile/desktop-to-mobile-plan.md` | Группа A: Button меняет **только размерные значения**; `_mob` уже собран в Figma |
-| `Prototypes/compare-button-mob.html` | Числа `Button_mob`, снятые из Figma |
+| `Prototypes/compare-button-mob.html` (файла в репозитории нет) | Числа `Button_mob`, снятые из Figma |
 | `components-web/iiko-ds-spec.md` (якорь `#### Button \``) | Десктоп: M 36, S 28, XS 24; свойства Size/Style/Type/State |
 | `components-web/components/Button_DS/button.css` | Текущая реализация (там были хардкоды) |
 
@@ -80,7 +80,7 @@ HUG. Примитива 44 px в Base Size тоже нет (максимум `--
 ## Recipe: демо-страница режимов
 
 `Prototypes/button-modes.html` — по образцу
-`metro-general-settings.html`: локальные `../components-web/font.css`, `tokens.css`,
+`metro-general-settings.html` (удалена из репозитория): локальные `../components-web/font.css`, `tokens.css`,
 **`modes.css`**, `styles.css`, `components/index.css`.
 
 - Две колонки: `<div data-mode="desktop">` и `<div data-mode="mobile">` — один

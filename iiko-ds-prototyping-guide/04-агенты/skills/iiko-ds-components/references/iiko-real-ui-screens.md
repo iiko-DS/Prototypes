@@ -14,7 +14,7 @@ iikoInventory дефолт (зелёная brand-шапка, чипсы, зел�
 сторонне мобильное приложение не на нашей дизайн системе.» Значит: из реального экрана берём
 **только состав и содержание**, а разметку и вид — классами и токенами нашей ДС (`ds-btn`,
 `ds-btn-icon`, `ds-input`, accent-заливка), материал — из **своих** прототипов
-(`Prototypes/figma-7450-create-product.html`, `components-mobile/prototypes/button-modes.html`).
+(`Prototypes/figma-7450-create-product.html` — файла в репозитории нет; `components-mobile/prototypes/button-modes.html`).
 Его «Возьми как вариант что-то из склада» читается двояко (складское приложение iikoInventory или
 наш «склад» прототипов); первый вариант забракован именно за чужой вид — начинать со своих
 прототипов. Разметка итога — `references/rec-screens-block.md`, раздел «Пятый заход».
@@ -47,7 +47,7 @@ iikoInventory дефолт (зелёная brand-шапка, чипсы, зел�
   - другие приложения вендора — `appshunter.io` (developer 740400984) и `web_search`.
 - **Репозиторий** (подписи и приёмы, без картинок): `components-mobile/prototypes/button-modes.html`
   (реальные подписи кнопок iiko: «Создать», «Далее», «Отмена», «Добавить», «Сохранить», «Удалить»;
-  «Футер формы — на всю ширину (bottom action bar)»), `Prototypes/compare-button-mob.html`,
+  «Футер формы — на всю ширину (bottom action bar)»), `Prototypes/compare-button-mob.html` (файла в репозитории нет),
   `Prototypes/figma-7450-create-product.html`.
 
 ## Приложения iiko и их домены (что из чего собирать)
@@ -94,7 +94,7 @@ iikoInventory дефолт (зелёная brand-шапка, чипсы, зел�
 
 Текущий дефолт Button — наша ДС: шапка с иконками-кнопками ДС (`←`, `delete` negative filled,
 `save_alt` accent filled), три поля `ds-input--m` («Название» Fair Trade Ground Coffee, «Артикул»
-00001, «Цена» 120 ₽ — из нашего же прототипа `figma-7450-create-product.html`), в теле
+00001, «Цена» 120 ₽ — из нашего же прототипа `figma-7450-create-product.html` — файла в репозитории нет), в теле
 `data-buttons="screen"` = «Отмена» (neutral outlined) + «Сохранить» (accent filled), шторка
 «Действия с продуктом» с `data-buttons="sheet"` = «Дублировать» (outlined) + «Удалить продукт»
 (negative text). Разметка и грабли — `references/rec-screens-block.md`, «Пятый заход».

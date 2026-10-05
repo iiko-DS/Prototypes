@@ -71,7 +71,7 @@ un-merged `out/` patches) — run it after any interruption before promising any
 | `components-web/components/<Name>_DS/*.css` | One folder per component; `components/index.css` aggregates them with `@import`. |
 | `components-web/iiko-ds-spec.md` | ~700 KB single source of truth written to be pasted into any AI: general rules, class map, token tables, full component CSS. Mostly generated. |
 | `components-mobile/` | The **mobile layer** (not a git repo), structure mirrors `components-web`: `modes.css` (the mode axis), `components/index.css` (aggregator; a `components/<Name>_DS/` file appears only when a real `*_mob` component exists), `prototypes/` (demo pages, e.g. `prototypes/button-modes.html` — desktop and mobile side by side + measurements). Plus the plan docs: `desktop-to-mobile-plan.md` (classification A–D + how Material/Angular solve each), `mobile-mode-notes.md`, `mobile-workflow.md`, `mobile-steps.md`, `mobile-block-schemes.md`. |
-| `Prototypes/` | HTML prototypes and the knowledge base — a **separate git repo** (`github.com/iiko-DS/Prototypes`) next to the `DS` folder. Comparison pages such as `compare-button-mob.html` hold values transcribed from Figma — a legitimate source when the canvas itself is unreachable. |
+| `Prototypes/` | HTML prototypes and the knowledge base — a **separate git repo** (`github.com/iiko-DS/Prototypes`) next to the `DS` folder. Some reference pages (e.g. `compare-button-mob.html`) transcribed Figma values; these files are no longer in the repo. |
 
 ## Проверки (обязательные, все лежат в `_audit/rec/checks/`)
 

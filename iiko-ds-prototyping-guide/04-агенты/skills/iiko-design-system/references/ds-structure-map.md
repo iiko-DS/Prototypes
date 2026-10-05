@@ -62,9 +62,9 @@ components-mobile/components/index.css → styles.css → components-web/compone
   `touch-mode.js` 15 КБ + `touch-mode.css` + `touch-hover-off.css` (тач-режим ≤ 768), `device-chrome/`.
 - Сквозные организмы приложения (шапка, боковое меню) — в ДС: `DS/organisms/`; страницы подключают их одной строкой `../DS/connect.js`.
 - Экраны: `figma-*` ×5 (Метро 1276/1277, Поставщики 7422, Прайс-лист 7431/7436, Создание товара 7450),
-  `metro-general-settings.html`, `add-fasovka.html`, `compare-button-mob.html`; KDS-прототипы — в отдельном
+  `metro-general-settings.html`, `add-fasovka.html`, `compare-button-mob.html` — файлов в репозитории нет; KDS-прототипы — в отдельном
   репозитории `kds-ux-prototype`.
-- `readme.md` (правила + каталог), `_crops/`, `_figma-1276-*.png`; журнал дефектов ДС — в ДС: `DS/fixes.md`
+- `readme.md` (правила + каталог); `_crops/`, `_figma-1276-*.png` — файлов в репозитории нет; журнал дефектов ДС — в ДС: `DS/fixes.md`
   (в прототипах остался файл-указатель).
 
 ## `_audit` — цех
