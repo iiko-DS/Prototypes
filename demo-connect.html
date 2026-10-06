@@ -13,6 +13,9 @@
    https://iiko-ds.github.io/DS/connect.js — остальное не меняется.)
 -->
 <script src="../DS/connect.js" defer></script>
+<!-- Слой ревью (внутренний): панель стенда с экранами/размером/хромом. Подтягивает ds-review.css
+     и реестр layouts.js рядом со страницей сам. Юзерским прототипам не нужен. -->
+<script src="../DS/ds-review.js" defer></script>
 <style>
   /* Страница занимает всё окно: без служебных отступов браузера — сетка контейнера
      отсчитывается от краёв меню и шапки, как в макете. */
@@ -32,7 +35,7 @@
 </head>
 <body>
   <div class="demo">
-    <h1>Динамический контейнер</h1>
+    <h1 id="demo-title">Первый контент контейнер</h1>
     <p>
       Это контейнер контента для всей iiko: он принимает любой экран — от одного компонента
       до целого раздела или сценария. Что положить и как расставить — решает задача:
@@ -43,5 +46,23 @@
       а контейнер целиком отдан под содержимое.
     </p>
   </div>
+  <script>
+    /* Демо: одна страница-контейнер в трёх заголовках (меняется только H1). Переключение —
+       из панели ревью (селект «Экраны»): событие dsreview:state (и window.DSReviewState);
+       ?state=N — для прямой ссылки. */
+    (function () {
+      var TITLES = {
+        '1': 'Первый контент контейнер',
+        '2': 'Второй контент контейнер',
+        '3': 'Третий контент контейнер'
+      };
+      function apply(id) {
+        document.getElementById('demo-title').textContent = TITLES[String(id)] || TITLES['1'];
+      }
+      window.DSReviewState = apply;
+      document.addEventListener('dsreview:state', function (e) { apply(e.detail && e.detail.id); });
+      try { apply(new URL(location.href).searchParams.get('state') || '1'); } catch (err) { apply('1'); }
+    })();
+  </script>
 </body>
 </html>
