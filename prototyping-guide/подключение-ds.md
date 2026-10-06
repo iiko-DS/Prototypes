@@ -97,6 +97,9 @@ Snackbar, Status, Stepper, Textarea, Timepicker, Tree.
   спорное сверяем по `demo.html` и спецификации; стили референса не копируем;
 - свои стили — только для раскладки (колонки, отступы контекста); внешний вид компонентов
   не переписываем: **как выглядит — только из ДС**;
+- текст и заголовки вне компонентов — только шрифт ДС (Roboto 400/500); системные шрифты
+  браузера не оставляем (у голого `<h1>` по умолчанию — Times). Пресеты типографики — токены ДС,
+  например: `font: var(--ds-font-header-s-20-normal-medium); letter-spacing: var(--ds-font-header-s-20-normal-medium-spacing);`
 - иконки — Material Icons по имени: `<span class="material-icons">search</span>`.
 
 ## Пример страницы целиком
