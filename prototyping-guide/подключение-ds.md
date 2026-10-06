@@ -45,6 +45,38 @@
   одним большим файлом); открывай, когда нужна глубина — для обычной сборки хватает папок выше:
   https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/iiko-ds-spec.md
 
+## Карта демо-стендов
+
+У компонентов из списка ниже в папке есть `demo.html` — **живой стенд**: правильная разметка,
+все состояния и примеры сборок (повторяет набор Figma). Собираешь такой компонент — сверяйся
+по этому стенду (ссылки машиночитаемые, ИИ открывает их напрямую):
+
+- Button: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Button_DS/demo.html
+- Card: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Card_DS/demo.html
+- Chips: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Chips_DS/demo.html
+- Datepicker: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Datepicker_DS/demo.html
+- Divider: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Divider_DS/demo.html
+- Form field input: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Form-Field-Input_DS/demo.html
+- Icon size: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Icon-Size_DS/demo.html
+- List: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/List_DS/demo.html
+- Search: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Search_DS/demo.html
+- Select: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Select_DS/demo.html
+- Sidenav: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Sidenav_DS/demo.html
+- Table: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Table_DS/demo.html
+- Tabs: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Tabs_DS/demo.html
+- UI components (Text UI): https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/UI-Components_DS/demo.html
+- Banners: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Banners_DS/demo.html
+- Badge: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Badge_DS/demo.html
+
+Организмы (сборки уровня приложения) — у каждого тоже свой стенд, папка `organisms/<имя>`:
+app-header, app-sidenav, app-right-panel:
+https://github.com/iiko-DS/DS/tree/main/organisms
+
+У остальных компонентов demo.html нет — классы, варианты и разметку смотри в спецификации:
+Autocomplete, Backdrop, Button icon, Button toggle, Checkbox, Chips input, Dialog,
+Expansion panel, Hint tooltip, Input number, Logo, Menu, Radio button, Scroll, Slide toggle,
+Snackbar, Status, Stepper, Textarea, Timepicker, Tree.
+
 ## Что писать на странице
 
 Интерфейс собирается из компонентов ДС — классами `ds-*`. Например, кнопка:
