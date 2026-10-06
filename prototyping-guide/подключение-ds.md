@@ -51,31 +51,50 @@
 все состояния и примеры сборок (повторяет набор Figma). Собираешь такой компонент — сверяйся
 по этому стенду (ссылки машиночитаемые, ИИ открывает их напрямую):
 
+- Autocomplete: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Autocomplete_DS/demo.html
+- Backdrop: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Backdrop_DS/demo.html
+- Badge: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Badge_DS/demo.html
+- Banners: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Banners_DS/demo.html
 - Button: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Button_DS/demo.html
+- Button icon: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Button-Icon_DS/demo.html
+- Button toggle: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Button-Toggle_DS/demo.html
 - Card: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Card_DS/demo.html
+- Checkbox: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Checkbox_DS/demo.html
 - Chips: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Chips_DS/demo.html
+- Chips input: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Chips-Input_DS/demo.html
 - Datepicker: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Datepicker_DS/demo.html
+- Dialog: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Dialog_DS/demo.html
 - Divider: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Divider_DS/demo.html
+- Expansion panel: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Expansion-Panel_DS/demo.html
 - Form field input: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Form-Field-Input_DS/demo.html
+- Hint tooltip: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Hint-Tooltip_DS/demo.html
 - Icon size: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Icon-Size_DS/demo.html
+- Input number: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Input-Number_DS/demo.html
 - List: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/List_DS/demo.html
+- Logo: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Logo_DS/demo.html
+- Menu: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Menu_DS/demo.html
+- Radio button: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Radio-Button_DS/demo.html
+- Scroll: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Scroll_DS/demo.html
 - Search: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Search_DS/demo.html
 - Select: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Select_DS/demo.html
 - Sidenav: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Sidenav_DS/demo.html
+- Slide toggle: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Slide-Toggle_DS/demo.html
+- Snackbar: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Snackbar_DS/demo.html
+- Status: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Status_DS/demo.html
+- Stepper: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Stepper_DS/demo.html
 - Table: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Table_DS/demo.html
 - Tabs: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Tabs_DS/demo.html
+- Textarea: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Textarea_DS/demo.html
+- Timepicker: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Timepicker_DS/demo.html
+- Tree: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Tree_DS/demo.html
 - UI components (Text UI): https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/UI-Components_DS/demo.html
-- Banners: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Banners_DS/demo.html
-- Badge: https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/components/Badge_DS/demo.html
 
 Организмы (сборки уровня приложения) — у каждого тоже свой стенд, папка `organisms/<имя>`:
 app-header, app-sidenav, app-right-panel:
 https://github.com/iiko-DS/DS/tree/main/organisms
 
-У остальных компонентов demo.html нет — классы, варианты и разметку смотри в спецификации:
-Autocomplete, Backdrop, Button icon, Button toggle, Checkbox, Chips input, Dialog,
-Expansion panel, Hint tooltip, Input number, Logo, Menu, Radio button, Scroll, Slide toggle,
-Snackbar, Status, Stepper, Textarea, Timepicker, Tree.
+Теперь demo.html есть у **всех компонентов** (батчи A–E, 10.2026) — если компонента нет в списке выше,
+смотри спецификацию; состав и состояния также фиксировались в журнале ДС `fixes.md` (№115–135).
 
 ## Что писать на странице
 
@@ -145,4 +164,8 @@ https://raw.githubusercontent.com/iiko-DS/Prototypes/main/prototyping-guide/по
   https://github.com/iiko-DS/DS/tree/main/components-web/components
 - спецификация всех компонентов (классы, варианты, состояния):
   https://raw.githubusercontent.com/iiko-DS/DS/main/components-web/iiko-ds-spec.md
+- правила применения компонентов (что можно и нельзя при сборке):
+  https://raw.githubusercontent.com/iiko-DS/Prototypes/main/prototyping-guide/дизайн-система/сборка-из-ДС.md
+- отступы и компоновка экранов (контент-зона 20/30/24, заголовки H1–H3, карточки):
+  https://raw.githubusercontent.com/iiko-DS/Prototypes/main/prototyping-guide/дизайн-система/принципы-группировки-контента.md
 - остальная база знаний — в этом же репозитории.
